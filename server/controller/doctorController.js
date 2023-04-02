@@ -53,7 +53,7 @@ export const doctorLogin = async(req,res)=>{
              const passMatch=await bcrypt.compare(password,doctorDetails.password);
 
              if(!passMatch){
-                return res.status(200).json({success:false,message:"Doctor Password is Invalid"})
+                return res.status(200).json({success:false,message:"Doctor Password is invalid"})
              }
              
              const token=jwt.sign({id:doctorDetails._id},process.env.DOC_JWT_SECRET,{expiresIn:'30d'});
