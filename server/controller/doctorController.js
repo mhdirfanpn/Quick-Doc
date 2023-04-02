@@ -56,7 +56,7 @@ export const doctorLogin = async(req,res)=>{
                 return res.status(200).json({success:false,message:"Doctor Password is Invalid"})
              }
              
-             const token=jwt.sign({id:doctorDetails._id},process.env.JWT_SECRET,{expiresIn:'30d'});
+             const token=jwt.sign({id:doctorDetails._id},process.env.DOC_JWT_SECRET,{expiresIn:'30d'});
              res.status(200).json({success:true,token,doctorDetails})
 
           }else{
