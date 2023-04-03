@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const UserSchema=mongoose.Schema({
-    
+const UserSchema=mongoose.Schema({  
     userName:{
         type:String,
         required:true
@@ -15,11 +14,11 @@ const UserSchema=mongoose.Schema({
         type: String,
         required: true
     },
-    phoneNumber:{
+    number:{
         type:String,
         required:true
     },
-    dateOfBirth:{
+    date:{
         type:String,
         required:true
     },

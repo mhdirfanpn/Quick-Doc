@@ -1,15 +1,16 @@
-import React from 'react'
-import Navbar from '../../../components/admin/navbar/Navbar'
-import Sidebar from '../../../components/admin/sidebar/Sidebar'
-import UsersList from '../../../components/admin/usersList/UsersList'
+import React from "react";
+import Navbar from "../../../components/admin/navbar/Navbar";
+import Sidebar from "../../../components/admin/sidebar/Sidebar";
+import UsersList from "../../../components/admin/usersList/UsersList";
 
 const UserManage = () => {
   return (
     <>
-    
-        <UsersList/>
+      <Navbar />
+      <Sidebar />
+      <UsersList />
     </>
-  )
-}
+  );
+};
 
-export default UserManage
+export default UserManage;

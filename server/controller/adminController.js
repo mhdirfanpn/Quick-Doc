@@ -22,13 +22,13 @@ export const adminLogin = async(req,res)=>{
               if(!matchPassword) return res.status(200).json({success:false,message:"Admin Password is not matched"})
      
               const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWT_SECRET)
-              res.status(200).json({success:true,message:"Login success",adminToken})
+              res.status(200).json({success:true,message:"Login success",adminToken,adminDetails})
          }else{
              
               res.status(200).json({success:false,message:"admin credentials not found"})
          }
          
-    }catch(err){
+    } catch(err){
          res.status(400).json({error:err,message:"server error"})
     }
 
@@ -43,7 +43,7 @@ export const getAllUsers = async (req,res)=>{
          
          res.status(200).json(users)
          
-    }catch(err){
+    } catch(err){
          res.status(400).json({error:err})
     }
 }
@@ -57,7 +57,7 @@ export const getAllDoctors = async (req,res)=>{
          
          res.status(200).json(doctors)
          
-    }catch(err){
+    } catch(err){
          res.status(400).json({error:err})
     }
 }
@@ -75,7 +75,7 @@ export const blockUser = async(req,res)=>{
 
 
 
-    }catch(err){
+    } catch(err){
         res.status(400).json({error:err})
     }
 }
@@ -90,7 +90,7 @@ export const unBlockUser = async(req,res)=>{
 
        res.status(200).json({message:"user is unblocked successfully",user})
 
-    }catch(err){
+    } catch(err){
         res.status(400).json({error:err})
     }
 }

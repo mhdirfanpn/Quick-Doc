@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import { MdLogout } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
@@ -11,7 +12,8 @@ function Navbar() {
         </Text>
         <Spacer />
         <Box marginRight={30}>
-        <MdLogout size={50}/>
+        <Link to="/admin"><MdLogout size={50}/></Link>
+       
       
         </Box>
       

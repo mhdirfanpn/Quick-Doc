@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Th, Td,  } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Box, Stack  } from "@chakra-ui/react";
 
 let users=[{
     id:'1',
@@ -10,6 +10,14 @@ let users=[{
 
 function DoctorsList() {
   return (
+    <Box
+    marginLeft={80}
+    marginTop={10}
+   
+    >
+
+    <Stack>
+    <Box>
     <Table variant="simple">
       <Thead>
         <Tr>
@@ -40,6 +48,9 @@ function DoctorsList() {
         ))}
       </Tbody>
     </Table>
+    </Box>
+    </Stack>
+    </Box>
   );
 }
 

@@ -1,12 +1,16 @@
-import React from 'react'
-import DoctorsRequest from '../../../components/admin/doctorsRequest/DoctorsRequest'
+import React from "react";
+import Navbar from "../../../components/admin/navbar/Navbar";
+import Sidebar from "../../../components/admin/sidebar/Sidebar";
+import DoctorsRequest from "../../../components/admin/doctorsRequest/DoctorsRequest";
 
 const ManageDoctors = () => {
   return (
     <>
-    <DoctorsRequest/>
+      <Navbar />
+      <Sidebar />
+      <DoctorsRequest />
     </>
-  )
-}
+  );
+};
 
-export default ManageDoctors
+export default ManageDoctors;

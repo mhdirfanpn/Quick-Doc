@@ -10,21 +10,42 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "../../../utils/axios";
+import { DOC_SIGN_UP } from "../../../utils/ConstUrls";
 
 const DoctorRegister = () => {
+
     const navigate = useNavigate()
-    const [firstName, setFirstName] = useState("");
+
+    const [fullName, setFullName] = useState("");
     const [date, setDate] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [number, setNumber] = useState("");
   
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
-      navigate('/doctor-login');
-      console.log(
-        `First Name: ${firstName}, dob: ${date}, Email: ${email}, Contact: ${number}, Password: ${password}`
-      );
+      
+      if (fullName ==="" || date ==="" || number ==="" || email === "" || password === "") {
+        return toast.error("Please Fill the Components");
+      }
+
+      const body= JSON.stringify({
+        fullName,
+        date,
+        number,
+        email,
+        password
+      })
+
+      await axios.post(DOC_SIGN_UP,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
+        if(data.success){        
+          navigate('/doctor-login');
+        }else{
+          toast.error(data.message)
+        }
+      })
     
     };
   
@@ -47,8 +68,8 @@ const DoctorRegister = () => {
             <Input
               type="text"
               placeholder="Enter your full name"
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
             />
           </FormControl>
   
@@ -114,6 +135,7 @@ const DoctorRegister = () => {
                   Login
                 </Link>
           </Text>
+          <Toaster />
       </Box>
     );
   };

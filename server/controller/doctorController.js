@@ -5,9 +5,9 @@ import  jwt  from 'jsonwebtoken'
 
 export const registerDoctor = async (req,res) => {
     try {
-        const {email,password,userName,phoneNumber,dateOfBirth,}=req.body
+        const {email,password,fullName,number,date,}=req.body
 
-        if(!email || !password || !userName || !phoneNumber || !dateOfBirth){
+        if(!email || !password || !fullName || !number || !date){
             return res.status(401).json({message:'all fields are required'})
         }
 
@@ -18,11 +18,11 @@ export const registerDoctor = async (req,res) => {
          }else{
             const hashedPassword=await bcrypt.hash(password,10);
             const newDoctor= await Doctor.create({
-               userName,
+               fullName,
                email,
                password:hashedPassword,
-               phoneNumber,
-               dateOfBirth
+               number,
+               date
             })
             res.status(200).json({success:true,message:"success new doctor created",doctor:newDoctor})
          }
@@ -43,7 +43,7 @@ export const doctorLogin = async(req,res)=>{
           }
        
           const doctorDetails=await Doctor.findOne({email});
-
+          console.log(doctorDetails);
           if(doctorDetails){
 
             if(!doctorDetails.isVerified){
@@ -62,7 +62,6 @@ export const doctorLogin = async(req,res)=>{
           }else{
              res.status(200).json({success:false,message:"Doctor not found"})
           }
-         
        }
 
        catch(err){

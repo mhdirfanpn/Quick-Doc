@@ -8,16 +8,49 @@ import {
   Box,
   Heading,
 } from "@chakra-ui/react";
+import toast, { Toaster } from "react-hot-toast";
+import { ADMIN_LOGIN } from "../../../utils/ConstUrls";
+import axios from "../../../utils/axios";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(`Email: ${email},Password: ${password}`);
-    navigate("/admin-home");
+
+    if (email === "" || password === "") {
+      return toast.error("Please Fill the Components");
+    }
+
+    const body = JSON.stringify({
+      email,
+      password,
+    });
+
+    try {
+      await axios
+        .post(ADMIN_LOGIN, body, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.success) {
+            document.cookie = `token:${data.token}`;
+            console.log(data.adminDetails);
+            navigate("/admin-home");
+          } else {
+            toast.error(data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      toast.error("Oops Something went wrong");
+    }
+
   };
 
   return (
@@ -66,6 +99,7 @@ const AdminLogin = () => {
           LOGIN
         </Button>
       </form>
+      <Toaster />
     </Box>
   );
 };

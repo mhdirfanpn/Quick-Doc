@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
 const DoctorSchema=mongoose.Schema({
+
+
     
-    userName:{
+    fullName:{
         type:String,
         required:true
     },
@@ -15,11 +17,11 @@ const DoctorSchema=mongoose.Schema({
         type: String,
         required: true
     },
-    phoneNumber:{
+    number:{
         type:String,
         required:true
     },
-    dateOfBirth:{
+    date:{
         type:String,
         required:true
     },
