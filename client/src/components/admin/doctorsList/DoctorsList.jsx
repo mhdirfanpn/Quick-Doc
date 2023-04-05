@@ -1,14 +1,43 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Box, Stack  } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { Table, Thead, Tbody, Tr, Th, Td, Box, Stack, Button  } from "@chakra-ui/react";
+import axios from "../../../utils/axios";
+import { ALL_DOCTORS } from "../../../utils/ConstUrls";
+import { useNavigate } from "react-router-dom";
 
-let users=[{
-    id:'1',
-    email:'a@gmail.com',
-    status:'Active',
-    name:'sample',
-    contact:'1234567890',
-}]
 
-function DoctorsList() {
+
+const DoctorsList = () => {
+
+
+  const navigate=useNavigate()
+  const [doctorsList,setDoctors]=useState([]);
+  const adminToken=localStorage.getItem("adminToken");
+
+  useEffect(()=>{
+    getDoctorsDetails();
+  },[])
+
+  const getDoctorsDetails = async()=>{
+    try{
+      axios.get(ALL_DOCTORS,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+        console.log(response.data);
+        setDoctors(response.data);  
+        
+      }).catch((err)=>{
+        console.log(err,"catch error in doctorFetching")
+      })
+    }catch(err){
+      console.log(err)
+    } 
+    
+  }
+
+  const viewMore = (id) =>{
+    console.log(id)
+    navigate(`/doctor-card/${id}`)
+  }
+
+
   return (
     <Box
     marginLeft={80}
@@ -26,24 +55,22 @@ function DoctorsList() {
           <Th>Contact</Th>
           <Th>Specialization</Th>
           <Th>Experience</Th>
+          <Th>Action</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {users.map((user) => (
-          <Tr key={user.id}>
-            <Td>{user.name}</Td>
-            <Td>{user.email}</Td>
-            <Td>{user.contact}</Td>
+        {doctorsList.map((doctor,index) => (
+          <Tr key={index}>
+            <Td>{doctor.fullName}</Td>
+            <Td>{doctor.email}</Td>
+            <Td>{doctor.number}</Td>
             <Td>Cardiology</Td>
             <Td>3 years</Td>
-            {/* <Td>
-              <Button colorScheme="blue" size="sm" mr={2}>
-                Edit
+            <Td>
+              <Button colorScheme="blue" size="sm" mr={2} onClick={()=>viewMore(doctor._id)}>
+                view more
               </Button>
-              <Button colorScheme="red" size="sm">
-                Delete
-              </Button>
-            </Td> */}
+            </Td>
           </Tr>
         ))}
       </Tbody>

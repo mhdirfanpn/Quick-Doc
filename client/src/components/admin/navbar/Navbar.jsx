@@ -1,9 +1,20 @@
 import React from 'react';
 import { Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import { MdLogout } from "react-icons/md";
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setAdminLogout } from '../../../redux/adminSlice';
 
 function Navbar() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+
+  const handleLogout=(e)=>{
+    localStorage.removeItem("adminToken")
+    dispatch(setAdminLogout());
+    navigate('/admin')
+  }
   return (
     <Box bg="#0A1F29" w="100%" p={4} color="white">
       <Flex>
@@ -12,7 +23,7 @@ function Navbar() {
         </Text>
         <Spacer />
         <Box marginRight={30}>
-        <Link to="/admin"><MdLogout size={50}/></Link>
+        <MdLogout onClick={handleLogout} size={50}/>
        
       
         </Box>

@@ -25,6 +25,18 @@ const DoctorSchema=mongoose.Schema({
         type:String,
         required:true
     },
+    experience:{
+        type:String,
+        required:true
+    },
+    register:{
+        type:String,
+        required:true
+    },
+    specialization:{
+        type:String,
+        required:true
+    },
     profilePic:{
         type:String
     },

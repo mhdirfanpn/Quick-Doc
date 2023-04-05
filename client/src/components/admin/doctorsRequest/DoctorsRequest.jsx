@@ -1,26 +1,44 @@
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  Box,
-  Stack,
-} from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Button, Box, Stack,} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import axios from "../../../utils/axios";
+import { ALL_DOC_REQ } from "../../../utils/ConstUrls";
+import { useNavigate } from "react-router-dom";
 
-let users = [
-  {
-    id: "1",
-    email: "a@gmail.com",
-    status: "Active",
-    name: "sample",
-    contact: "1234567890",
-  },
-];
 
-function DoctorsRequest() {
+
+
+const DoctorsRequest = () => {
+
+  const navigate = useNavigate()
+
+  const [doctorsReq,setDocReq] = useState([]);
+  const adminToken=localStorage.getItem("adminToken")
+
+  useEffect(()=>{
+    getDoctorsReq();
+  },[])
+
+  const getDoctorsReq = async()=>{
+    try {
+
+      axios.get(ALL_DOC_REQ,{ headers: { 'Authorization': `Bearer ${adminToken}`}}).then((response)=>{
+        console.log(response.data);
+        setDocReq(response.data);
+
+      }).catch((err)=>{
+        console.log(err,"catch error in doctorFetching");
+      })
+      
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const viewMore = (id) =>{
+    console.log(id)
+    navigate(`/doctor-card/${id}`)
+  }
+
   return (
     <Box marginLeft={80} marginTop={10}>
       <Stack>
@@ -37,21 +55,18 @@ function DoctorsRequest() {
               </Tr>
             </Thead>
             <Tbody>
-              {users.map((user) => (
-                <Tr key={user.id}>
-                  <Td>{user.name}</Td>
-                  <Td>{user.email}</Td>
-                  <Td>{user.contact}</Td>
-                  <Td>Cardiology</Td>
-                  <Td>3 years</Td>
-                  <Td>
-                    <Button colorScheme="blue" size="sm" mr={2}>
-                      Approve
-                    </Button>
-                    <Button colorScheme="red" size="sm">
-                      Reject
-                    </Button>
-                  </Td>
+                {doctorsReq.map((doctor,index) => (
+                  <Tr key={index}>
+                    <Td>{doctor.fullName}</Td>
+                    <Td>{doctor.email}</Td>
+                    <Td>{doctor.number}</Td>
+                    <Td>Cardiology</Td>
+                    <Td>3 years</Td>
+                    <Td>
+              <Button colorScheme="blue" size="sm" mr={2} onClick={()=>viewMore(doctor._id)}>
+                view more
+              </Button>
+            </Td>
                 </Tr>
               ))}
             </Tbody>

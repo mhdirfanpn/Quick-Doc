@@ -50,9 +50,9 @@ const DoctorLogin = () => {
               })
             );
             
-            console.log(data.doctorDetails,data.token);
-
             navigate("/doctor-home");
+            localStorage.setItem('doctorToken',data.token);
+
           } else {
             toast.error(data.message);
           }

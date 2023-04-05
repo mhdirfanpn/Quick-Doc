@@ -1,14 +1,54 @@
+import { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, Button, Stack, Box } from "@chakra-ui/react";
+import { ALL_USERS } from "../../../utils/ConstUrls";
+import axios from "../../../utils/axios";
 
-let users=[{
-    id:'1',
-    email:'a@gmail.com',
-    status:'Active',
-    name:'sample',
-    contact:'1234567890',
-}]
+const UsersList = () => {
 
-function UsersList() {
+  const [state,setState]=useState('')
+  const [usersList,setUsers]=useState([]);
+  const adminToken=localStorage.getItem("adminToken");
+  const d = new Date();
+  let time = d.getTime();
+
+  const unBlock =async (id) =>{
+    console.log(id)
+   await axios.put(`/admin/unBlockUser/${id}`,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then(()=>{
+    setState(time)
+        
+    })
+  }
+
+  const block =async (id) =>{
+      console.log(id);
+    await  axios.put(`/admin/blockUser/${id}`,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then(()=>{
+      setState(time)
+       
+    })
+  }
+
+
+  useEffect(()=>{
+    getUserDetails();
+  },[state])
+
+ 
+
+  const getUserDetails = async()=>{
+    try{
+      axios.get(ALL_USERS,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+        console.log(response.data);
+        setUsers(response.data);  
+        
+      }).catch((err)=>{
+        console.log(err,"catch error in userFetching")
+      })
+    }catch(err){
+      console.log(err)
+    } 
+    
+  }
+
   return (
     <Box
     marginLeft={80}
@@ -28,19 +68,27 @@ function UsersList() {
         </Tr>
       </Thead>
       <Tbody>
-        {users.map((user) => (
-          <Tr key={user.id}>
-            <Td>{user.name}</Td>
+        {usersList.map((user,index) => (
+          <Tr key={index}>
+            <Td>{user.userName}</Td>
             <Td>{user.email}</Td>
-            <Td>{user.contact}</Td>
-            <Td>{user.status}</Td>
-            <Td>
-              <Button colorScheme="blue" size="sm" mr={2}>
-                Edit
+            <Td>{user.number}</Td>
+            <Td>{user.isBlocked ? <span style={{color:"red"}}>inactive</span> : <span style={{color:"green"}}>active</span>}</Td>
+            <Td>{
+                    user.isBlocked ? <Button        onClick={() => {
+                      if (window.confirm("Are you sure you want to reject?")) {
+                        unBlock(user._id);
+                      }
+                    }} colorScheme="blue" size="sm">
+                    unblock
+                  </Button> :  <Button     onClick={() => {
+                      if (window.confirm("Are you sure you want to reject?")) {
+                        block(user._id);
+                      }
+                    }} colorScheme="red" size="sm">
+                block
               </Button>
-              <Button colorScheme="red" size="sm">
-                Delete
-              </Button>
+              }     
             </Td>
           </Tr>
         ))}

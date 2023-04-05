@@ -22,13 +22,13 @@ export const registerUser = async (req,res) => {
                email,
                password:hashedPassword,
                number,
-               date
+               date,
             })
             res.status(200).json({success:true,message:"success new user created",user:newUser})
          }
 
     } catch (error) {
-          res.status(500).json({error:err})
+          res.status(500).json({error:error})
     }
 }
 

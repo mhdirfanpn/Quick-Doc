@@ -41,6 +41,7 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         })
         .then(({ data }) => {
+          console.log(data.token);
           if (data.success) {
             document.cookie = `token:${data.token}`;
 
@@ -50,8 +51,9 @@ const Login = () => {
                 token: data.token,
               })
             );
-
-            navigate("/home");
+            navigate('/home'); 
+            localStorage.setItem('userToken',data.token);
+          
           } else {
             toast.error(data.message);
           }

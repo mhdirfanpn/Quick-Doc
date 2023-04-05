@@ -49,8 +49,26 @@ export const getAllUsers = async (req,res)=>{
 }
 
 export const getAllDoctors = async (req,res)=>{
+
     try{
-         const doctors=await Doctors.find();
+         const doctors=await Doctors.find({isVerified:true});
+         if(!doctors){
+              return   res.status(200).json({message:"no doctors found"}) 
+         }
+         
+         res.status(200).json(doctors)
+         
+    } catch(err){
+         res.status(400).json({error:err})
+    }
+}
+
+export const doctorsRequest = async (req,res)=>{
+    try{
+
+        let adminAuthHeader=req.header("Authorization")
+        console.log(adminAuthHeader);
+         const doctors=await Doctors.find({isVerified:false});
          if(!doctors){
               return   res.status(200).json({message:"no doctors found"}) 
          }
@@ -85,7 +103,7 @@ export const blockUser = async(req,res)=>{
 export const unBlockUser = async(req,res)=>{
     try {
         const user=await User.findOneAndUpdate({_id:req.params.id},{
-            isBlocked:false
+            isBlocked:false  
        })
 
        res.status(200).json({message:"user is unblocked successfully",user})
@@ -108,3 +126,25 @@ export const verifyDoctor =async(req,res)=>{
         res.status(400).json({error:err})
     }
 }
+
+export const removeDoctor = async (req,res)=>{
+    try {
+        const doctor = await Doctors.findOneAndRemove({_id:req.params.id})
+        res.status(200).json({message:"doctor removed successfully",doctor})
+ 
+     } catch (err) {
+         res.status(400).json({error:err})
+     }
+}
+
+
+export const getDoctor = async(req,res) => {
+ 
+    try {
+       const doctor = await Doctors.findOne({_id:req.params.id})
+       res.status(200).json({message:"doctor data sent success",doctor})
+
+    } catch (err) {
+        res.status(400).json({error:err})
+    }
+ }

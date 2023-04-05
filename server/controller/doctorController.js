@@ -5,9 +5,10 @@ import  jwt  from 'jsonwebtoken'
 
 export const registerDoctor = async (req,res) => {
     try {
-        const {email,password,fullName,number,date,}=req.body
+        const {email,password,fullName,number,date,experience,register,specialization}=req.body
+        
 
-        if(!email || !password || !fullName || !number || !date){
+        if(!email || !password || !fullName || !number || !date || !experience || !register || !specialization){
             return res.status(401).json({message:'all fields are required'})
         }
 
@@ -22,7 +23,10 @@ export const registerDoctor = async (req,res) => {
                email,
                password:hashedPassword,
                number,
-               date
+               date,
+               experience,
+               register,
+               specialization
             })
             res.status(200).json({success:true,message:"success new doctor created",doctor:newDoctor})
          }
@@ -68,3 +72,5 @@ export const doctorLogin = async(req,res)=>{
         res.status(400).json({error:err})
      }
  }
+
+

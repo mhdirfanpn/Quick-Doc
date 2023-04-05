@@ -7,4 +7,8 @@ export const DOC_SIGN_UP='doc/signup'
 export const DOC_LOGIN='doc/login'
 
 export const ADMIN_LOGIN='admin/login'
+export const ALL_USERS='admin/allUsers'
+export const ALL_DOCTORS='admin/allDoctors'
+export const ALL_DOC_REQ='admin/doctorsRequest'
+export const GET_DOC='/getDoctor'
 

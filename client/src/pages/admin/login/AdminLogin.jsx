@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   FormControl,
   FormLabel,
@@ -10,10 +11,13 @@ import {
 } from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
 import { ADMIN_LOGIN } from "../../../utils/ConstUrls";
+import { setAdminLogin } from "../../../redux/adminSlice";
 import axios from "../../../utils/axios";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,11 +39,17 @@ const AdminLogin = () => {
           headers: { "Content-Type": "application/json" },
         })
         .then(({ data }) => {
-          console.log(data);
+          console.log(data.adminToken);
           if (data.success) {
-            document.cookie = `token:${data.token}`;
-            console.log(data.adminDetails);
-            navigate("/admin-home");
+            // document.cookie = `token:${data.adminToken}`;
+            dispatch(
+              setAdminLogin({
+                admin: data.adminDetails,
+                token: data.adminToken,
+              })
+            );
+             navigate('/admin-home'); 
+                    localStorage.setItem('adminToken',data.adminToken);
           } else {
             toast.error(data.message);
           }

@@ -13,10 +13,15 @@ const doctorSlice = createSlice({
         setDoctorLogin: (state,action)=>{
             state.doctor = action.payload.doctor;
             state.token = action.payload.token;
+        },
+
+        setDoctorLogout: (state)=>{
+            state.doctor = null;
+            state.token = null;
         }
     }
 })
 
-export const {setDoctorLogin} = doctorSlice.actions;
+export const {setDoctorLogin,setDoctorLogout} = doctorSlice.actions;
 
 export default doctorSlice.reducer;
