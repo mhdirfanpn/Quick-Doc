@@ -57,7 +57,7 @@ const Register = () => {
       boxShadow="lg"
       maxWidth={{ base: "20%", md: "25%" }}
       margin="0 auto"
-      marginTop="40"
+      marginTop="20"
     >
       <Box textAlign="center" mb={4}>
         <Heading>Register</Heading>

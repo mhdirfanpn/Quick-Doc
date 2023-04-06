@@ -36,6 +36,8 @@ const App = () => {
           <Route path='/doctor-home' element={ <DoctorHome /> } />
           <Route path='/doctor-card/:doctorId' element={ <DoctorCard /> } />
 
+ 
+
 
        </Routes>
        </BrowserRouter>

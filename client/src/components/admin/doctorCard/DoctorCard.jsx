@@ -71,7 +71,7 @@ const DoctorCard = () => {
       <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
         <GridItem>
         <Text mb={5} fontSize="light" color="gray.500" dark={{ color: "gray.400" }}>
-            Name - {doctorList.fullName}
+            Name -DR. {doctorList.fullName}
           </Text>
           <Text mb={5} fontSize="light" color="gray.500" dark={{ color: "gray.400" }}>
             Email - {doctorList.email}
@@ -80,6 +80,7 @@ const DoctorCard = () => {
             Mobile - {doctorList.number}
           </Text>
           <Box d="flex" justifyContent={{ md: "center" }} mt={{ md: 5 }}>
+           
             {doctorList.isVerified ? (
               <Text textShadow={4} style={{color:"green"}} p={4}>Approved</Text>
             ) : ( 
