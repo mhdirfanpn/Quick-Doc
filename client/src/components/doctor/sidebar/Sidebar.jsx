@@ -12,14 +12,14 @@ import {
   
     return (
       <Box
-        position="fixed"
+        position="absolute"
         marginTop='86'
         left="0"
         top="0"
-        h="100vh"
-        w="64"
-        bg="#E3F8F1"
-        color="#0C869F"
+        h="100%"
+        w="25"
+        bg="#051766"
+        color="white"
         px="8"
         py="6"
       >

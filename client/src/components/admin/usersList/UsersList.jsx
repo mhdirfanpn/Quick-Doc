@@ -1,7 +1,24 @@
 import { useState, useEffect } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Button, Stack, Box, InputGroup, ButtonGroup, Input, Flex, Text } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  Switch,
+  Stack,
+  Box,
+  InputGroup,
+  ButtonGroup,
+  Input,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import { ALL_USERS } from "../../../utils/ConstUrls";
 import axios from "../../../utils/axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const UsersList = () => {
   const PAGE_SIZE = 6;
@@ -22,6 +39,7 @@ const UsersList = () => {
       })
       .then(() => {
         setState(time);
+        toast.success("unblocked")
       });
   };
 
@@ -33,7 +51,9 @@ const UsersList = () => {
       })
       .then(() => {
         setState(time);
+        toast.error("blocked")
       });
+   
   };
 
   useEffect(() => {
@@ -79,7 +99,9 @@ const UsersList = () => {
 
   return (
     <Box marginLeft={80} marginTop={10}>
-      <Text fontWeight="bold" fontSize="3xl">USERS LIST</Text>
+      <Text fontWeight="bold" fontSize="3xl">
+        USERS LIST
+      </Text>
       <Stack>
         <Box>
           <InputGroup size="sm">
@@ -112,67 +134,52 @@ const UsersList = () => {
                   <Td>{user.number}</Td>
                   <Td>
                     {user.isBlocked ? (
-                      <span style={{ color: "red" }}>inactive</span>
+                      <span style={{ color: "red" }}>blocked</span>
                     ) : (
                       <span style={{ color: "green" }}>active</span>
                     )}
                   </Td>
+
                   <Td>
-                    {user.isBlocked ? (
-                      <Button
-                        onClick={() => {
-                          if (
-                            window.confirm("Are you sure you want to reject?")
-                          ) {
-                            unBlock(user._id);
-                          }
-                        }}
-                        colorScheme="blue"
-                        size="sm"
-                      >
-                        unblock
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          if (
-                            window.confirm("Are you sure you want to reject?")
-                          ) {
-                            block(user._id);
-                          }
-                        }}
-                        colorScheme="red"
-                        size="sm"
-                      >
-                        block
-                      </Button>
-                    )}
+                    <Switch
+                      colorScheme={user.isBlocked ? "red" : "green"}
+                      isChecked={user.isBlocked}
+                      onChange={() => {
+                        user.isBlocked ? unBlock(user._id) : block(user._id);
+                      }}
+                      size="md"
+                    />
                   </Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
-          <Flex className="parent-element" display="flex" justifyContent="flex-end" marginRight="150">
-  <ButtonGroup mt={10}>
-    <Button
-      disabled={currentPage === 1}
-      onClick={() => handlePrevPage()}
-      variant="outline"
-    >
-      Previous
-    </Button>
-    <Button
-      disabled={currentPage === totalPages}
-      onClick={() => handleNextPage()}
-      ml="-px" 
-    >
-      Next
-    </Button>
-  </ButtonGroup>
-</Flex>
-
+          <Flex
+            className="parent-element"
+            display="flex"
+            justifyContent="flex-end"
+            marginRight="150"
+          >
+            <ButtonGroup mt={10}>
+              <Button
+                disabled={currentPage === 1}
+                onClick={() => handlePrevPage()}
+                variant="outline"
+              >
+                Previous
+              </Button>
+              <Button
+                disabled={currentPage === totalPages}
+                onClick={() => handleNextPage()}
+                ml="-px"
+              >
+                Next
+              </Button>
+            </ButtonGroup>
+          </Flex>
         </Box>
       </Stack>
+      <Toaster />
     </Box>
   );
 };

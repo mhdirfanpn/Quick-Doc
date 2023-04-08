@@ -18,15 +18,15 @@ import { DOC_SIGN_UP } from "../../../utils/ConstUrls";
 const DoctorRegister = () => {
 
   const options = [
-    { value: "Psychology", label: "Psychology" },
-    { value: "Sexology", label: "Sexology" },
+    { value: "Cardiologist", label: "Cardiologist" },
+    { value: "Dermatologist", label: "Dermatologist" },
     {
-      value: " in psychological sciences",
-      label: " in psychological sciences",
+      value: "Neurologist",
+      label: "Neurologist",
     },
     {
-      value: " Global Mental Health and Wellbeing",
-      label: " Global Mental Health and Wellbeing",
+      value: "Oncologist",
+      label: "Oncologist",
     },
   ];
 
@@ -194,8 +194,8 @@ const DoctorRegister = () => {
           />
         </FormControl>
         <Button
-          bg="#46c29d"
-          colorScheme="green"
+          bg="#011c91"
+          colorScheme="#011c91"
           size="md"
           mt={6}
           width="100%"

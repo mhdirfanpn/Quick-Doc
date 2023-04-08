@@ -41,14 +41,13 @@ const AdminLogin = () => {
         .then(({ data }) => {
           console.log(data.adminToken);
           if (data.success) {
-            // document.cookie = `token:${data.adminToken}`;
             dispatch(
               setAdminLogin({
                 admin: data.adminDetails,
                 token: data.adminToken,
               })
             );
-             navigate('/admin-home'); 
+             navigate('/users-list'); 
                     localStorage.setItem('adminToken',data.adminToken);
           } else {
             toast.error(data.message);

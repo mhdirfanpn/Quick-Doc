@@ -25,7 +25,7 @@ const DoctorLogin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-      if (email === "" || password === "") {
+    if (email === "" || password === "") {
       return toast.error("Please Fill the Components");
     }
 
@@ -49,10 +49,9 @@ const DoctorLogin = () => {
                 token: data.token,
               })
             );
-            
-            navigate("/doctor-home");
-            localStorage.setItem('doctorToken',data.token);
 
+            navigate("/doctor-home");
+            localStorage.setItem("doctorToken", data.token);
           } else {
             toast.error(data.message);
           }
@@ -63,7 +62,6 @@ const DoctorLogin = () => {
     } catch (err) {
       toast.error("Oops Something went wrong");
     }
-
   };
 
   return (
@@ -100,8 +98,8 @@ const DoctorLogin = () => {
           />
         </FormControl>
         <Button
-          colorScheme="green"
-          bg="#46c29d"
+          bg="#011c91"
+          colorScheme="#011c91"
           size="md"
           mt={6}
           width="100%"

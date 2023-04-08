@@ -17,11 +17,10 @@ const Sidebar = () => {
 
   return (
     <Box
-      position="fixed"
-      marginTop={20}
+      position="absolute"
       left="0"
-      top="0"
-      h="100vh"
+      top="20"
+      h="92vh"
       w="64"
       bg="#0A1F29"
       color="#b9c9be"

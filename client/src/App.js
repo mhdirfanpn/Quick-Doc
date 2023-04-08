@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import Register from './pages/user/register/Register'
 import Login from './pages/user/login/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -13,30 +12,103 @@ import DoctorRegister from './pages/doctor/register/DoctorRegister'
 import DoctorLogin from './pages/doctor/login/DoctorLogin'
 import DoctorHome from './pages/doctor/home/DoctorHome'
 import DoctorCard from './pages/admin/doctorDetails/DoctorDetails'
+import AuthorizeAdmin from './protected/admin/AuthorizeAdmin'
+import AuthAdmin from './protected/admin/AuthAdmin'
+import AuthorizeUser from './protected/user/AuthorizeUser'
+import AuthUser from './protected/user/AuthUser'
+import AuthorizeDoctor from './protected/doctor/AuthorizeDoctor'
+import AuthDoctor from './protected/doctor/AuthDoctor'
+import { useSelector } from 'react-redux'
 
 
 const App = () => {
-  const userAuth = Boolean(useSelector((state) => state.user.token));
+  
 
   return (
     <div> 
        <BrowserRouter>
        <Routes>
-          <Route path='/' element={!userAuth ? <Login /> : <Home/>}/> 
-          <Route path='/signUp' element={<Register />} />
-          <Route path='/login' element={<Login/>} />
-          <Route path='/home' element={<Home /> } />
-          <Route path='/admin' element={<AdminLogin />  } />
-          <Route path='/admin-home' element={<AdminHome /> } />
-          <Route path='/users-list' element={<UserManage />} />
-          <Route path='/doctors-list' element={<ViewDoctors />} />
-          <Route path='/manage-doctors' element={<ManageDoctors />} />
-          <Route path='/doctor-register' element={<DoctorRegister />} />
-          <Route path='/doctor-login' element={<DoctorLogin />} />
-          <Route path='/doctor-home' element={ <DoctorHome /> } />
-          <Route path='/doctor-card/:doctorId' element={ <DoctorCard /> } />
+          
 
- 
+          <Route path='/' element={
+            <AuthUser>
+              <Login/>
+            </AuthUser>
+          }/>
+
+          <Route path='/signUp' element={
+            <AuthUser>
+              <Register/>
+            </AuthUser>
+          }/>   
+
+          <Route path='/home' element={
+            <AuthorizeUser>
+              <Home/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/admin' element={
+            <AuthAdmin>
+              <AdminLogin />
+            </AuthAdmin>
+          } />
+
+          <Route path='/admin-home' element={
+            <AuthorizeAdmin>
+              <AdminHome />
+            </AuthorizeAdmin>
+          } />
+
+
+
+          <Route path='/users-list' element={
+            <AuthorizeAdmin>
+              <UserManage />
+            </AuthorizeAdmin>
+          } />
+
+
+          <Route path='/doctors-list' element={
+            <AuthorizeAdmin>
+              <ViewDoctors />
+            </AuthorizeAdmin>
+          } />
+
+          <Route path='/manage-doctors' element={
+            <AuthorizeAdmin>
+              <ManageDoctors />
+            </AuthorizeAdmin>
+          } />
+
+          <Route path='/doctor-card/:doctorId' element={
+            <AuthorizeAdmin>
+              <DoctorCard />
+            </AuthorizeAdmin>
+          } />
+
+          
+          <Route path='/doctor-login' element={
+            <AuthDoctor>
+             <DoctorLogin />
+            </AuthDoctor>
+          } />
+
+           
+        <Route path='/doctor-register' element={
+            <AuthDoctor>
+               <DoctorRegister />
+            </AuthDoctor>
+          } />
+
+          <Route path='/doctor-home' element={
+            <AuthorizeDoctor>
+              <DoctorHome /> 
+            </AuthorizeDoctor>
+          } />
+
+
+
 
 
        </Routes>

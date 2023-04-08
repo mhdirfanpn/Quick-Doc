@@ -40,7 +40,7 @@ const Register = () => {
 
     await axios.post(USER_SIGN_UP,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
       if(data.success){        
-        navigate('/login');
+        navigate('/');
       }else{
         toast.error(data.message)
       }
@@ -128,7 +128,7 @@ const Register = () => {
         Already have an account?{" "}
         <Link
           href="#"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/")}
           variant="body2"
           ml={1}
         >
