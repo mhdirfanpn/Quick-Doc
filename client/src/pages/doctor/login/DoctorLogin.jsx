@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { loginSchema } from "../../../schemas";
+import { useFormik } from "formik";
 import {
   FormControl,
   FormLabel,
@@ -19,21 +21,10 @@ const DoctorLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (email === "" || password === "") {
-      return toast.error("Please Fill the Components");
-    }
-
-    const body = JSON.stringify({
-      email,
-      password,
-    });
-
+  const onSubmit = async (values, actions) => {
+    const body = JSON.stringify(values);
+    console.log(body);
     try {
       await axios
         .post(DOC_LOGIN, body, {
@@ -52,6 +43,7 @@ const DoctorLogin = () => {
 
             navigate("/doctor-home");
             localStorage.setItem("doctorToken", data.token);
+            
           } else {
             toast.error(data.message);
           }
@@ -62,7 +54,18 @@ const DoctorLogin = () => {
     } catch (err) {
       toast.error("Oops Something went wrong");
     }
+    actions.resetForm(); 
   };
+
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit,
+  });
+
 
   return (
     <Box
@@ -81,21 +84,21 @@ const DoctorLogin = () => {
         <FormControl>
           <FormLabel>Email address</FormLabel>
           <Input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
+             value={values.email}
+             onChange={handleChange}
+             onBlur={handleBlur}
+             id="email" type="email" placeholder="Enter your email" />
+             {errors.email && touched.email && <p className="error">{errors.email}</p>}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Password</FormLabel>
           <Input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="password" type="password" placeholder="Enter your password" />
+             {errors.password && touched.password && <p className="error">{errors.password}</p>}
         </FormControl>
         <Button
           bg="#011c91"

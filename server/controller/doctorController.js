@@ -74,3 +74,17 @@ export const doctorLogin = async(req,res)=>{
  }
 
 
+ export const doctorDetails = async(req,res) => {
+   console.log('hello');
+   console.log(req.params.id);
+   try {
+      const doctorDetails=await Doctor.findOne({_id:req.params.id})
+      console.log(doctorDetails);
+      res.status(200).json({message:"data sent successfully successfully",doctorDetails})
+
+  } catch(err){
+   console.log(err);
+      res.status(400).json({error:err})
+  }
+ }
+

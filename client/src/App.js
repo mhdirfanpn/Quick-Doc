@@ -1,3 +1,4 @@
+import './App.css'
 import React from 'react'
 import Register from './pages/user/register/Register'
 import Login from './pages/user/login/Login'
@@ -18,17 +19,17 @@ import AuthorizeUser from './protected/user/AuthorizeUser'
 import AuthUser from './protected/user/AuthUser'
 import AuthorizeDoctor from './protected/doctor/AuthorizeDoctor'
 import AuthDoctor from './protected/doctor/AuthDoctor'
-import { useSelector } from 'react-redux'
+
 
 
 const App = () => {
   
-
   return (
     <div> 
        <BrowserRouter>
        <Routes>
-          
+
+  {/* ========================================USER ROUTES============================================================= */}        
 
           <Route path='/' element={
             <AuthUser>
@@ -48,6 +49,31 @@ const App = () => {
             </AuthorizeUser>
           }/>
 
+
+  {/* ========================================DOCTOR ROUTES============================================================= */}
+
+        <Route path='/doctor-login' element={
+            <AuthDoctor>
+             <DoctorLogin />
+            </AuthDoctor>
+          } />
+
+           
+        <Route path='/doctor-register' element={
+            <AuthDoctor>
+               <DoctorRegister />
+            </AuthDoctor>
+          } />
+
+          <Route path='/doctor-home' element={
+            <AuthorizeDoctor>
+              <DoctorHome /> 
+            </AuthorizeDoctor>
+          } />
+
+
+  {/* ========================================ADMIN ROUTES============================================================= */}         
+         
           <Route path='/admin' element={
             <AuthAdmin>
               <AdminLogin />
@@ -88,29 +114,6 @@ const App = () => {
           } />
 
           
-          <Route path='/doctor-login' element={
-            <AuthDoctor>
-             <DoctorLogin />
-            </AuthDoctor>
-          } />
-
-           
-        <Route path='/doctor-register' element={
-            <AuthDoctor>
-               <DoctorRegister />
-            </AuthDoctor>
-          } />
-
-          <Route path='/doctor-home' element={
-            <AuthorizeDoctor>
-              <DoctorHome /> 
-            </AuthorizeDoctor>
-          } />
-
-
-
-
-
        </Routes>
        </BrowserRouter>
     </div>

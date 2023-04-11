@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 
+
 export default function AuthorizeDoctor({children}){
     const token=localStorage.getItem('doctorToken');
 

@@ -1,0 +1,9 @@
+.box-border {
+    border-width: 2px;
+    border-color: #e2e8f0;
+    border-style: solid;
+  }
+
+  .box-shadow {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }

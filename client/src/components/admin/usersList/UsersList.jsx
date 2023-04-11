@@ -19,12 +19,14 @@ import {
 import { ALL_USERS } from "../../../utils/ConstUrls";
 import axios from "../../../utils/axios";
 import toast, { Toaster } from "react-hot-toast";
+import debounce from "lodash.debounce"; // import debounce function from lodash library
+
 
 const UsersList = () => {
   const PAGE_SIZE = 6;
   const [state, setState] = useState("");
   const [usersList, setUsers] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const adminToken = localStorage.getItem("adminToken");
@@ -55,10 +57,13 @@ const UsersList = () => {
       });
    
   };
+  
 
   useEffect(() => {
     getUserDetails();
-  }, [state, currentPage, searchValue]);
+  }, [state,searchTerm, currentPage]);
+
+
 
   const getUserDetails = async () => {
     try {
@@ -66,10 +71,12 @@ const UsersList = () => {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
       console.log(response.data);
-      setUsers(response.data);
-      const filteredUsers = response.data.filter((user) =>
-        user.userName.toLowerCase().includes(searchValue.toLowerCase())
+      let filteredUsers = response.data;
+      if(searchTerm){
+        filteredUsers = response.data.filter((user) =>
+        user.userName.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      }
       setTotalPages(Math.ceil(filteredUsers.length / PAGE_SIZE));
       const startIndex = (currentPage - 1) * PAGE_SIZE;
       const endIndex = startIndex + PAGE_SIZE;
@@ -80,10 +87,7 @@ const UsersList = () => {
     }
   };
 
-  const handleSearch = (event) => {
-    setSearchValue(event.target.value);
-    setCurrentPage(1);
-  };
+ 
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -97,6 +101,11 @@ const UsersList = () => {
     }
   };
 
+  const handleSearch = debounce((value) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  }, 700);
+
   return (
     <Box marginLeft={80} marginTop={10}>
       <Text fontWeight="bold" fontSize="3xl">
@@ -105,16 +114,16 @@ const UsersList = () => {
       <Stack>
         <Box>
           <InputGroup size="sm">
-            <Input
-              className="border1"
-              type="text"
-              placeholder="Search by name"
-              value={searchValue}
-              onChange={handleSearch}
-              border="white"
-              marginTop={10}
-              marginRight="130"
-            />
+          <Input
+  className="border1"
+  type="text"
+  placeholder="Search by name"
+  border="white"
+  marginTop={10}
+  marginRight="130"
+  onChange={(e) => handleSearch(e.target.value)}
+/>
+
           </InputGroup>
           <Table variant="simple" marginTop={10}>
             <Thead>

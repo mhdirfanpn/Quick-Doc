@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userSignUpSchema } from "../../../schemas";
+import { useFormik } from "formik";
 import {
   FormControl,
   FormLabel,
@@ -10,45 +12,51 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
-import toast, { Toaster } from 'react-hot-toast';
-import axios from "../../../utils/axios"
+import toast, { Toaster } from "react-hot-toast";
+import axios from "../../../utils/axios";
 import { USER_SIGN_UP } from "../../../utils/ConstUrls";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [date, setDate] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [number, setNumber] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (values, actions) => {
+    const body = JSON.stringify(values);
+    console.log(body);
 
-    if (userName ==="" || date ==="" || number ==="" || email === "" || password === "") {
-      return toast.error("Please Fill the Components");
+    try {
+      await axios
+        .post(USER_SIGN_UP, body, {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then(({ data }) => {
+          if (data.success) {
+            navigate("/");
+          } else {
+            toast.error(data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      toast.error("Oops Something went wrong");
     }
-
-    const body= JSON.stringify({
-      userName,
-      date,
-      number,
-      email,
-      password
-    })
-   
-
-    await axios.post(USER_SIGN_UP,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
-      if(data.success){        
-        navigate('/');
-      }else{
-        toast.error(data.message)
-      }
-    })
-
-
+    actions.resetForm();
   };
- 
+
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: {
+        userName: "",
+        email: "",
+        password: "",
+        date: "",
+        number: "",
+      },
+      validationSchema: userSignUpSchema,
+      onSubmit,
+    });
+
   return (
     <Box
       p={4}
@@ -63,53 +71,79 @@ const Register = () => {
         <Heading>Register</Heading>
       </Box>
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Full name</FormLabel>
+        <FormControl mt={6}>
+          <FormLabel>Username</FormLabel>
           <Input
+            value={values.userName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="userName"
             type="text"
-            placeholder="Enter your full name"
-            value={userName}
-            onChange={(event) => setUserName(event.target.value)}
+            placeholder="Enter your username"
           />
+          {errors.userName && touched.userName && (
+            <p className="error">{errors.userName}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Email address</FormLabel>
           <Input
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="email"
             type="email"
             placeholder="Enter your email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
           />
+          {errors.email && touched.email && (
+            <p className="error">{errors.email}</p>
+          )}
         </FormControl>
+
         <FormControl mt={6}>
           <FormLabel>Date of birth</FormLabel>
           <Input
-            placeholder="Select Date and Time"
-            size="md"
+            value={values.date}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="date"
             type="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
+            placeholder="Enter your Date of Birth"
           />
+          {errors.date && touched.date && (
+            <p className="error">{errors.date}</p>
+          )}
         </FormControl>
+
         <FormControl mt={6}>
           <FormLabel>Contact Number</FormLabel>
           <Input
-            placeholder="Enter contact number"
-            size="md"
-            type="text"
-            value={number}
-            onChange={(event) => setNumber(event.target.value)}
+            value={values.number}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="number"
+            type="number"
+            placeholder="Enter your Number"
           />
+          {errors.number && touched.number && (
+            <p className="error">{errors.number}</p>
+          )}
         </FormControl>
+
         <FormControl mt={6}>
           <FormLabel>Password</FormLabel>
           <Input
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="password"
             type="password"
             placeholder="Enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
           />
+          {errors.password && touched.password && (
+            <p className="error">{errors.password}</p>
+          )}
         </FormControl>
         <Button
           bg="#46c29d"
@@ -126,12 +160,7 @@ const Register = () => {
       </form>
       <Text align="center" mt={3}>
         Already have an account?{" "}
-        <Link
-          href="#"
-          onClick={() => navigate("/")}
-          variant="body2"
-          ml={1}
-        >
+        <Link href="#" onClick={() => navigate("/")} variant="body2" ml={1}>
           Login
         </Link>
       </Text>

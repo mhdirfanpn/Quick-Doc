@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import Admin from "../model/admin.js";
 import User from '../model/user.js'
 import Doctors from '../model/doctor.js'
+import { token } from '../validation/tokenValidate.js';
 
 export const adminLogin = async(req,res)=>{
 
@@ -21,11 +22,12 @@ export const adminLogin = async(req,res)=>{
            
               if(!matchPassword) return res.status(200).json({success:false,message:"Admin Password is not matched"})
      
-              const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWT_SECRET)
+              const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWT_SECRET);
+              token(adminToken);
               res.status(200).json({success:true,message:"Login success",adminToken,adminDetails})
          }else{
              
-              res.status(200).json({success:false,message:"admin credentials not found"})
+              res.status(200).json({success:false,message:"admin email is not matched"})
          }
          
     } catch(err){
@@ -37,6 +39,7 @@ export const adminLogin = async(req,res)=>{
 export const getAllUsers = async (req,res)=>{
     try{
          const users=await User.find();
+         console.log(req.header("Authorization").split(" ").pop());
          if(!users){
               return   res.status(200).json({message:"no users found"}) 
          }

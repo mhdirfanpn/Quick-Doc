@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import { ALL_DOC_REQ } from "../../../utils/ConstUrls";
 import { useNavigate } from "react-router-dom";
-
-
+import { debounce } from "lodash";
 
 
 const DoctorsRequest = () => {
@@ -12,24 +11,24 @@ const DoctorsRequest = () => {
   const PAGE_SIZE = 6;
   const navigate = useNavigate()
   const [doctorsReq,setDocReq] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const adminToken=localStorage.getItem("adminToken")
+  const [searchTerm, setSearchTerm] = useState("");
+  const adminToken=localStorage.getItem("adminToken");
 
   useEffect(()=>{
     getDoctorsReq();
-  },[currentPage, searchValue])
+  },[currentPage, searchTerm])
 
   const getDoctorsReq = async()=>{
     try {
 
         const response = await axios.get(ALL_DOC_REQ,{ headers: { 'Authorization': `Bearer ${adminToken}`}})
         console.log(response.data);
-        setDocReq(response.data);
         const filteredDoctors = response.data.filter((doctor) =>
-        doctor.fullName.toLowerCase().includes(searchValue.toLowerCase())
-        ); setTotalPages(Math.ceil(filteredDoctors.length / PAGE_SIZE));
+          doctor.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+        ); 
+        setTotalPages(Math.ceil(filteredDoctors.length / PAGE_SIZE));
         const startIndex = (currentPage - 1) * PAGE_SIZE;
         const endIndex = startIndex + PAGE_SIZE;
         const usersToDisplay = filteredDoctors.slice(startIndex, endIndex);
@@ -44,10 +43,10 @@ const DoctorsRequest = () => {
     navigate(`/doctor-card/${id}`)
   }
 
-  const handleSearch = (event) => {
-    setSearchValue(event.target.value);
+  const handleSearch = debounce((value) => {
+    setSearchTerm(value);
     setCurrentPage(1);
-  };
+  }, 700);
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -71,11 +70,10 @@ const DoctorsRequest = () => {
                     className="border1"
                     type="text"
                     placeholder="Search by name"
-                    value={searchValue}
-                    onChange={handleSearch}
                     border="white"
                     marginTop={10}
                     marginRight="130"
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
                 </InputGroup>
           <Table variant="simple" marginTop={10}>

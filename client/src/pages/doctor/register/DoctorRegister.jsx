@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { React } from "react";
 import { useNavigate } from "react-router-dom";
+import { doctorSignUpSchema } from "../../../schemas";
+import { useFormik } from "formik";
 import {
   FormControl,
   FormLabel,
@@ -40,43 +42,13 @@ const DoctorRegister = () => {
 
   const navigate = useNavigate();
 
-  const [fullName, setFullName] = useState("");
-  const [date, setDate] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [number, setNumber] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const [experience,setExperience] = useState("")
-  const [register, setRegister] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (
-      fullName === "" ||
-      date === "" ||
-      number === "" ||
-      email === "" ||
-      password === "" ||
-      specialization ==="" ||
-      experience ==="" ||
-      register ===""
-    ) {
-      return toast.error("Please Fill the Components");
-    }
-
-    const body = JSON.stringify({
-      fullName,
-      date,
-      number,
-      email,
-      password,
-      specialization,
-      experience,
-      register
-    });
-
-    await axios
+  const onSubmit = async (values, actions) => {
+    const body = JSON.stringify(values);
+    console.log(body)
+  
+    try {
+      await axios
       .post(DOC_SIGN_UP, body, {
         headers: { "Content-Type": "application/json" },
       })
@@ -87,7 +59,29 @@ const DoctorRegister = () => {
           toast.error(data.message);
         }
       });
+    } catch (err) {
+      toast.error("Oops Something went wrong");
+    }
+    actions.resetForm(); 
   };
+
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      date: "",
+      number: "",
+      specialization: "",
+      experience: "",
+      register: ""
+    },
+    validationSchema: doctorSignUpSchema,
+    onSubmit,
+  });
+
+  
+  
 
   return (
     <Box
@@ -106,41 +100,59 @@ const DoctorRegister = () => {
         <FormControl>
           <FormLabel>Full name</FormLabel>
           <Input
+            value={values.fullName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="fullName"
             type="text"
-            placeholder="Enter your full name"
-            value={fullName}
-            onChange={(event) => setFullName(event.target.value)}
+            placeholder="Enter your fullName"
           />
+          {errors.fullName && touched.fullName && (
+            <p className="error">{errors.fullName}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Email address</FormLabel>
           <Input
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="email"
             type="email"
             placeholder="Enter your email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
           />
+          {errors.email && touched.email && (
+            <p className="error">{errors.email}</p>
+          )}
         </FormControl>
         <FormControl mt={6}>
           <FormLabel>Date of birth</FormLabel>
           <Input
-            placeholder="Select Date and Time"
-            size="md"
+            value={values.date}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="date"
             type="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
+            placeholder="Enter your Date of Birth"
           />
+          {errors.date && touched.date && (
+            <p className="error">{errors.date}</p>
+          )}
         </FormControl>
         <FormControl mt={6}>
           <FormLabel>Contact Number</FormLabel>
           <Input
-            placeholder="Enter contact number"
-            size="md"
-            type="text"
-            value={number}
-            onChange={(event) => setNumber(event.target.value)}
+            value={values.number}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="number"
+            type="number"
+            placeholder="Enter your Number"
           />
+          {errors.number && touched.number && (
+            <p className="error">{errors.number}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
@@ -148,18 +160,25 @@ const DoctorRegister = () => {
           <Input
             placeholder="Enter your Register Number"
             size="md"
-            type="text"
-            value={register}
-            onChange={(event) => setRegister(event.target.value)}
+            value={values.register}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="register"
+            type="number"
           />
+          {errors.register && touched.register && (
+            <p className="error">{errors.register}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Qualification</FormLabel>
           <Select
             placeholder="Choose your Qualification"
-            value={specialization}
-            onChange={(event) => setSpecialization(event?.target?.value)}
+            value={values.specialization}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="specialization"
           >
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -167,14 +186,19 @@ const DoctorRegister = () => {
               </option>
             ))}
           </Select>
+          {errors.specialization && touched.specialization && (
+            <p className="error">{errors.specialization}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Experience</FormLabel>
           <Select
             placeholder="Choose your Experience in years"
-            value={specialization}
-            onChange={(event) => setExperience(event?.target?.value)}
+            value={values.experience}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="experience"
           >
             {exp.map((option) => (
               <option key={option.value} value={option.value}>
@@ -182,17 +206,25 @@ const DoctorRegister = () => {
               </option>
             ))}
           </Select>
+          {errors.experience && touched.experience && (
+            <p className="error">{errors.experience}</p>
+          )}
         </FormControl>
 
         <FormControl mt={6}>
           <FormLabel>Password</FormLabel>
           <Input
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            id="password"
             type="password"
             placeholder="Enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
           />
-        </FormControl>
+          {errors.password && touched.password && (
+            <p className="error">{errors.password}</p>
+          )}
+         </FormControl>
         <Button
           bg="#011c91"
           colorScheme="#011c91"

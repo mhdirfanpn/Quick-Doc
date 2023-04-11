@@ -8,9 +8,8 @@ function Home() {
   return (
     <>
       <Navbar />
-      <Body1/>
-      <Footer/>
-     
+      <Body1/>  
+      <Footer/>   
     </>
   );
 }

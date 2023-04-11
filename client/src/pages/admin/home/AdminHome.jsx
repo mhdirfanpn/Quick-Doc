@@ -5,8 +5,8 @@ import Sidebar from '../../../components/admin/sidebar/Sidebar'
 const AdminHome = () => {
   return (
     <>
-    <Navbar/>
-    <Sidebar/>
+   <Navbar/>
+   <Sidebar/>
     </>
   )
 }

@@ -23,6 +23,7 @@ const ListHeader = () => {
 const Footer = () => {
   return (
     <Box
+      marginTop={5}
       bg={useColorModeValue("#46c29d", "gray.900")}
       color={useColorModeValue("white")}
       bottom={0}
