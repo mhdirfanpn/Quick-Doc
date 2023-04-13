@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
 const DoctorSchema=mongoose.Schema({
-
-
     
     fullName:{
         type:String,

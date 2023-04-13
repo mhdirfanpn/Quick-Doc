@@ -21,7 +21,6 @@ import axios from "../../../utils/axios";
 import toast, { Toaster } from "react-hot-toast";
 import debounce from "lodash.debounce"; // import debounce function from lodash library
 
-
 const UsersList = () => {
   const PAGE_SIZE = 6;
   const [state, setState] = useState("");
@@ -41,7 +40,7 @@ const UsersList = () => {
       })
       .then(() => {
         setState(time);
-        toast.success("unblocked")
+        toast.success("unblocked");
       });
   };
 
@@ -53,17 +52,13 @@ const UsersList = () => {
       })
       .then(() => {
         setState(time);
-        toast.error("blocked")
+        toast.error("blocked");
       });
-   
   };
-  
 
   useEffect(() => {
     getUserDetails();
-  }, [state,searchTerm, currentPage]);
-
-
+  }, [state, searchTerm, currentPage]);
 
   const getUserDetails = async () => {
     try {
@@ -72,10 +67,10 @@ const UsersList = () => {
       });
       console.log(response.data);
       let filteredUsers = response.data;
-      if(searchTerm){
+      if (searchTerm) {
         filteredUsers = response.data.filter((user) =>
-        user.userName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+          user.userName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       }
       setTotalPages(Math.ceil(filteredUsers.length / PAGE_SIZE));
       const startIndex = (currentPage - 1) * PAGE_SIZE;
@@ -86,8 +81,6 @@ const UsersList = () => {
       console.log(err);
     }
   };
-
- 
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -114,16 +107,15 @@ const UsersList = () => {
       <Stack>
         <Box>
           <InputGroup size="sm">
-          <Input
-  className="border1"
-  type="text"
-  placeholder="Search by name"
-  border="white"
-  marginTop={10}
-  marginRight="130"
-  onChange={(e) => handleSearch(e.target.value)}
-/>
-
+            <Input
+              className="border1"
+              type="text"
+              placeholder="Search by name"
+              border="white"
+              marginTop={10}
+              marginRight="130"
+              onChange={(e) => handleSearch(e.target.value)}
+            />
           </InputGroup>
           <Table variant="simple" marginTop={10}>
             <Thead>

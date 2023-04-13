@@ -47,7 +47,7 @@ export const userLogin = async(req,res)=>{
           if(userDetails){
 
             if(userDetails.isBlocked){
-               return res.status(200).json({success:false,message:"User is blocked"})
+               return res.status(200).json({success:false,message:"User is blocked"})    
             }
 
              const passMatch=await bcrypt.compare(password,userDetails.password);
@@ -56,15 +56,26 @@ export const userLogin = async(req,res)=>{
                 return res.status(200).json({success:false,message:"User Password is Invalid"})
              }
              
-             const token=jwt.sign({id:userDetails._id},process.env.JWT_SECRET,{expiresIn:'30d'});
+             const token=jwt.sign({id:userDetails._id,name:userDetails.userName,password:userDetails.password},process.env.JWT_SECRET,{expiresIn:'30d'});
              res.status(200).json({success:true,token,userDetails})
 
           }else{
              res.status(200).json({success:false,message:"User not found"})
           } 
-       }
+       }   
 
        catch(err){
         res.status(400).json({error:err})
      }
  }
+
+
+ export const userDetails = async(req,res) => {
+   try {
+      const userDetails = await User.findOne({_id:req.params.id})
+      res.status(200).json({message:"user data sent successfully",userDetails})
+
+   } catch (err) {
+       res.status(400).json({error:err})
+   }
+}

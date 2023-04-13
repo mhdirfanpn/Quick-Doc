@@ -19,6 +19,9 @@ import AuthorizeUser from './protected/user/AuthorizeUser'
 import AuthUser from './protected/user/AuthUser'
 import AuthorizeDoctor from './protected/doctor/AuthorizeDoctor'
 import AuthDoctor from './protected/doctor/AuthDoctor'
+import UserProfile from './pages/user/profile/UserProfile'
+import UserProfileEdit from './pages/user/profile/UserProfileEdit'
+import DoctorProfile from './pages/doctor/profile/DoctorProfile'
 
 
 
@@ -49,6 +52,18 @@ const App = () => {
             </AuthorizeUser>
           }/>
 
+          <Route path='/profile' element={
+            <AuthorizeUser>
+              <UserProfile/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/profile/edit' element={
+            <AuthorizeUser>
+              <UserProfileEdit/>
+            </AuthorizeUser>
+          }/>
+
 
   {/* ========================================DOCTOR ROUTES============================================================= */}
 
@@ -68,6 +83,13 @@ const App = () => {
           <Route path='/doctor-home' element={
             <AuthorizeDoctor>
               <DoctorHome /> 
+            </AuthorizeDoctor>
+          } />
+
+
+          <Route path='/doctor-profile' element={
+            <AuthorizeDoctor>
+              <DoctorProfile /> 
             </AuthorizeDoctor>
           } />
 

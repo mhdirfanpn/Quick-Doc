@@ -23,10 +23,13 @@ const ListHeader = () => {
 const Footer = () => {
   return (
     <Box
-      marginTop={5}
-      bg={useColorModeValue("#46c29d", "gray.900")}
-      color={useColorModeValue("white")}
-      bottom={0}
+    position=""
+    bottom={0}
+    left={0}
+    right={0}
+    marginTop={5}
+    bg={useColorModeValue("#46c29d", "gray.900")}
+    color={useColorModeValue("white")}
     >
       <Container as={Stack} maxW={"6xl"} py={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>

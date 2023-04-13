@@ -12,16 +12,16 @@ import {
   
     return (
       <Box
-        position="absolute"
-        marginTop='86'
-        left="0"
-        top="0"
-        h="100%"
-        w="25"
-        bg="#051766"
-        color="white"
-        px="8"
-        py="6"
+      position="absolute"
+      marginTop='86'
+      left="0"
+      top="0"
+      h="100vh"
+      w="25"
+      bg="#051766"
+      color="white"
+      px="8"
+      py="6"
       >
         <Stack spacing="7" mt="7">
           <Box>

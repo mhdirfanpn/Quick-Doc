@@ -4,6 +4,7 @@ import { useState,useEffect } from "react";
 import axios from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
 import { DOC_DETAILS } from "../../../utils/ConstUrls";
+import { useNavigate } from "react-router-dom";
 
 function DoctorProfile() {
 
@@ -14,13 +15,13 @@ function DoctorProfile() {
 
   const [doctorDetails,setDoctorDetails]=useState('');
   const doctorToken=localStorage.getItem('doctorToken');
+  const navigate = useNavigate()
   
 
 
   const getDoctorsDetails = async()=>{
     try{
       const decode = jwtDecode(localStorage.getItem("doctorToken"))
-      console.log(decode.id);
         await axios.get(`${DOC_DETAILS}/${decode.id}`,{ headers: { 'Authorization': `Bearer ${doctorToken}` } }).then((response)=>{
         console.log(response.data.doctorDetails);
         setDoctorDetails(response.data.doctorDetails);  
@@ -50,7 +51,7 @@ function DoctorProfile() {
       <Flex justify="space-between" align="center">
         <Image src="https://www.asterhospitals.in/sites/default/files/styles/webp/public/2022-02/dr-anil-kumar-r-best-cardiologist-in-kochi.jpg.webp?itok=CntgMaxn/400x400" alt="Dr. Jane Smith" mb="4" />
 
-        <IconButton aria-label="Edit profile" icon={<EditIcon />} size="sm" marginBottom="500"/>
+        <IconButton aria-label="Edit profile" icon={<EditIcon />} size="sm" marginBottom="500" onClick={()=>navigate('/doctor-profile')}/>
       </Flex>
 
       <VStack spacing={1} align="left">

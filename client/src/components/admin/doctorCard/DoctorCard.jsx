@@ -1,7 +1,8 @@
-import { Box, Grid, GridItem, Text, Button } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text, Button, IconButton } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../../utils/axios";
+import { MdEdit } from 'react-icons/md';
 import Swal from "sweetalert2";
 
 const DoctorCard = () => {
@@ -101,6 +102,15 @@ const DoctorCard = () => {
       shadow="md"
       dark={{ bg: "gray.800", borderColor: "gray.700" }}
     >
+         <IconButton
+        aria-label="Edit Profile"
+        icon={<MdEdit />}
+        size="md"
+        position="absolute"
+        top="4"
+        right="4"
+        onClick={()=>navigate('edit')}
+      />
       <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
         <GridItem>
           <Text

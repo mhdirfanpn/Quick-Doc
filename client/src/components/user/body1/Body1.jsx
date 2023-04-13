@@ -1,8 +1,6 @@
-
-
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import './Body1.css'
+import "./Body1.css";
 
 const Body1 = () => {
   return (
@@ -33,4 +31,3 @@ const Body1 = () => {
 };
 
 export default Body1;
-

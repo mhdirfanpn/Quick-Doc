@@ -85,7 +85,7 @@ export default function NavBar() {
                         <p>Dashboard</p>
                     </li>
                     <li className="text-white">
-                        <p>Profile</p>
+                        <p onClick={()=>navigate('/profile')} >Profile</p>
                     </li>
                     <li className="text-white text-right-0">
                         <button  onClick={handleLogout}
