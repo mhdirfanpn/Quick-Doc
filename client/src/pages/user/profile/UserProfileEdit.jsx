@@ -1,13 +1,13 @@
 import React from "react";
 import NavBar from "../../../components/user/navbar/Navbar";
-import UserProfileBox from "../../../components/user/profile/UserProfileBox";
 import Footer from "../../../components/user/footer/Footer";
+import UpdateProperty from "../../../components/user/profile/UpdateUserProfile";
 
 const UserProfileEdit = () => {
   return (
     <>
       <NavBar />
-      <UserProfileBox />
+      <UpdateProperty/>
       <Footer />
     </>
   );

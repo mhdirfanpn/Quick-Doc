@@ -1,5 +1,19 @@
 import mongoose from "mongoose";
 
+
+
+// const profileSchema=mongoose.Schema({  
+//     id:{
+//         type:String
+//     },
+//     pic_url:{
+//         type:String
+//     },
+    
+// })
+
+
+
 const UserSchema=mongoose.Schema({  
     userName:{
         type:String,

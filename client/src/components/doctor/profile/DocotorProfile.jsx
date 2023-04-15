@@ -1,4 +1,4 @@
-import { Box, Image, Badge, Text, VStack, HStack, Flex, IconButton } from "@chakra-ui/react";
+import { Box, Avatar, Badge, Text, VStack, HStack, Flex, IconButton } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import { useState,useEffect } from "react";
 import axios from "../../../utils/axios";
@@ -35,6 +35,8 @@ function DoctorProfile() {
     }   
   }
 
+  let imageUrl = doctorDetails.profilePic
+
   return (
     <Box
       marginLeft="330"
@@ -49,12 +51,21 @@ function DoctorProfile() {
       dark={{ bg: "gray.800", borderColor: "gray.700" }}
     >
       <Flex justify="space-between" align="center">
-        <Image src="https://www.asterhospitals.in/sites/default/files/styles/webp/public/2022-02/dr-anil-kumar-r-best-cardiologist-in-kochi.jpg.webp?itok=CntgMaxn/400x400" alt="Dr. Jane Smith" mb="4" />
+      <Avatar
+          src={imageUrl}
+          boxSize={200}
+          borderRadius={10}
+          size="4xl"
+        />
 
-        <IconButton aria-label="Edit profile" icon={<EditIcon />} size="sm" marginBottom="500" onClick={()=>navigate('/doctor-profile')}/>
+        <EditIcon
+        mt="-90"
+            onClick={() => navigate('/doctor-profile')}
+        />
+
       </Flex>
 
-      <VStack spacing={1} align="left">
+      <VStack spacing={1} align="left" mt={6}>
         <Text fontWeight="bold" fontSize="2xl">
           {doctorDetails.fullName}
         </Text>

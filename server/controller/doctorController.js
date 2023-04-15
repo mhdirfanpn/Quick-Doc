@@ -1,6 +1,7 @@
 import Doctor from '../model/doctor.js'
 import bcrypt from 'bcrypt'
 import  jwt  from 'jsonwebtoken'
+import cloudinary from '../utils/cloudinary.js'
 
 
 export const registerDoctor = async (req,res) => {
@@ -85,4 +86,68 @@ export const doctorLogin = async(req,res)=>{
       res.status(400).json({error:err})
   }
  }
+
+
+export const updateDetails =async(req,res)=>{
+
+   try {
+       const doctorDetails = await Doctor.findOneAndUpdate({_id:req.params.id},{
+         fullName:req.body.fullName,
+         email:req.body.email,
+         number:req.body.number,
+         experience:req.body.experience
+       })
+       if(!doctorDetails){
+         return res.status(200).json({success:false,message:"Doctor not found"})
+       }
+
+      res.status(200).json({message:"doctor data updated successfully",doctorDetails})
+       
+   } catch (err) {
+       res.status(400).json({error:err})
+   }
+}
+
+export const updatePassword =async(req,res)=>{
+
+   try {
+
+      let password = req.body.newPassword
+
+       if(password){
+         const hashedPassword=await bcrypt.hash(password,10);
+   
+         await Doctor.findOneAndUpdate({_id:req.params.id},{
+         password:hashedPassword
+       })
+       
+         return res.status(200).json({message:"doctor password is updated successfully"})
+      }
+       
+   } catch (err) {
+       res.status(400).json({error:err})
+   }
+}
+
+
+export const updateProfileImage =async(req,res)=>{
+   console.log('hello');
+   try {
+      const result = await cloudinary.uploader.upload(req.file.path);
+
+     let user =  await Doctor.findByIdAndUpdate(req.params.id,{
+         $set:{
+            profilePic:result.secure_url
+         }
+      })
+      let pic=user.profilePic
+      return res.status(200).json({message:"doctor image updated successfully",pic})
+  } catch (err) {
+      
+          console.log('Error uploading file:', err.message);
+      
+      res.status(400).json({error:err})
+  }
+  
+}
 
