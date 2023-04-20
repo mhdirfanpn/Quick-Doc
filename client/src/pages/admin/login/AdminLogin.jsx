@@ -3,13 +3,19 @@ import { useDispatch } from "react-redux";
 import { loginSchema } from "../../../schemas";
 import { useFormik } from "formik";
 import {
+  Flex,
+  Box,
   FormControl,
   FormLabel,
   Input,
+  Checkbox,
+  Stack,
+  Link,
   Button,
-  Box,
   Heading,
-} from "@chakra-ui/react";
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import toast, { Toaster } from "react-hot-toast";
 import { ADMIN_LOGIN } from "../../../utils/ConstUrls";
 import { setAdminLogin } from "../../../redux/adminSlice";
@@ -65,55 +71,68 @@ const AdminLogin = () => {
 
 
   return (
-    <Box
-      p={4}
-      borderWidth={1}
-      borderRadius={8}
-      boxShadow="lg"
-      maxWidth={{ base: "20%", md: "25%" }}
-      margin="0 auto"
-      marginTop="40"
-    >
-      <Box textAlign="center" mb={6}>
-        <Heading>ADMIN LOGIN</Heading>
-      </Box>
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
-          <Input
-             value={values.email}
-             onChange={handleChange}
-             onBlur={handleBlur}
-             id="email" type="email" placeholder="Enter your email" />
-             {errors.email && touched.email && <p className="error">{errors.email}</p>}
-        </FormControl>
 
-        <FormControl mt={6}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            value={values.password}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            id="password" type="password" placeholder="Enter your password" />
-             {errors.password && touched.password && <p className="error">{errors.password}</p>}
-      
-        </FormControl>
-        <Button
-          colorScheme="#0A1F29"
-          bg="#0A1F29"
-          size="md"
-          mt={7}
-          width="100%"
-          alignContent="center"
-          type="submit"
-          color="white"
-        >
-          LOGIN
-        </Button>
-      </form>
-      <Toaster />
-    </Box>
+    <Flex
+    minH={'100vh'} 
+    align={'center'}
+    justify={'center'}
+    bg={useColorModeValue('gray.50', 'gray.800')}>
+    <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+    <Stack align={'center'}>
+          <Heading fontSize={'4xl'}>Login to your account</Heading>
+          <Text fontSize={'lg'} color={'gray.600'}>
+            ✌️
+          </Text>
+        </Stack>
+      <Box
+        rounded={'lg'}
+        bg={useColorModeValue('white', 'gray.700')}
+        boxShadow={'lg'}
+        p={8}>
+        <Stack spacing={4}>
+        <form onSubmit={handleSubmit}>
+      <FormControl>
+        <FormLabel>Email address</FormLabel>
+        <Input
+           value={values.email}
+           onChange={handleChange}
+           onBlur={handleBlur}
+           id="email" type="email" placeholder="Enter your email" />
+           {errors.email && touched.email && <p className="error">{errors.email}</p>}
+      </FormControl>
+          <FormControl id="password">
+            <FormLabel>Password</FormLabel>
+            <Input
+          value={values.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          id="password" type="password" placeholder="Enter your password" />
+           {errors.password && touched.password && <p className="error">{errors.password}</p>}
+    
+      </FormControl>
+          <Stack spacing={10}>
+            <Button
+            mt={6}
+              bg={'black'}
+              type="submit"
+              color={'white'}
+              _hover={{
+                bg: 'black.500',
+              }}>
+                 LOGIN
+            </Button>
+          </Stack>
+          </form>
+        </Stack>
+      </Box>
+    </Stack>
+  </Flex>
   );
 };
 
 export default AdminLogin;
+
+
+
+
+

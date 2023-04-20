@@ -14,6 +14,8 @@ import {
   InputGroup,
   ButtonGroup,
   Text,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import axios from "../../../utils/axios";
 import { ALL_DOCTORS } from "../../../utils/ConstUrls";
@@ -95,37 +97,40 @@ const DoctorsList = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </InputGroup>
-          <Table variant="simple" marginTop={10}>
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Specialization</Th>
-                <Th>Contact</Th>
-                <Th>Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {doctorsList.map((doctor, index) => (
-                <Tr key={index}>
-                  <Td>{doctor.fullName}</Td>
-                  <Td>{doctor.email}</Td>
-                  <Td>{doctor.specialization}</Td>
-                  <Td>{doctor.number}</Td>
-                  <Td>
-                    <Button
-                      colorScheme="blue"
-                      size="sm"
-                      mr={2}
-                      onClick={() => viewMore(doctor._id)}
-                    >
-                      view more
-                    </Button>
-                  </Td>
+          <TableContainer>
+            <Table variant="striped" colorScheme="teal">
+              <TableCaption>Manage users</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Email</Th>
+                  <Th>Specialization</Th>
+                  <Th>Contact</Th>
+                  <Th>Action</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {doctorsList.map((doctor, index) => (
+                  <Tr key={index}>
+                    <Td>{doctor.fullName}</Td>
+                    <Td>{doctor.email}</Td>
+                    <Td>{doctor.specialization}</Td>
+                    <Td>{doctor.number}</Td>
+                    <Td>
+                      <Button
+                        colorScheme="blue"
+                        size="sm"
+                        mr={2}
+                        onClick={() => viewMore(doctor._id)}
+                      >
+                        view more
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
           <Flex
             className="parent-element"
             display="flex"

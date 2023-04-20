@@ -6,6 +6,7 @@ export const USER_DETAILS='/details'
 export const UPDATE_PROFILE='/updateDetails'
 export const UPDATE_IMG='/updateUserImage'
 export const UPDATE_PASS='/updatePassword'
+export const OTP_LOGIN='/otpLogin'
 
 export const DOC_SIGN_UP='doc/signup'
 export const DOC_LOGIN='doc/login'
@@ -13,6 +14,7 @@ export const DOC_DETAILS='doc/details'
 export const UPDATE_DOC_DETAILS='/doc/updateDetails'
 export const UPDATE_DOC_PASS='/doc/updatePassword'
 export const UPDATE_DOC_IMG='/doc/updateDoctorImage'
+
 
 
 export const ADMIN_LOGIN='admin/login'

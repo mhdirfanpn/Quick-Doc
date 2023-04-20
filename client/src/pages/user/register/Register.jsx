@@ -1,44 +1,46 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userSignUpSchema } from "../../../schemas";
+import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 import { useFormik } from "formik";
+import { useDispatch, } from "react-redux";
 import {
+  Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Box,
   Heading,
+  Input,
   Text,
-  Link,
-} from "@chakra-ui/react";
+  Stack,
+  Image,
+} from '@chakra-ui/react';
 import toast, { Toaster } from "react-hot-toast";
 import axios from "../../../utils/axios";
 import { USER_SIGN_UP } from "../../../utils/ConstUrls";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
     const body = JSON.stringify(values);
     console.log(body);
 
     try {
-      await axios
-        .post(USER_SIGN_UP, body, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then(({ data }) => {
-          if (data.success) {
+      await axios.post(USER_SIGN_UP, body, {headers: { "Content-Type": "application/json" },}).then(({ data }) => {
+        dispatch(hideLoading())
+        if (data.success) {
             navigate("/");
           } else {
             toast.error(data.message);
           }
         })
         .catch((err) => {
+          dispatch(hideLoading())
           console.log(err);
         });
     } catch (err) {
+      dispatch(hideLoading())
       toast.error("Oops Something went wrong");
     }
     actions.resetForm();
@@ -58,19 +60,21 @@ const Register = () => {
     });
 
   return (
-    <Box
-      p={4}
-      borderWidth={1}
-      borderRadius={8}
-      boxShadow="lg"
-      maxWidth={{ base: "20%", md: "25%" }}
-      margin="0 auto"
-      marginTop="20"
-    >
-      <Box textAlign="center" mb={4}>
-        <Heading>Register</Heading>
-      </Box>
-      <form onSubmit={handleSubmit}>
+
+<Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+<Flex flex={1}>
+ <Image
+   alt={'Login Image'}
+   objectFit={'cover'}
+   src={
+     'https://img.freepik.com/free-vector/online-doctor-concept-illustration_114360-1831.jpg?size=626&ext=jpg&ga=GA1.1.1128364979.1680491256&semt=ais'
+   }
+ />
+</Flex>
+<Flex p={8} flex={1} align={'center'} justify={'center'}>
+ <Stack spacing={4} w={'full'} maxW={'md'}>
+   <Heading fontSize={'2xl'}>Register a new account</Heading>
+   <form onSubmit={handleSubmit}>
         <FormControl mt={6}>
           <FormLabel>Username</FormLabel>
           <Input
@@ -81,12 +85,12 @@ const Register = () => {
             type="text"
             placeholder="Enter your username"
           />
-          {errors.userName && touched.userName && (
+  {errors.userName && touched.userName && (
             <p className="error">{errors.userName}</p>
-          )}
-        </FormControl>
+          )}   </FormControl>
 
-        <FormControl mt={6}>
+   
+<FormControl mt={6}>
           <FormLabel>Email address</FormLabel>
           <Input
             value={values.email}
@@ -100,7 +104,6 @@ const Register = () => {
             <p className="error">{errors.email}</p>
           )}
         </FormControl>
-
         <FormControl mt={6}>
           <FormLabel>Date of birth</FormLabel>
           <Input
@@ -145,28 +148,30 @@ const Register = () => {
             <p className="error">{errors.password}</p>
           )}
         </FormControl>
-        <Button
-          bg="#46c29d"
-          colorScheme="green"
-          size="md"
-          mt={6}
-          width="100%"
-          alignContent="center"
-          type="submit"
-          color="white"
-        >
-          SIGN IN
-        </Button>
-      </form>
-      <Text align="center" mt={3}>
-        Already have an account?{" "}
-        <Link href="#" onClick={() => navigate("/")} variant="body2" ml={1}>
-          Login
-        </Link>
-      </Text>
-      <Toaster />
-    </Box>
+
+   <Stack spacing={6} mt={2}>
+     <Stack
+       direction={{ base: 'column', sm: 'row' }}
+       align={'start'}
+       justify={'space-between'}>
+       <Text color={'blue.500'}>
+ Already have an account? <Link to="/">Log in</Link>
+</Text>
+     </Stack>
+     <Button colorScheme={'blue'} variant={'solid'}  type="submit" 
+   bg={'blue.500'}>
+      SIGN IN
+     </Button>
+     
+   </Stack>
+   </form>
+ </Stack>
+</Flex>
+<Toaster />
+</Stack>
   );
 };
 
 export default Register;
+
+

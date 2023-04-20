@@ -41,6 +41,9 @@ const DoctorSchema=mongoose.Schema({
     isVerified:{
         type:Boolean,
         default:false
+    },
+    timings:{
+        type:Object,
     }
 
 })

@@ -1,6 +1,8 @@
 import { Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useColorModeValue,  Avatar, AvatarBadge, IconButton, Center,  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure,} from "@chakra-ui/react";
 import { userDetailsUpdateSchema, changePasswordSchema } from "../../../schemas";
 import { useFormik } from "formik";
+import { useDispatch, } from "react-redux";
+import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 import { React, useState, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import axios from "../../../utils/axios";
@@ -15,25 +17,31 @@ const UpdateProperty = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // state variables for showing/hiding the modal
   const token = localStorage.getItem("userToken");
   const decode = jwtDecode(token);
-
+  const dispatch = useDispatch();
 
   const getUserDetails = async () => {
+    
     try {
       await axios.get(`${USER_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
           setUserDetails(response.data.userDetails);
+          dispatch(hideLoading())
         })
         .catch((err) => {
           console.log(err);
+          dispatch(hideLoading())
         });
     } catch (err) {
       console.log(err);
+      dispatch(hideLoading())
     }
   };
 
   const onSubmit = async (values, actions) => {
     try {
+      dispatch(showLoading())
       await axios.put(`${UPDATE_PROFILE}/${decode.id}`, values, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
           console.log(response.data.userDetails);
+          dispatch(hideLoading())
           if (response.data) {
             setState(response.data)
             toast.success("updated successfully")
@@ -43,9 +51,12 @@ const UpdateProperty = () => {
         })
         .catch((err) => {
           console.log(err);
+          dispatch(hideLoading())
+          toast.error("Oops Something went wrong");
         });
     } catch (err) {
       console.log(err);
+      dispatch(hideLoading())
       toast.error("Oops Something went wrong");
     }
     actions.resetForm();
@@ -71,8 +82,10 @@ const UpdateProperty = () => {
     validationSchema: changePasswordSchema,
     onSubmit: async (values, actions) => {
       try {
+        dispatch(showLoading())
         await axios.put(`${UPDATE_PASS}/${decode.id}`, values, { headers: { Authorization: `Bearer ${token}` },}).then((response) => {
             console.log(response.data);
+            dispatch(hideLoading())
             if (response.data) {
               setState(response.data)
               toast.success("Password updated successfully")
@@ -81,9 +94,11 @@ const UpdateProperty = () => {
             }
           })
           .catch((err) => {
+            dispatch(hideLoading())
             toast.error("Oops Something went wrong");
           });
       } catch (err) {
+        dispatch(hideLoading())
         toast.error("Oops Something went wrong");
       }
       actions.resetForm();
@@ -103,14 +118,17 @@ const UpdateProperty = () => {
     }
     const formData = new FormData();
     formData.append('image', profilePicture);
+    dispatch(showLoading())
     await axios.put(`${UPDATE_IMG}/${decode.id}`,formData,{ headers: { Authorization: `Bearer ${token}` },}).then((res)=>{
       if(res){
         setState(res);
         onClose();
+        dispatch(hideLoading())
         toast.success("image updated successfully")
       }
     }).catch((err)=>{
       onClose();
+      dispatch(hideLoading())
       toast.error("Oops Something went wrong");
       
     })
@@ -249,8 +267,8 @@ const UpdateProperty = () => {
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>
             <Button
-              colorScheme="green"
-              bg="#46c29d"
+              colorScheme="blue"
+              bg="#4851b0"
               size="md"
               mt={6}
               width="100%"
@@ -266,7 +284,7 @@ const UpdateProperty = () => {
               variant="link"
               fontSize="sm"
               fontWeight="medium"
-              color="purple.500"
+              color="red.500"
               _hover={{ textDecoration: "underline" }}
               onClick={() => setShowPasswordForm(!Boolean(showPasswordForm))}
             >
@@ -334,8 +352,8 @@ const UpdateProperty = () => {
                 fontSize="md"
                 fontWeight="medium"
                 textTransform="uppercase"
-                colorScheme="green"
-                bg="#46c29d"
+                colorScheme="blue"
+                bg="#4851b0"
               >
                 Save Password
               </Button>

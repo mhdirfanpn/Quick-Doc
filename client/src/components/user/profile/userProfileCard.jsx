@@ -2,6 +2,8 @@ import { Box, Grid, GridItem, Text, IconButton, Avatar } from "@chakra-ui/react"
 import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
 import { MdDateRange, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, } from "react-redux";
+import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -12,6 +14,7 @@ import { USER_DETAILS } from "../../../utils/ConstUrls";
 function UserProfileCard(props) {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("userToken");
   const decode = jwtDecode(token);
   const [UserDetails, setUserDetails] = useState("");
@@ -22,15 +25,19 @@ function UserProfileCard(props) {
 
 
   const getUserDetails = async () => {
+
     try {
       await axios.get(`${USER_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
           setUserDetails(response.data.userDetails);
+          dispatch(hideLoading())
         })
         .catch((err) => {
           console.log(err);
+          dispatch(hideLoading())
         });
     } catch (err) {
       console.log(err);
+      dispatch(hideLoading())
     }
   };
 

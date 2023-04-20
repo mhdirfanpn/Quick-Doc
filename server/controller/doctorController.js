@@ -2,6 +2,7 @@ import Doctor from '../model/doctor.js'
 import bcrypt from 'bcrypt'
 import  jwt  from 'jsonwebtoken'
 import cloudinary from '../utils/cloudinary.js'
+import moment from 'moment'
 
 
 export const registerDoctor = async (req,res) => {
@@ -91,11 +92,17 @@ export const doctorLogin = async(req,res)=>{
 export const updateDetails =async(req,res)=>{
 
    try {
+      let timings = req.body.timings
+      const times = timings.map(time => moment.utc(time).format('h:mm A'));
+
+console.log(times);
+  
        const doctorDetails = await Doctor.findOneAndUpdate({_id:req.params.id},{
          fullName:req.body.fullName,
          email:req.body.email,
          number:req.body.number,
-         experience:req.body.experience
+         experience:req.body.experience,
+         timings:times
        })
        if(!doctorDetails){
          return res.status(200).json({success:false,message:"Doctor not found"})

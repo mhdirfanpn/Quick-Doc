@@ -4,13 +4,15 @@ import { useDispatch } from "react-redux";
 import { loginSchema } from "../../../schemas";
 import { useFormik } from "formik";
 import {
+  Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Box,
   Heading,
+  Input,
   Text,
+  Stack,
+  Image,
 } from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "../../../utils/axios";
@@ -20,7 +22,6 @@ import { setDoctorLogin } from "../../../redux/doctorSlice";
 const DoctorLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const onSubmit = async (values, actions) => {
     const body = JSON.stringify(values);
@@ -43,7 +44,6 @@ const DoctorLogin = () => {
 
             navigate("/doctor-home");
             localStorage.setItem("doctorToken", data.token);
-            
           } else {
             toast.error(data.message);
           }
@@ -54,70 +54,93 @@ const DoctorLogin = () => {
     } catch (err) {
       toast.error("Oops Something went wrong");
     }
-    actions.resetForm(); 
+    actions.resetForm();
   };
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: loginSchema,
-    onSubmit,
-  });
-
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: loginSchema,
+      onSubmit,
+    });
 
   return (
-    <Box
-      p={4}
-      borderWidth={1}
-      borderRadius={8}
-      boxShadow="lg"
-      maxWidth={{ base: "20%", md: "25%" }}
-      margin="0 auto"
-      marginTop="40"
-    >
-      <Box textAlign="center" mb={4}>
-        <Heading>Doctor Login</Heading>
-      </Box>
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
-          <Input
-             value={values.email}
-             onChange={handleChange}
-             onBlur={handleBlur}
-             id="email" type="email" placeholder="Enter your email" />
-             {errors.email && touched.email && <p className="error">{errors.email}</p>}
-        </FormControl>
+    <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+      <Flex flex={1}>
+        <Image
+          alt={"Login Image"}
+          objectFit={"cover"}
+          src={
+            "https://img.freepik.com/free-photo/front-view-young-female-doctor-white-medical-suit-with-stethoscope-wearing-white-protective-mask-white_140725-16566.jpg?w=1380&t=st=1681900985~exp=1681901585~hmac=99f7f6866c534d48d0a1afe255a5bfa2b1c4401579eb02e15335097575df62c0"
+          }
+        />
+      </Flex>
+      <Flex p={8} flex={1} align={"center"} justify={"center"}>
+        <Stack spacing={4} w={"full"} maxW={"md"}>
+          <Heading fontSize={"2xl"}>Login in to your account</Heading>
+          <form onSubmit={handleSubmit}>
+            <FormControl>
+              <FormLabel>Email address</FormLabel>
+              <Input
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+              />
+              {errors.email && touched.email && (
+                <p className="error">{errors.email}</p>
+              )}
+            </FormControl>
 
-        <FormControl mt={6}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            value={values.password}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            id="password" type="password" placeholder="Enter your password" />
-             {errors.password && touched.password && <p className="error">{errors.password}</p>}
-        </FormControl>
-        <Button
-          bg="#011c91"
-          colorScheme="#011c91"
-          size="md"
-          mt={6}
-          width="100%"
-          alignContent="center"
-          type="submit"
-          color="white"
-        >
-          LOGIN
-        </Button>
-      </form>
-      <Text align="center" mt={3}>
-        Doesn't have an account? <Link to="/doctor-register">Sign in</Link>
-      </Text>
+            <FormControl mt={6}>
+              <FormLabel>Password</FormLabel>
+              <Input
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+              />
+              {errors.password && touched.password && (
+                <p className="error">{errors.password}</p>
+              )}
+            </FormControl>
+            <Stack spacing={6} mt={2}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              >
+                <Text color={"blue.500"}>
+                  Doesn't have an account?{" "}
+                  <Link to="/doctor-register">Sign in</Link>
+                </Text>
+              </Stack>
+              <Button
+                colorScheme={"blue"}
+                variant={"solid"}
+                type="submit"
+                bg={"blue.500"}
+              >
+                LOGIN
+              </Button>
+              {/* <Button colorScheme={'blue'} variant={'solid'}  type="submit"    onClick={() => navigate("/otp")}
+
+   bg={'blue.500'}>
+    OTP LOGIN
+     </Button> */}
+            </Stack>
+          </form>
+        </Stack>
+      </Flex>
       <Toaster />
-    </Box>
+    </Stack>
   );
 };
 

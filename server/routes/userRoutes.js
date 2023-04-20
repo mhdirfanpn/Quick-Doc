@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, userLogin, userDetails, updateDetails, updatePassword, updateProfileImage } from "../controller/userController.js";
+import { registerUser, userLogin, userDetails, updateDetails, updatePassword, updateProfileImage, otpLogin } from "../controller/userController.js";
 import upload from "../utils/multer.js";
 const router = express.Router();
 
@@ -9,6 +9,8 @@ const router = express.Router();
 router.post("/signup", registerUser);
 
 router.post("/login",userLogin);
+
+router.get('/otpLogin/:id',otpLogin);
 
 router.get("/details/:id",userDetails)
 

@@ -28,7 +28,7 @@ const Footer = () => {
     left={0}
     right={0}
     marginTop={5}
-    bg={useColorModeValue("#46c29d", "gray.900")}
+    bg={useColorModeValue("#4851b0")}
     color={useColorModeValue("white")}
     >
       <Container as={Stack} maxW={"6xl"} py={10}>
@@ -62,7 +62,7 @@ const Footer = () => {
             <FormControl id="password">
               <HStack>
                 <Input bg="white" type="text" />
-                <Button color={"green.300"}>Subscribe</Button>
+                <Button color={"#4851b0"}>Subscribe</Button>
               </HStack>
             </FormControl>
           </Stack>

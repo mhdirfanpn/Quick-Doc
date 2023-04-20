@@ -1,41 +1,40 @@
+
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Text,
+  Stack,
+  Image,
+} from '@chakra-ui/react';
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, } from "react-redux";
+import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 import { loginSchema } from "../../../schemas";
 import { useFormik } from "formik";
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Box,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "../../../utils/axios";
 import { USER_LOGIN } from "../../../utils/ConstUrls";
 import { setLogin } from "../../../redux/userSlice";
 
-const Login = () => {
-  
+
+export default function Login() {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
+    // dispatch(showLoading())
     const body = JSON.stringify(values);
-    console.log(body);
     try {
-      await axios
-        .post(USER_LOGIN, body, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then(({ data }) => {
-          console.log(data.userDetails);
-          if (data.success) {
-
-            dispatch(
-              setLogin({
+      await axios.post(USER_LOGIN, body, {headers: { "Content-Type": "application/json" },}).then(({ data }) => {
+        dispatch(hideLoading())
+        if (data.success) {
+            dispatch(setLogin({
                 user: data.userDetails,
                 token: data.token,
               })
@@ -48,9 +47,11 @@ const Login = () => {
           }
         })
         .catch((err) => {
+          dispatch(hideLoading())
           console.log(err);
         });
     } catch (err) {
+      dispatch(hideLoading())
       toast.error("Oops Something went wrong");
     }
     actions.resetForm(); 
@@ -66,58 +67,61 @@ const Login = () => {
   });
 
   return (
-    <Box
-      p={4}
-      borderWidth={1}
-      borderRadius={8}
-      boxShadow="lg"
-      maxWidth={{ base: "20%", md: "25%" }}
-      margin="0 auto"
-      marginTop="40"
-    >
-      <Box textAlign="center" mb={4}>
-        <Heading>Login</Heading>
-      </Box>
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Email address</FormLabel>
-          <Input
+    <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+       <Flex flex={1}>
+        <Image
+          alt={'Login Image'}
+          objectFit={'cover'}
+          src={
+            'https://img.freepik.com/free-vector/online-doctor-concept-illustration_114360-1831.jpg?size=626&ext=jpg&ga=GA1.1.1128364979.1680491256&semt=ais'
+          }
+        />
+      </Flex>
+      <Flex p={8} flex={1} align={'center'} justify={'center'}>
+        <Stack spacing={4} w={'full'} maxW={'md'}>
+          <Heading fontSize={'2xl'}>Login in to your account</Heading>
+          <form onSubmit={handleSubmit}>
+          <FormControl id="email">
+            <FormLabel>Email address</FormLabel>
+            <Input
              value={values.email}
              onChange={handleChange}
              onBlur={handleBlur}
              id="email" type="email" placeholder="Enter your email" />
              {errors.email && touched.email && <p className="error">{errors.email}</p>}
-        </FormControl>
-
-        <FormControl mt={6}>
-          <FormLabel>Password</FormLabel>
-          <Input
+          </FormControl>
+          <FormControl id="password">
+            <FormLabel>Password</FormLabel>
+            <Input
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
             id="password" type="password" placeholder="Enter your password" />
              {errors.password && touched.password && <p className="error">{errors.password}</p>}
-      
-        </FormControl>
-        <Button
-          colorScheme="green"
-          bg="#46c29d"
-          size="md"
-          mt={6}
-          width="100%"
-          alignContent="center"
-          type="submit"
-          color="white"
-        >
-          LOGIN
-        </Button>
-      </form>
-      <Text align="center" mt={3}>
+          </FormControl>
+          <Stack spacing={6} mt={2}>
+            <Stack
+              direction={{ base: 'column', sm: 'row' }}
+              align={'start'}
+              justify={'space-between'}>
+              <Text color={'blue.500'}>
         Doesn't have an account? <Link to="/SignUp">Sign in</Link>
       </Text>
-      <Toaster />
-    </Box>
-  );
-};
+            </Stack>
+            <Button colorScheme={'blue'} variant={'solid'}  type="submit" 
+          bg={'blue.500'}>
+            LOGIN
+            </Button>
+              <Button colorScheme={'blue'} variant={'solid'}  type="submit"    onClick={() => navigate("/otp")}
 
-export default Login;
+          bg={'blue.500'}>
+           OTP LOGIN
+            </Button>
+          </Stack>
+          </form>
+        </Stack>
+      </Flex>
+      <Toaster />
+    </Stack>
+  );
+}

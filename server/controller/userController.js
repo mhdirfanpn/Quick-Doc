@@ -58,7 +58,7 @@ export const userLogin = async(req,res)=>{
                 return res.status(200).json({success:false,message:"User Password is Invalid"})
              }
              
-             const token=jwt.sign({id:userDetails._id,name:userDetails.userName,password:userDetails.password},process.env.JWT_SECRET,{expiresIn:'30d'});
+             const token=jwt.sign({id:userDetails._id,name:userDetails.userName},process.env.JWT_SECRET,{expiresIn:'30d'});
              res.status(200).json({success:true,token,userDetails})
 
           }else{
@@ -70,6 +70,24 @@ export const userLogin = async(req,res)=>{
         res.status(400).json({error:err})
      }
  }
+
+
+
+ export const otpLogin = async(req,res) => {
+   try {
+
+       let userDetails = await User.findOne({number:req.params.id});
+       
+       if(userDetails){
+           const token=jwt.sign({id:userDetails._id,name:userDetails.userName},process.env.JWT_SECRET,{expiresIn:'30d'});
+           return res.status(202).json({message:'user exist',token})
+       }
+       res.status(203).json({message:"mobile no. mismatch"})
+   } catch (error) {
+       console.log(error);
+       res.status(500).json({message:`Error -> ${error}`})
+   }
+}
 
 
  export const userDetails = async(req,res) => {

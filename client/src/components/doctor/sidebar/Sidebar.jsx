@@ -6,6 +6,7 @@ import {
       } from "@chakra-ui/react";
   import { FiHome, FiUsers } from "react-icons/fi";
   import { FaUserNurse } from "react-icons/fa";
+  import { Link } from "react-router-dom";
   
   const Sidebar = () => {
    
@@ -44,7 +45,7 @@ import {
            
             >
               <Icon as={FiUsers} mr="2" />
-              Appointment
+              <Link to="/setTime">Time Slot</Link>
             </Text>
             <Text
               display="flex"
@@ -52,6 +53,8 @@ import {
               fontSize="2xl"
               fontWeight="bold"
               mb="6"
+              
+
                          >
               <Icon as={FaUserNurse} mr="2" />
              Session

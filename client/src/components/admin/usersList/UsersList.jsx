@@ -15,6 +15,8 @@ import {
   Input,
   Flex,
   Text,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import { ALL_USERS } from "../../../utils/ConstUrls";
 import axios from "../../../utils/axios";
@@ -117,44 +119,48 @@ const UsersList = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </InputGroup>
-          <Table variant="simple" marginTop={10}>
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Contact</Th>
-                <Th>Status</Th>
-                <Th>Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {usersList.map((user, index) => (
-                <Tr key={index}>
-                  <Td>{user.userName}</Td>
-                  <Td>{user.email}</Td>
-                  <Td>{user.number}</Td>
-                  <Td>
-                    {user.isBlocked ? (
-                      <span style={{ color: "red" }}>blocked</span>
-                    ) : (
-                      <span style={{ color: "green" }}>active</span>
-                    )}
-                  </Td>
-
-                  <Td>
-                    <Switch
-                      colorScheme={user.isBlocked ? "red" : "green"}
-                      isChecked={user.isBlocked}
-                      onChange={() => {
-                        user.isBlocked ? unBlock(user._id) : block(user._id);
-                      }}
-                      size="md"
-                    />
-                  </Td>
+          <TableContainer>
+            <Table variant="striped" colorScheme="teal">
+              <TableCaption>Manage users</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Email</Th>
+                  <Th>Contact</Th>
+                  <Th>Status</Th>
+                  <Th>Actions</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {usersList.map((user, index) => (
+                  <Tr key={index}>
+                    <Td>{user.userName}</Td>
+                    <Td>{user.email}</Td>
+                    <Td>{user.number}</Td>
+                    <Td>
+                      {user.isBlocked ? (
+                        <span style={{ color: "red" }}>blocked</span>
+                      ) : (
+                        <span style={{ color: "green" }}>active</span>
+                      )}
+                    </Td>
+
+                    <Td>
+                      <Switch
+                        colorScheme={user.isBlocked ? "red" : "green"}
+                        isChecked={user.isBlocked}
+                        onChange={() => {
+                          user.isBlocked ? unBlock(user._id) : block(user._id);
+                        }}
+                        size="md"
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+
           <Flex
             className="parent-element"
             display="flex"

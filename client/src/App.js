@@ -22,14 +22,24 @@ import AuthDoctor from './protected/doctor/AuthDoctor'
 import UserProfile from './pages/user/profile/UserProfile'
 import UserProfileEdit from './pages/user/profile/UserProfileEdit'
 import DoctorProfile from './pages/doctor/profile/DoctorProfile'
+import { useSelector } from 'react-redux'
+import OtpLogin from './pages/user/login/OtpLogin'
+import SpinnerLoader from './components/spinner/SpinnerLoader'
+import ScheduleAppointment from './pages/doctor/ScheduleTime/ScheduleAppointment'
 
-
+console.log(process.env.REACT_APP_API_KEY);
 
 const App = () => {
+
+  const {loading} = useSelector(state => state.spinner)
   
   return (
     <div> 
        <BrowserRouter>
+
+        {loading ? <SpinnerLoader/> : 
+
+
        <Routes>
 
   {/* ========================================USER ROUTES============================================================= */}        
@@ -37,6 +47,12 @@ const App = () => {
           <Route path='/' element={
             <AuthUser>
               <Login/>
+            </AuthUser>
+          }/>
+
+          <Route path='/otp' element={
+            <AuthUser>
+              <OtpLogin/>
             </AuthUser>
           }/>
 
@@ -93,6 +109,12 @@ const App = () => {
             </AuthorizeDoctor>
           } />
 
+          <Route path='/setTime' element={
+            <AuthorizeDoctor>
+              <ScheduleAppointment /> 
+            </AuthorizeDoctor>
+          } />
+
 
   {/* ========================================ADMIN ROUTES============================================================= */}         
          
@@ -137,6 +159,10 @@ const App = () => {
 
           
        </Routes>
+
+
+        }
+
        </BrowserRouter>
     </div>
   )
