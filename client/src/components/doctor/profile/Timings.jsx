@@ -1,27 +1,44 @@
-import { React, useState, useEffect } from "react";
-import { Box, Button, Grid, GridItem, FormControl, Text, FormLabel, Input, Avatar, useDisclosure, Heading, Stack,Center,Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
-import { doctorDetailsUpdateSchema, changePasswordSchema } from "../../../schemas";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { DOC_DETAILS, UPDATE_DOC_DETAILS,UPDATE_DOC_PASS } from "../../../utils/ConstUrls";
+import { React } from "react";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  FormControl,
+  FormLabel,
+  Text,
+} from "@chakra-ui/react";
+
 import axios from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
-import { useFormik } from "formik";
-import { UPDATE_DOC_IMG } from "../../../utils/ConstUrls";
-import { TimePicker } from "antd";
-import  moment from "moment"
+import { DOC_DETAILS } from "../../../utils/ConstUrls";
 
 const Timings = () => {
+  const [doctorDetails, setDoctorDetails] = useState("");
+  const token = localStorage.getItem("doctorToken");
 
+  const getDoctorsDetails = async () => {
+    try {
+      const decode = jwtDecode(localStorage.getItem("doctorToken"));
+      await axios.get(`${DOC_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}`},}).then((response) => {
+          setDoctorDetails(response.data.doctorDetails);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const [showPasswordForm, setShowPasswordForm] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure(); // state variables for showing/hiding the 
-    const [doctorDetails, setDoctorDetails] = useState("");
-    const [profilePicture, setProfilePicture] = useState("");
-    const [state, setState] = useState("");
-    const token = localStorage.getItem("doctorToken");
-    const decode = jwtDecode(token);
+  useEffect(() => {
+    getDoctorsDetails();
+  }, []);
+
+ 
+  let timeSlots = doctorDetails.timeSlot;
+  
   return (
     <Box
       marginLeft="330"
@@ -36,36 +53,26 @@ const Timings = () => {
       dark={{ bg: "gray.800", borderColor: "gray.700" }}
     >
       <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
-        <form>
-          <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
-            <GridItem>
-              <FormControl id="email" isRequired mt={6}>
-                <FormLabel>Timings</FormLabel>
+        <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
+          <GridItem>
+            <FormControl mt={6}>
+              <FormLabel fontWeight="bold" fontSize="lg">
+                Appointment Timings
+              </FormLabel>
 
-                <TimePicker.RangePicker
-                //   id="timings"
-                //   name="timings"
-                //   format="hh:mm A"
-                //   value={values.timings}
-                //   onChange={(value) => {
-                //     setFieldValue("timings", value);
-                //   }}
-                //   onBlur={handleBlur}
-                />
-              </FormControl>
-            </GridItem>
-          </Grid>
-          <Button
-            type="submit"
-            colorScheme="blue"
-            mt={6}
-          //  onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </form>
+              {timeSlots?.map((timeSlot) => (
+                <Box
+                  key={timeSlot.time}
+                  display="inline-block"
+                  marginRight="10px"
+                >
+                  <Text marginX="2">{timeSlot.time}</Text>
+                </Box>
+              ))}
+            </FormControl>
+          </GridItem>
+        </Grid>
       </Grid>
-      <Toaster />
     </Box>
   );
 };

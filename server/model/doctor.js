@@ -42,9 +42,10 @@ const DoctorSchema=mongoose.Schema({
         type:Boolean,
         default:false
     },
-    timings:{
-        type:Object,
-    }
+    timeSlot:{
+        type:Array,
+        default:''
+    },
 
 })
 

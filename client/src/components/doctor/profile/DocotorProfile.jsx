@@ -100,8 +100,10 @@ function DoctorProfile() {
         <Text fontSize="sm" color="gray.600">
           Experience:
         </Text>
-        <Text fontSize="sm">{doctorDetails.experience}</Text>
+        <Text fontSize="sm" >{doctorDetails.experience}</Text>
       </HStack>
+
+      
     </Box>
   );
 }

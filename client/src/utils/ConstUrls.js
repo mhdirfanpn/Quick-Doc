@@ -7,6 +7,8 @@ export const UPDATE_PROFILE='/updateDetails'
 export const UPDATE_IMG='/updateUserImage'
 export const UPDATE_PASS='/updatePassword'
 export const OTP_LOGIN='/otpLogin'
+export const GET_DOCTORS='/allDoctors'
+export const GET_DOCTOR ='/getDoctor'
 
 export const DOC_SIGN_UP='doc/signup'
 export const DOC_LOGIN='doc/login'

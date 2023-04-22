@@ -92,17 +92,11 @@ export const doctorLogin = async(req,res)=>{
 export const updateDetails =async(req,res)=>{
 
    try {
-      let timings = req.body.timings
-      const times = timings.map(time => moment.utc(time).format('h:mm A'));
-
-console.log(times);
-  
        const doctorDetails = await Doctor.findOneAndUpdate({_id:req.params.id},{
          fullName:req.body.fullName,
          email:req.body.email,
          number:req.body.number,
          experience:req.body.experience,
-         timings:times
        })
        if(!doctorDetails){
          return res.status(200).json({success:false,message:"Doctor not found"})
@@ -156,5 +150,27 @@ export const updateProfileImage =async(req,res)=>{
       res.status(400).json({error:err})
   }
   
+}
+
+
+export const timeSlot = async(req,res) => {
+      try {
+          const id = req.body[1].id
+          console.log(id);
+          console.log(req.body[0]);
+          let doc=await Doctor.findById({_id:id})
+          console.log(doc);
+          await Doctor.findByIdAndUpdate(id, {
+              $set: {
+                  timeSlot: req.body[0]
+              }
+          }, { upsert: true })
+
+          res.status(200).json('successful');
+
+      } catch (err) {
+          console.log(err);
+          res.status(200).json(err)
+      }
 }
 

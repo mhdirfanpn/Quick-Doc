@@ -26,6 +26,14 @@ import { useSelector } from 'react-redux'
 import OtpLogin from './pages/user/login/OtpLogin'
 import SpinnerLoader from './components/spinner/SpinnerLoader'
 import ScheduleAppointment from './pages/doctor/ScheduleTime/ScheduleAppointment'
+import DoctorDetails from './pages/user/doctorDetails/DoctorDetails'
+import ScrollToTop from './scrollTop/ScrollTop'
+import AvailableTime from './pages/user/availableTime/AvailableTime'
+import Payment from './pages/user/payment/Payment'
+import OrderSuccess from './pages/user/orderSuccess/OrderSuccess'
+
+
+
 
 console.log(process.env.REACT_APP_API_KEY);
 
@@ -36,6 +44,8 @@ const App = () => {
   return (
     <div> 
        <BrowserRouter>
+
+       <ScrollToTop>
 
         {loading ? <SpinnerLoader/> : 
 
@@ -77,6 +87,30 @@ const App = () => {
           <Route path='/profile/edit' element={
             <AuthorizeUser>
               <UserProfileEdit/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/doctorDetails/:doctorId' element={
+            <AuthorizeUser>
+              <DoctorDetails/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/checkAvailability/:doctorId' element={
+            <AuthorizeUser>
+              <AvailableTime/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/handlePay' element={
+            <AuthorizeUser>
+              <Payment/>
+            </AuthorizeUser>
+          }/>
+
+          <Route path='/order_success' element={
+            <AuthorizeUser>
+              <OrderSuccess/>
             </AuthorizeUser>
           }/>
 
@@ -162,6 +196,8 @@ const App = () => {
 
 
         }
+
+      </ScrollToTop>
 
        </BrowserRouter>
     </div>

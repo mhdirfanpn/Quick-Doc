@@ -3,14 +3,11 @@ import { Box, Button, Grid, GridItem, FormControl, Text, FormLabel, Input, Avata
 import { EditIcon } from "@chakra-ui/icons";
 import { doctorDetailsUpdateSchema, changePasswordSchema } from "../../../schemas";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { DOC_DETAILS, UPDATE_DOC_DETAILS,UPDATE_DOC_PASS } from "../../../utils/ConstUrls";
 import axios from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
 import { useFormik } from "formik";
 import { UPDATE_DOC_IMG } from "../../../utils/ConstUrls";
-import { TimePicker } from "antd";
-import  moment from "moment"
 import { useDispatch, } from "react-redux";
 import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 
@@ -26,7 +23,7 @@ const DoctorProfileEdit = () => {
   const dispatch = useDispatch()
 
 
-  const getUDoctorDetails = async () => {
+  const getDoctorDetails = async () => {
     try {
       await axios.get(`${DOC_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` }, }).then((response) => {
           console.log(response.data.doctorDetails);
@@ -40,34 +37,18 @@ const DoctorProfileEdit = () => {
     }
   };
   console.log(doctorDetails.timings);
-  const { values,setFieldValue, errors, touched, handleChange, handleBlur, handleSubmit } =
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
     useFormik({
       initialValues: {
         fullName: doctorDetails.fullName,
         email: doctorDetails.email,
         experience: doctorDetails.experience,
         number: doctorDetails.number,
-        timings: doctorDetails.timings && doctorDetails.timings.length >= 2 ? [moment(doctorDetails.timings[0], 'HH:mm'), moment(doctorDetails.timings[1], 'HH:mm')] : ['','']
       },
       enableReinitialize: true,
       validationSchema: doctorDetailsUpdateSchema,
-      onSubmit: async (values,setFieldValue, actions) => {
+      onSubmit: async (values, actions) => {
         try {
-          console.log(values.timings[0]);
-          const formattedValues = {
-            ...values,
-            timings: [
-              moment(values.timings[0], 'HH:mm'),
-              moment(values.timings[1], 'HH:mm'),
-            ]
-          };
-     
-          const time =moment(values.timings[0], 'HH:mm');
-
-console.log('2222',time,'555');
-          console.log(formattedValues);
-         let sample= moment(values.timings[0]).format("hh:mm")
-         console.log(sample);
           await axios.put(`${UPDATE_DOC_DETAILS}/${decode.id}`,values, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
               console.log(response.data);
               if (response.data) {
@@ -148,7 +129,7 @@ console.log('2222',time,'555');
     };
 
   useEffect(() => {
-    getUDoctorDetails();
+    getDoctorDetails();
   }, [state]);
 
   let imageUrl = doctorDetails.profilePic
@@ -260,22 +241,6 @@ console.log('2222',time,'555');
                 {errors.email && touched.email && (
             <p className="error">{errors.email}</p>
           )}
-              </FormControl>
-
-              <FormControl id="email" isRequired mt={6}>
-                <FormLabel>Timings</FormLabel>
-              
-                <TimePicker.RangePicker
-                id="timings"
-                name="timings"
-                format="hh:mm A"
-                value={values.timings}
-                onChange={(value) => {
-                  setFieldValue('timings', value);
-                }}
-                onBlur={handleBlur}
-              />
-           
               </FormControl>
 
             </GridItem>

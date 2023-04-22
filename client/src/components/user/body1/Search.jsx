@@ -10,7 +10,7 @@ const Search = () => {
 <div className="flex justify-center box-border box-shadow p-4">
   <form className="flex">
     <input
-      className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+      className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none min-w-100"
       type="text"
       placeholder="Search..."
     />

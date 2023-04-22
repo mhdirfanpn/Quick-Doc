@@ -2,6 +2,7 @@ import User from '../model/user.js'
 import bcrypt from 'bcrypt'
 import  jwt  from 'jsonwebtoken'
 import cloudinary from '../utils/cloudinary.js'
+import Doctor from '../model/doctor.js'
 
 
 
@@ -58,7 +59,7 @@ export const userLogin = async(req,res)=>{
                 return res.status(200).json({success:false,message:"User Password is Invalid"})
              }
              
-             const token=jwt.sign({id:userDetails._id,name:userDetails.userName},process.env.JWT_SECRET,{expiresIn:'30d'});
+             const token=jwt.sign({id:userDetails._id,name:userDetails.userName,email:userDetails.email,number:userDetails.number},process.env.JWT_SECRET,{expiresIn:'30d'});
              res.status(200).json({success:true,token,userDetails})
 
           }else{
@@ -161,4 +162,47 @@ export const updateProfileImage =async(req,res)=>{
       res.status(400).json({error:err})
   }
   
+}
+
+
+export const allDoctors = async (req,res)=>{
+
+   try{
+        const doctors=await Doctor.find();
+        if(doctors){
+             return   res.status(200).json({message:"doctors data sent successfully",doctors}) 
+        }
+        
+        res.status(400).json({message:"their is no doctor"})
+        
+   } catch(err){
+        res.status(400).json({error:err})
+   }
+}
+
+
+export const getDoctor = async(req,res) => {
+ 
+   try {
+      const doctor = await Doctor.findOne({_id:req.params.id})
+      res.status(200).json({message:"doctor data sent success",doctor})
+
+   } catch (err) {
+       res.status(400).json({error:err})
+   }
+}
+
+
+export const bookSession = async(req,res) => {
+
+   try {
+       console.log(req.body);
+       res.status(200).json({message:"doctor data sent success"})
+
+   } catch (err) {
+       console.log(err);
+       res.status(400).json(err)
+   }
+
+
 }

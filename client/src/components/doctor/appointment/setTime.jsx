@@ -1,30 +1,55 @@
 import { useState } from "react";
 import {
   Box,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Stack,
+  VStack,
   Text,
+  Checkbox,
+  Badge,
   Button,
+  Flex,
 } from "@chakra-ui/react";
+import jwtDecode from "jwt-decode";
+import axios from "../../../utils/axios";
+
+const availableTimings = [
+  { time: "10:00 AM", available: true },
+  { time: "12:00 PM", available: true },
+  { time: "2:00 PM", available: true },
+  { time: "4:00 PM", available: true },
+  { time: "6:00 PM", available: true },
+  { time: "8:00 PM", available: true },
+];
 
 function TimeSlot() {
-  const [timeSlot, setTimeSlot] = useState([]);
+  const doctorToken = localStorage.getItem("doctorToken");
+  const [selectedTimings, setSelectedTimings] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setTimeSlot([...timeSlot, { time: value, status: true }]);
+  const handleTimingSelection = (timing) => {
+    const index = selectedTimings.indexOf(timing);
+    if (index === -1) {
+      setSelectedTimings([...selectedTimings, timing]);
     } else {
-      setTimeSlot(timeSlot.filter((element) => element.time !== value));
+      setSelectedTimings(selectedTimings.filter((t) => t !== timing));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // Handle submitting selected timings here
+    console.log("Selected timings:", selectedTimings);
     e.preventDefault();
-    console.log("hello");
-    console.log(timeSlot);
+    try {
+      const decode = jwtDecode(localStorage.getItem("doctorToken"));
+      await axios
+        .post("doc/timeSlot", [selectedTimings, { id: decode.id }], {
+          headers: { Authorization: `Bearer ${doctorToken}` },
+        })
+        .then((response) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -46,124 +71,53 @@ function TimeSlot() {
         _hover: { bg: "gray.700" },
       }}
     >
-      <Text
-        mb="2"
-        fontSize="2xl"
-        fontWeight="bold"
-        tracking="tight"
-        color="gray.900"
-        dark={{ color: "white" }}
-        textAlign="center"
-      >
-        Time Slot
-      </Text>
-      <form onSubmit={handleSubmit}>
-        <Stack direction={["column", "column", "row"]} spacing="4">
-          <FormControl>
+      <VStack align="stretch" spacing={4}>
+        <Text fontSize="2xl" fontWeight="bold">
+          Select Appointment Timings:
+        </Text>
+        <Flex wrap="wrap">
+          {availableTimings.map((timing) => (
             <Checkbox
-              id="vue-checkbox-list"
-              value="07-08 am"
-              name="slot"
-              colorScheme="blue"
-              onChange={handleCheckboxChange}
+              paddingLeft={28}
+              key={timing.time}
+              isDisabled={!timing.available}
+              isChecked={selectedTimings.includes(timing)}
+              onChange={() => handleTimingSelection(timing)}
             >
-              <FormLabel
-                htmlFor="vue-checkbox-list"
-                mb="0"
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.900"
-                dark={{ color: "gray.300" }}
-              >
-                07.00 - 08.00 am
-              </FormLabel>
+              {timing.time}
+              {!timing.available && (
+                <Badge ml={2} colorScheme="red">
+                  Booked
+                </Badge>
+              )}
             </Checkbox>
-          </FormControl>
-          <FormControl>
-            <Checkbox
-              id="vue-checkbox-list"
-              value="10-11 am"
-              name="slot"
-              colorScheme="blue"
-              onChange={handleCheckboxChange}
-            >
-              <FormLabel
-                htmlFor="vue-checkbox-list"
-                mb="0"
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.900"
-                dark={{ color: "gray.300" }}
-              >
-                10.00 - 11.00 am
-              </FormLabel>
-            </Checkbox>
-          </FormControl>
-          <FormControl>
-            <Checkbox
-              id="vue-checkbox-list"
-              value="01-02 pm"
-              name="slot"
-              colorScheme="blue"
-              onChange={handleCheckboxChange}
-            >
-              <FormLabel
-                htmlFor="vue-checkbox-list"
-                mb="0"
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.900"
-                dark={{ color: "gray.300" }}
-              >
-                01.00 - 02.00 pm
-              </FormLabel>
-            </Checkbox>
-          </FormControl>
-          <FormControl>
-            <Checkbox
-              id="vue-checkbox-list"
-              value="04-05 pm"
-              name="slot"
-              colorScheme="blue"
-              onChange={handleCheckboxChange}
-            >
-              <FormLabel
-                htmlFor="vue-checkbox-list"
-                mb="0"
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.900"
-                dark={{ color: "gray.300" }}
-              >
-                04.00 - 05.00 pm
-              </FormLabel>
-            </Checkbox>
-          </FormControl>
-          <FormControl>
-            <Checkbox
-              id="vue-checkbox-list"
-              value="07-08 pm"
-              name="slot"
-              colorScheme="blue"
-              onChange={handleCheckboxChange}
-            >
-              <FormLabel
-                htmlFor="vue-checkbox-list"
-                mb="0"
-                fontSize="sm"
-                fontWeight="medium"
-                color="gray.900"
-                dark={{ color: "gray.300" }}
-              >
-                07.00 - 08.00 pm
-              </FormLabel>
-            </Checkbox>
-          </FormControl>
-        </Stack>
-        <Button type="submit" mt={4} colorScheme="blue">
-          Submit
-        </Button>
-      </form>
+          ))}
+        </Flex>
+        <Flex justify="center">
+          <Button
+            mt={6}
+            colorScheme="blue"
+            size="sm"
+            disabled={selectedTimings.length === 0}
+            onClick={handleSubmit}
+          >
+            Submit Timings
+          </Button>
+        </Flex>
+        <Flex mt={4}>
+          {selectedTimings.length > 0 ? (
+            selectedTimings.map((timing) => (
+              <Box key={timing.time} mr={12}>
+                <Badge colorScheme="green">{timing.time}</Badge>
+              </Box>
+            ))
+          ) : (
+            <Text fontStyle="italic">
+              Please select one or more available appointment timings.
+            </Text>
+          )}
+        </Flex>
+      </VStack>
     </Box>
   );
 }
