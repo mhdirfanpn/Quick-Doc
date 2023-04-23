@@ -37,6 +37,7 @@ const HandlePay = () => {
           const result = await axios.post("/payment/verify", response);
           console.log(result);
           bookSession();
+          appointment();
         } catch (err) {
           console.log(err);
         }
@@ -53,16 +54,30 @@ const HandlePay = () => {
     console.log(doctorDetails._id);
     await axios
       .post("/book_session", {
-        doctor: doctorDetails,
-        time: time,
+        doctorDetails,
+        time,
+        date,
         plan: "500",
-        user: userData,
+        userData,
       })
       .then((res) => {
         console.log(res);
         navigate("/order_success");
       });
   };
+
+  const appointment = async () => {
+    console.log("apppointment booking");
+    await axios
+    .post("/appointment", {
+      doctorDetails,
+      time,
+      date
+    })
+    .then((res) => {
+      console.log(res);
+    });
+  }
 
   return (
     <div class="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">

@@ -1,6 +1,5 @@
 import {
   Box,
-  Grid,
   Heading,
   Container,
   SimpleGrid,
@@ -13,7 +12,9 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
+import moment from "moment";
 import { DatePicker } from "antd";
+import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_DOCTOR } from "../../../utils/ConstUrls";
@@ -56,10 +57,35 @@ const SelectTime = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toISOString().split("T")[0]);
+    setSelectedTime(null);
   };
 
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
+  const handleTimeChange = async (time) => {
+    try {
+      if (selectedDate === null) return toast.error("select a date");
+      await axios
+        .post("/availability", {
+          doctorId: params.doctorId,
+          time: time,
+          date: selectedDate,
+        })
+        .then((response) => {
+          if (response.status === 202) {
+            setSelectedTime(time);
+            toast.success("time slot available");
+          }
+          if (response.status === 204) {
+            setSelectedTime(null);
+            toast.error("time slot unavailable");
+          }
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err, "catch error in doctorFetching");
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -85,7 +111,26 @@ const SelectTime = () => {
               <Box w="full" h={60} mb={5}>
                 <FormControl as="form" onSubmit={handleSubmit}>
                   <FormLabel>Date</FormLabel>
-                  <DatePicker onChange={handleDateChange} />
+                  <DatePicker
+                    onChange={handleDateChange}
+                    disabledDate={(currentDate) => {
+                      // disable dates before today
+                      if (
+                        currentDate &&
+                        currentDate < moment().startOf("day")
+                      ) {
+                        return true;
+                      }
+                      // disable dates more than 30 days in the future
+                      if (
+                        currentDate &&
+                        currentDate > moment().add(30, "days")
+                      ) {
+                        return true;
+                      }
+                      return false;
+                    }}
+                  />
 
                   <FormLabel mt={4}>Time</FormLabel>
                   <SimpleGrid columns={3} spacing={4}>
@@ -132,6 +177,7 @@ const SelectTime = () => {
           </Flex>
         </SimpleGrid>
       </Container>
+      <Toaster />
     </Center>
   );
 };

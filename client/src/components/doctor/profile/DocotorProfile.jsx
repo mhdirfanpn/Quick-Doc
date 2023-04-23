@@ -1,4 +1,4 @@
-import { Box, Avatar, Badge, Text, VStack, HStack, Flex, IconButton } from "@chakra-ui/react";
+import { Box, Avatar, Badge, Text, VStack, HStack, Flex } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import { useState,useEffect } from "react";
 import axios from "../../../utils/axios";

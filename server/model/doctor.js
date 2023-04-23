@@ -47,6 +47,13 @@ const DoctorSchema=mongoose.Schema({
         default:''
     },
 
+    appointments: [
+        {
+          date: { type: Date, required: true },
+          times: [{ type: String, required: true }],
+        },
+      ],
+
 })
 
 const Doctor = mongoose.model('Doctor', DoctorSchema);

@@ -32,7 +32,8 @@ export default function NavBar() {
         <div>
             <div className="flex items-center justify-between py-3 md:py-5 md:block">
 
-                <p className="text-2xl text-white">Quick-Doc</p>
+            <p className="text-2xl text-white cursor-pointer" onClick={()=>navigate("/")}>Quick-Doc</p>
+
                 <div className="md:hidden">
                     <button
                         className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
@@ -78,13 +79,13 @@ export default function NavBar() {
                 }`}
             >
                 <ul className="flex items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
-                    <li className="text-white">
-                        <p>Home</p>
+                <li className="text-white cursor-pointer">
+                        <p>Chat</p>
                     </li>
-                    <li className="text-white">
-                        <p>Dashboard</p>
+                    <li className="text-white cursor-pointer">
+                        <p>Session</p>
                     </li>
-                    <li className="text-white">
+                    <li className="text-white cursor-pointer">
                         <p onClick={()=>navigate('/profile')} >Profile</p>
                     </li>
                     <li className="text-white text-right-0">
