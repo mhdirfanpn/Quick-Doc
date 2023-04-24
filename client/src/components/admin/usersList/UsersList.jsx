@@ -15,7 +15,6 @@ import {
   Input,
   Flex,
   Text,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
 import { ALL_USERS } from "../../../utils/ConstUrls";
@@ -120,8 +119,8 @@ const UsersList = () => {
             />
           </InputGroup>
           <TableContainer>
-            <Table variant="striped" colorScheme="teal">
-              <TableCaption>Manage users</TableCaption>
+            <Table variant="simple">
+         
               <Thead>
                 <Tr>
                   <Th>Name</Th>

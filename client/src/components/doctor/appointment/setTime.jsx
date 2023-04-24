@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
 import axios from "../../../utils/axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const availableTimings = [
   { time: "10:00 AM", available: true },
@@ -34,7 +35,6 @@ function TimeSlot() {
   };
 
   const handleSubmit = async (e) => {
-    // Handle submitting selected timings here
     console.log("Selected timings:", selectedTimings);
     e.preventDefault();
     try {
@@ -44,6 +44,7 @@ function TimeSlot() {
           headers: { Authorization: `Bearer ${doctorToken}` },
         })
         .then((response) => {})
+        toast.success("time slot updated successfully")
         .catch((err) => {
           console.log(err);
         });
@@ -118,6 +119,7 @@ function TimeSlot() {
           )}
         </Flex>
       </VStack>
+      <Toaster/>
     </Box>
   );
 }

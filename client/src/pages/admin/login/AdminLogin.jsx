@@ -126,6 +126,7 @@ const AdminLogin = () => {
         </Stack>
       </Box>
     </Stack>
+    <Toaster/>
   </Flex>
   );
 };

@@ -14,7 +14,6 @@ import {
   InputGroup,
   ButtonGroup,
   Text,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
 import axios from "../../../utils/axios";
@@ -98,8 +97,7 @@ const DoctorsList = () => {
             />
           </InputGroup>
           <TableContainer>
-            <Table variant="striped" colorScheme="teal">
-              <TableCaption>Manage users</TableCaption>
+            <Table variant="simple">
               <Thead>
                 <Tr>
                   <Th>Name</Th>

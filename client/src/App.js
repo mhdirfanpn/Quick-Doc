@@ -31,7 +31,9 @@ import ScrollToTop from './scrollTop/ScrollTop'
 import AvailableTime from './pages/user/availableTime/AvailableTime'
 import Payment from './pages/user/payment/Payment'
 import OrderSuccess from './pages/user/orderSuccess/OrderSuccess'
-
+import Sessions from './pages/user/sessions/Sessions'
+import Appointment from './pages/admin/appointments/Appointment'
+import DoctorAppointment from './pages/doctor/appointment/DoctorAppointment'
 
 
 
@@ -114,6 +116,12 @@ const App = () => {
             </AuthorizeUser>
           }/>
 
+          <Route path='/userSessions' element={
+            <AuthorizeUser>
+              <Sessions/>
+            </AuthorizeUser>
+          }/>
+
 
   {/* ========================================DOCTOR ROUTES============================================================= */}
 
@@ -146,6 +154,12 @@ const App = () => {
           <Route path='/setTime' element={
             <AuthorizeDoctor>
               <ScheduleAppointment /> 
+            </AuthorizeDoctor>
+          } />
+
+          <Route path='/doctor-appointment' element={
+            <AuthorizeDoctor>
+              <DoctorAppointment /> 
             </AuthorizeDoctor>
           } />
 
@@ -188,6 +202,12 @@ const App = () => {
           <Route path='/doctor-card/:doctorId' element={
             <AuthorizeAdmin>
               <DoctorCard />
+            </AuthorizeAdmin>
+          } />
+
+          <Route path='/appointment' element={
+            <AuthorizeAdmin>
+              <Appointment />
             </AuthorizeAdmin>
           } />
 

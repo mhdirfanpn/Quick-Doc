@@ -13,7 +13,6 @@ import {
   InputGroup,
   ButtonGroup,
   Text,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -22,7 +21,7 @@ import { ALL_DOC_REQ } from "../../../utils/ConstUrls";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
-const DoctorsRequest = () => { 
+const DoctorsRequest = () => {
   const PAGE_SIZE = 6;
   const navigate = useNavigate();
   const [doctorsReq, setDocReq] = useState([]);
@@ -95,8 +94,7 @@ const DoctorsRequest = () => {
             />
           </InputGroup>
           <TableContainer>
-            <Table variant="striped" colorScheme="teal">
-              <TableCaption>Manage users</TableCaption>
+            <Table variant="simple">
               <Thead>
                 <Tr>
                   <Th>Name</Th>

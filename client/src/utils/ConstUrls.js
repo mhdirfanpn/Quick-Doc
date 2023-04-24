@@ -16,13 +16,14 @@ export const DOC_DETAILS='doc/details'
 export const UPDATE_DOC_DETAILS='/doc/updateDetails'
 export const UPDATE_DOC_PASS='/doc/updatePassword'
 export const UPDATE_DOC_IMG='/doc/updateDoctorImage'
-
+export const DOC_APPOINTMENT='/doc/appointment'
 
 
 export const ADMIN_LOGIN='admin/login'
 export const ALL_USERS='admin/allUsers'
 export const ALL_DOCTORS='admin/allDoctors'
 export const ALL_DOC_REQ='admin/doctorsRequest'
+export const APPOINTMENT='admin/appointment'
 export const GET_DOC='/getDoctor'
 
 

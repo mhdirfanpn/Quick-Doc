@@ -1,4 +1,5 @@
 import Doctor from '../model/doctor.js'
+import Session from '../model/session.js'
 import bcrypt from 'bcrypt'
 import  jwt  from 'jsonwebtoken'
 import cloudinary from '../utils/cloudinary.js'
@@ -174,3 +175,19 @@ export const timeSlot = async(req,res) => {
       }
 }
 
+
+
+export const session = async(req,res) => {
+
+    try {
+ 
+       let id = req.params.id
+       let session = await Session.find({ doctorId: id })
+       console.log(session);
+       res.json(session);
+ 
+   } catch (err) {
+       console.log(err);
+       res.status(400).json(err)
+   }
+ }

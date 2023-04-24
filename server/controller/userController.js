@@ -201,13 +201,16 @@ export const bookSession = async(req,res) => {
             const today = moment().format('YYYY-MM-DD');
             // console.log("today=>",today);
             let userDetails = (req.body.userData)
+            console.log("user=>",userDetails);
             let doctorDetails = (req.body.doctorDetails)
             let user = await User.findById(userDetails.id);
             // console.log("user=>",user);
 
             const newSession =await Session.create({
                 userId: user.id,
+                userName:userDetails.name,
                 doctorId: doctorDetails._id,
+                doctorName: doctorDetails.fullName,
                 timeSlot: req.body.time,
                 plan: req.body.plan,
                 sessionDate: req.body.date,
@@ -289,4 +292,20 @@ export const availability = async(req,res) => {
        console.log(err);
        res.status(400).json(err)
    }
+}
+
+
+export const session = async(req,res) => {
+
+   try {
+
+      let id = req.params.id
+      let session = await Session.find({ userId: id })
+      console.log(session);
+      res.json(session);
+
+  } catch (err) {
+      console.log(err);
+      res.status(400).json(err)
+  }
 }

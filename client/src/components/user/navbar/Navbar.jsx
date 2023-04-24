@@ -83,7 +83,7 @@ export default function NavBar() {
                         <p>Chat</p>
                     </li>
                     <li className="text-white cursor-pointer">
-                        <p>Session</p>
+                        <p onClick={()=>navigate('/userSessions')}>Appointment</p>
                     </li>
                     <li className="text-white cursor-pointer">
                         <p onClick={()=>navigate('/profile')} >Profile</p>

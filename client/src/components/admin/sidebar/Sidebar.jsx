@@ -9,10 +9,11 @@ import {
 import { Link } from "react-router-dom";
 import { FiHome, FiUsers } from "react-icons/fi";
 import { FaUserNurse } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { isOpen, onToggle } = useDisclosure();
-
+  const navigate = useNavigate();
   const { isOpen: isOpenDoctor, onToggle: onOpenDoctor } = useDisclosure();
 
   return (
@@ -22,8 +23,8 @@ const Sidebar = () => {
       top="20"
       h="92vh"
       w="64"
-      bg="#0A1F29"
-      color="#b9c9be"
+      bg="#6e74ba"
+      color="white"
       px="8"
       py="6"
     >
@@ -35,6 +36,7 @@ const Sidebar = () => {
             alignItems="center"
             fontWeight="bold"
             mb="6"
+            _hover={{ cursor: "pointer" }}
           >
             <Icon as={FiHome} mr="2" />
             Home
@@ -46,6 +48,7 @@ const Sidebar = () => {
             fontWeight="bold"
             mb="6"
             onClick={onToggle}
+            _hover={{ cursor: "pointer" }}
           >
             <Icon as={FiUsers} mr="2" />
             Users
@@ -68,6 +71,7 @@ const Sidebar = () => {
             fontWeight="bold"
             mb="6"
             onClick={onOpenDoctor}
+            _hover={{ cursor: "pointer" }}
           >
             <Icon as={FaUserNurse} mr="2" />
             Doctors
@@ -79,11 +83,25 @@ const Sidebar = () => {
               borderLeft="1px solid white"
               spacing="2"
               mb="6"
+              _hover={{ cursor: "pointer" }}
             >
               <Link to="/doctors-list">View all doctors</Link>
               <Link to="/manage-doctors">Doctor request</Link>
             </Stack>
           </Collapse>
+
+          <Text
+            display="flex"
+            alignItems="center"
+            fontSize="2xl"
+            fontWeight="bold"
+            mb="6"
+            _hover={{ cursor: "pointer" }}
+            onClick={() => navigate("/appointment")}
+          >
+            <Icon as={FiUsers} mr="2" />
+            Appointment
+          </Text>
         </Box>
       </Stack>
     </Box>

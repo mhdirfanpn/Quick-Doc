@@ -1,6 +1,6 @@
 import express from 'express'
 import { adminVerification } from '../middleWares/adminAuth.js';
-import { adminLogin, getAllUsers, getAllDoctors, blockUser, unBlockUser, verifyDoctor, doctorsRequest, getDoctor, removeDoctor } from '../controller/adminController.js';
+import { adminLogin, getAllUsers, getAllDoctors, blockUser, unBlockUser, verifyDoctor, doctorsRequest, getDoctor, removeDoctor, appointments } from '../controller/adminController.js';
 
 
 const router=express.Router();
@@ -22,6 +22,8 @@ router.put("/verifyDoctor/:id",verifyDoctor);
 router.put("/rejectDoctor/:id",removeDoctor)
 
 router.get("/doctorsRequest",adminVerification,doctorsRequest)
+
+router.get("/appointment",appointments)
 
 
 export default router;

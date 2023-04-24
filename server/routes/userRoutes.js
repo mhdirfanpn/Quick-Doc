@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, userLogin, userDetails, updateDetails, updatePassword, updateProfileImage, otpLogin,availability, allDoctors, getDoctor, bookSession, appointment} from "../controller/userController.js";
+import { registerUser, userLogin, userDetails, updateDetails, session, updatePassword, updateProfileImage, otpLogin,availability, allDoctors, getDoctor, bookSession, appointment} from "../controller/userController.js";
 import upload from "../utils/multer.js";
 const router = express.Router();
 
@@ -29,5 +29,7 @@ router.post('/book_session',bookSession);
 router.post('/appointment',appointment);
 
 router.post('/availability',availability);
+
+router.get("/getSession/:id",session);
 
 export default router;

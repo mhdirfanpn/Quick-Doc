@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import Admin from "../model/admin.js";
 import User from '../model/user.js'
 import Doctors from '../model/doctor.js'
+import Session from '../model/session.js';
 import { token } from '../validation/tokenValidate.js';
 
 export const adminLogin = async(req,res)=>{
@@ -146,6 +147,19 @@ export const getDoctor = async(req,res) => {
     try {
        const doctor = await Doctors.findOne({_id:req.params.id})
        res.status(200).json({message:"doctor data sent success",doctor})
+
+    } catch (err) {
+        res.status(400).json({error:err})
+    }
+ }
+
+
+ export const appointments = async(req,res) => {
+ console.log('hai');
+    try {
+       const appointments = await Session.find()
+       console.log(appointments);
+       res.status(200).json({message:"data sent success",appointments})
 
     } catch (err) {
         res.status(400).json({error:err})
