@@ -21,7 +21,7 @@ const Sidebar = () => {
       position="absolute"
       left="0"
       top="20"
-      h="92vh"
+      h="100vh"
       w="64"
       bg="#6e74ba"
       color="white"

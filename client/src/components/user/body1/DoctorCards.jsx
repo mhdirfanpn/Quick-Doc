@@ -84,9 +84,9 @@ const DoctorCards = () => {
         <Heading as="h2" textAlign="center" my={8} size="2xl">
           Our Doctors
         </Heading>
-        <Flex ref={containerRef} overflowX="scroll" w="100%" h="auto">
+        <Flex ref={containerRef} overflowX="hidden" w="100%" h="auto">
           {doctorDetails?.map((doctor) => (
-            <Box minW={`${cardWidth}px`}>
+            <Box minW={`${cardWidth}px`} >
               <Card maxW="sm" className="card-footer">
                 <CardBody>
                   <Image

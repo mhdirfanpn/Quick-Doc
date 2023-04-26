@@ -51,7 +51,7 @@ const Sidebar = () => {
           >
             <Icon as={FaUserNurse} mr="2" />
 
-            <Link to='/doctor-appointment'>Appointment</Link>
+            <Link to="/doctor-appointment">Appointment</Link>
           </Text>
 
           <Text

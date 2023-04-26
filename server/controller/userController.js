@@ -298,11 +298,13 @@ export const availability = async(req,res) => {
 export const session = async(req,res) => {
 
    try {
-
+      const page = req.query.page ? parseInt(req.query.page) : 1;
+      const size = req.query.limit ? parseInt(req.query.limit) : 3;
+      const skip = (page -1) * size;
+      const total = await Session.countDocuments();
       let id = req.params.id
-      let session = await Session.find({ userId: id })
-      console.log(session);
-      res.json(session);
+      let session = await Session.find({ userId: id }).sort({bookedDate:-1}).skip(skip).limit(size)
+      res.json({session,total,page,size});
 
   } catch (err) {
       console.log(err);
