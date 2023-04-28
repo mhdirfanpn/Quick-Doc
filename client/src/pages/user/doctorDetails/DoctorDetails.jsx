@@ -9,7 +9,6 @@ const DoctorDetails = () => {
   return (
     <>
     <Navbar/>
-    <UserNav/>
     <ViewDoctor/>
     <Features2/>
     <Footer/>

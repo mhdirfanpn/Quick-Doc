@@ -8,7 +8,6 @@ const UserProfileEdit = () => {
   return (
     <>
       <NavBar />
-      <UserNav/>
       <UpdateProperty/>
       <Footer />
     </>

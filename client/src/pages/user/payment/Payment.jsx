@@ -9,7 +9,6 @@ const Payment = () => {
   return (
     <>
       <Navbar />
-      <UserNav />
       <HandlePay />
       <Features />
       <Footer />

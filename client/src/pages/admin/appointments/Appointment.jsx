@@ -1,16 +1,15 @@
-import React from 'react'
-import AppointmentList from '../../../components/admin/appointmentList/AppointmentList'
-import Navbar from '../../../components/admin/navbar/Navbar'
-import Sidebar from '../../../components/admin/sidebar/Sidebar'
+import React from "react";
+import AppointmentList from "../../../components/admin/appointmentList/AppointmentList";
+import Layout from "../../../components/admin/layout/Layout";
 
 const Appointment = () => {
   return (
-   <>
-       <Navbar/>
-    <Sidebar/>
-   <AppointmentList/>
-   </>
-  )
-}
+    <>
+      <Layout>
+        <AppointmentList />
+      </Layout>
+    </>
+  );
+};
 
-export default Appointment
+export default Appointment;

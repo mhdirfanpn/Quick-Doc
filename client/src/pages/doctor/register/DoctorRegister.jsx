@@ -43,8 +43,7 @@ const DoctorRegister = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
-    const body = JSON.stringify(values);
-    console.log(body);
+  const body = JSON.stringify(values);
 
     try {
       await axios
@@ -242,11 +241,6 @@ const DoctorRegister = () => {
               >
                 SIGN IN
               </Button>
-              {/* <Button colorScheme={'blue'} variant={'solid'}  type="submit"    onClick={() => navigate("/otp")}
-    
-       bg={'blue.500'}>
-        OTP LOGIN
-         </Button> */}
             </Stack>
           </form>
         </Stack>

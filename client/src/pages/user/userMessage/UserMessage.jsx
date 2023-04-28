@@ -1,17 +1,16 @@
 import React from 'react'
-import Success from '../../../components/user/orderSuccess/Success'
+import Messenger from '../../../components/user/messenger/Messenger'
 import NavBar from '../../../components/user/navbar/Navbar'
-import UserNav from '../../../components/user/navbar/UserNav'
 import Footer from '../../../components/user/footer/Footer'
 
-const OrderSuccess = () => {
+const UserMessage = () => {
   return (
     <>
     <NavBar/>
-    <Success/>
+    <Messenger isUser={true}/>
     <Footer/>
     </>
   )
 }
 
-export default OrderSuccess
+export default UserMessage

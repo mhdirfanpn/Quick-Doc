@@ -8,7 +8,6 @@ const UserProfile = () => {
   return (
     <>
     <NavBar/>
-    <UserNav/>
     <UserProfileCard/>
     <Footer/>
     </>

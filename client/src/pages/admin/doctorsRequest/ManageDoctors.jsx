@@ -1,14 +1,13 @@
 import React from "react";
-import Navbar from "../../../components/admin/navbar/Navbar";
-import Sidebar from "../../../components/admin/sidebar/Sidebar";
 import DoctorsRequest from "../../../components/admin/doctorsRequest/DoctorsRequest";
+import Layout from "../../../components/admin/layout/Layout";
 
 const ManageDoctors = () => {
   return (
     <>
-      <Navbar />
-      <Sidebar />
-      <DoctorsRequest />
+      <Layout>
+        <DoctorsRequest />
+      </Layout>
     </>
   );
 };

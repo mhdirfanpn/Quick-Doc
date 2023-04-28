@@ -1,20 +1,24 @@
-import { Box, Grid, GridItem, Text, IconButton, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Text,
+  IconButton,
+  Avatar,
+} from "@chakra-ui/react";
 import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
 import { MdDateRange, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, } from "react-redux";
-import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
+
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "../../../utils/axios";
 import { USER_DETAILS } from "../../../utils/ConstUrls";
 
-
 function UserProfileCard(props) {
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const token = localStorage.getItem("userToken");
   const decode = jwtDecode(token);
   const [UserDetails, setUserDetails] = useState("");
@@ -23,24 +27,22 @@ function UserProfileCard(props) {
     getUserDetails();
   }, []);
 
-
   const getUserDetails = async () => {
-
     try {
-      await axios.get(`${USER_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
+      await axios
+        .get(`${USER_DETAILS}/${decode.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
           setUserDetails(response.data.userDetails);
-          dispatch(hideLoading())
         })
         .catch((err) => {
           console.log(err);
-          dispatch(hideLoading())
         });
     } catch (err) {
       console.log(err);
-      dispatch(hideLoading())
     }
   };
-
 
   return (
     <Box
@@ -64,77 +66,77 @@ function UserProfileCard(props) {
         position="absolute"
         top="4"
         right="4"
-        onClick={() => navigate('/profile/edit')}
+        onClick={() => navigate("/profile/edit")}
       />
       <Grid
         gap={8}
         templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
         autoFlow={{ base: "dense", md: "row" }}
       >
-      <GridItem>
-      <Avatar
-          size={{ base: "3xl", md: "2xl" }}
-          src={UserDetails.profilePic}
-          alt={UserDetails.userName}
-          mb={5}
-          rounded="full"
-        />
+        <GridItem>
+          <Avatar
+            size={{ base: "3xl", md: "2xl" }}
+            src={UserDetails.profilePic}
+            alt={UserDetails.userName}
+            mb={5}
+            rounded="full"
+          />
 
-        <Text
-          fontSize={{ base: "4xl", md: "6xl" }}
-          fontWeight="bold"
-          color="gray.500"
-          dark={{ color: "gray.400" }}
-        >
-          {UserDetails.userName}
-        </Text>
-        <Box display="flex" alignItems="center">
-          <AiOutlineMail
-            size={28}
-            style={{ marginRight: "10px", marginTop: "60px" }}
-          />
           <Text
-            mb={5}
-            mt={{ base: "2", md: "80px" }}
-            fontSize={{ base: "xl", md: "2xl" }}
+            fontSize={{ base: "4xl", md: "6xl" }}
             fontWeight="bold"
             color="gray.500"
             dark={{ color: "gray.400" }}
           >
-            Email - {UserDetails.email}
+            {UserDetails.userName}
           </Text>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <AiOutlinePhone
-            size={28}
-            style={{ marginRight: "10px", marginBottom: "27px" }}
-          />
-          <Text
-            mb={5}
-            fontSize={{ base: "xl", md: "2xl" }}
-            fontWeight="bold"
-            color="gray.500"
-            dark={{ color: "gray.400" }}
-          >
-            Mobile - {UserDetails.number}
-          </Text>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <MdDateRange
-            size={28}
-            style={{ marginRight: "10px", marginBottom: "27px" }}
-          />
-          <Text
-            mb={5}
-            fontSize={{ base: "xl", md: "2xl" }}
-            fontWeight="bold"
-            color="gray.500"
-            dark={{ color: "gray.400" }}
-          >
-            Date of Birth - {UserDetails.date}
-          </Text>
-            </Box>
-          </GridItem>
+          <Box display="flex" alignItems="center">
+            <AiOutlineMail
+              size={28}
+              style={{ marginRight: "10px", marginTop: "60px" }}
+            />
+            <Text
+              mb={5}
+              mt={{ base: "2", md: "80px" }}
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="bold"
+              color="gray.500"
+              dark={{ color: "gray.400" }}
+            >
+              Email - {UserDetails.email}
+            </Text>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <AiOutlinePhone
+              size={28}
+              style={{ marginRight: "10px", marginBottom: "27px" }}
+            />
+            <Text
+              mb={5}
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="bold"
+              color="gray.500"
+              dark={{ color: "gray.400" }}
+            >
+              Mobile - {UserDetails.number}
+            </Text>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <MdDateRange
+              size={28}
+              style={{ marginRight: "10px", marginBottom: "27px" }}
+            />
+            <Text
+              mb={5}
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="bold"
+              color="gray.500"
+              dark={{ color: "gray.400" }}
+            >
+              Date of Birth - {UserDetails.date}
+            </Text>
+          </Box>
+        </GridItem>
       </Grid>
     </Box>
   );

@@ -1,15 +1,16 @@
 import React from 'react'
 import TimeSlot from '../../../components/doctor/appointment/setTime'
-import Navbar from '../../../components/doctor/navbar/Navbar'
-import Sidebar from '../../../components/doctor/sidebar/Sidebar'
+import Layout from '../../../components/doctor/layout/Layout'
+
 
 
 const ScheduleAppointment = () => {
   return (
     <>
-    <Navbar/>
-    <Sidebar/>
+    <Layout>
     <TimeSlot/>
+    </Layout>
+    
     </>
   )
 }

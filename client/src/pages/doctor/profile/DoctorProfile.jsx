@@ -1,14 +1,13 @@
 import React from 'react'
-import Navbar from '../../../components/doctor/navbar/Navbar'
-import Sidebar from '../../../components/doctor/sidebar/Sidebar'
+import Layout from '../../../components/doctor/layout/Layout'
 import DoctorProfileEdit from '../../../components/doctor/profile/DoctorProfileEdit'
 
 const DoctorProfile = () => {
   return (
    <>
-   <Navbar/>
-    <Sidebar/>
+    <Layout>
     <DoctorProfileEdit/>
+    </Layout>
    </>
   )
 }

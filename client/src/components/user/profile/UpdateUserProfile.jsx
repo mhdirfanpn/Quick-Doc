@@ -40,7 +40,6 @@ const UpdateProperty = () => {
     try {
       dispatch(showLoading())
       await axios.put(`${UPDATE_PROFILE}/${decode.id}`, values, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
-          console.log(response.data.userDetails);
           dispatch(hideLoading())
           if (response.data) {
             setState(response.data)
@@ -50,12 +49,10 @@ const UpdateProperty = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
           dispatch(hideLoading())
           toast.error("Oops Something went wrong");
         });
     } catch (err) {
-      console.log(err);
       dispatch(hideLoading())
       toast.error("Oops Something went wrong");
     }
@@ -84,7 +81,6 @@ const UpdateProperty = () => {
       try {
         dispatch(showLoading())
         await axios.put(`${UPDATE_PASS}/${decode.id}`, values, { headers: { Authorization: `Bearer ${token}` },}).then((response) => {
-            console.log(response.data);
             dispatch(hideLoading())
             if (response.data) {
               setState(response.data)
@@ -144,6 +140,7 @@ const UpdateProperty = () => {
   return (
     <Flex
       minH={"100vh"}
+      mt={24}
       align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}

@@ -9,6 +9,7 @@ export default function Success() {
       <Container maxW={"3xl"}>
         <Stack
           as={Box}
+          mt={24}
           textAlign={"center"}
           spacing={{ base: 8, md: 14 }}
           py={{ base: 20, md: 36 }}

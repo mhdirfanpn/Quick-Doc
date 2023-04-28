@@ -47,7 +47,6 @@ const DoctorCards = () => {
   };
 
   const viewMore = (id) => {
-    console.log(id);
     navigate(`/doctorDetails/${id}`);
   };
 
@@ -76,7 +75,6 @@ const DoctorCards = () => {
     }
   };
 
-  console.log(doctorDetails);
 
   return (
     <Container maxW={"8xl"} py={12} mt={6}>

@@ -6,7 +6,8 @@ function UserNav() {
   let userData = jwtDecode(localStorage.getItem("userToken"))
  
   return (
-    <Flex align="center" justify="space-between" p="4" bg="gray.100">
+    <Flex   
+    >
       <Box>
         <Avatar name={userData.name} src="" size="md" />
       </Box>
@@ -18,3 +19,4 @@ function UserNav() {
 }
 
 export default UserNav;
+

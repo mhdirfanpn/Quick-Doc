@@ -1,16 +1,16 @@
 import React from 'react'
-import Navbar from '../../../components/doctor/navbar/Navbar'
-import Sidebar from '../../../components/doctor/sidebar/Sidebar'
+import Layout from '../../../components/doctor/layout/Layout'
 import DoctorProfile from '../../../components/doctor/profile/DocotorProfile'
 import Timings from '../../../components/doctor/profile/Timings'
 
 const DoctorHome = () => {
   return (
     <>
-    <Navbar/>
-    <Sidebar/>
+    <Layout>
     <DoctorProfile/>
     <Timings/>
+    </Layout>
+   
     </>
   )
 }

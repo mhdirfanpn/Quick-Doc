@@ -1,5 +1,7 @@
 export const baseUserUrl = "http://localhost:7000/api/"
 
+//USER
+
 export const USER_SIGN_UP='/signup'
 export const USER_LOGIN='/login'
 export const USER_DETAILS='/details'
@@ -10,6 +12,9 @@ export const OTP_LOGIN='/otpLogin'
 export const GET_DOCTORS='/allDoctors'
 export const GET_DOCTOR ='/getDoctor'
 
+
+//DOCTOR
+
 export const DOC_SIGN_UP='doc/signup'
 export const DOC_LOGIN='doc/login'
 export const DOC_DETAILS='doc/details'
@@ -18,6 +23,8 @@ export const UPDATE_DOC_PASS='/doc/updatePassword'
 export const UPDATE_DOC_IMG='/doc/updateDoctorImage'
 export const DOC_APPOINTMENT='/doc/appointment'
 
+
+//ADMIN
 
 export const ADMIN_LOGIN='admin/login'
 export const ALL_USERS='admin/allUsers'

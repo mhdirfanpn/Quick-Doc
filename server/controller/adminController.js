@@ -9,7 +9,6 @@ import { token } from "../validation/tokenValidate.js";
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password) {
       return res
         .status(200)
@@ -17,13 +16,11 @@ export const adminLogin = async (req, res) => {
     }
 
     const adminDetails = await Admin.findOne({ email });
-
     if (adminDetails) {
       const matchPassword = await bcrypt.compare(
         password,
         adminDetails.password
       );
-
       if (!matchPassword)
         return res
           .status(200)
@@ -34,14 +31,12 @@ export const adminLogin = async (req, res) => {
         process.env.ADMIN_JWT_SECRET
       );
       token(adminToken);
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "Login success",
-          adminToken,
-          adminDetails,
-        });
+      res.status(200).json({
+        success: true,
+        message: "Login success",
+        adminToken,
+        adminDetails,
+      });
     } else {
       res
         .status(200)
@@ -55,11 +50,9 @@ export const adminLogin = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    console.log(req.header("Authorization").split(" ").pop());
     if (!users) {
       return res.status(200).json({ message: "no users found" });
     }
-
     res.status(200).json(users);
   } catch (err) {
     res.status(400).json({ error: err });
@@ -72,7 +65,6 @@ export const getAllDoctors = async (req, res) => {
     if (!doctors) {
       return res.status(200).json({ message: "no doctors found" });
     }
-
     res.status(200).json(doctors);
   } catch (err) {
     res.status(400).json({ error: err });
@@ -81,13 +73,11 @@ export const getAllDoctors = async (req, res) => {
 
 export const doctorsRequest = async (req, res) => {
   try {
-    let adminAuthHeader = req.header("Authorization");
-    console.log(adminAuthHeader);
+    const adminAuthHeader = req.header("Authorization");
     const doctors = await Doctors.find({ isVerified: false });
     if (!doctors) {
       return res.status(200).json({ message: "no doctors found" });
     }
-
     res.status(200).json(doctors);
   } catch (err) {
     res.status(400).json({ error: err });
@@ -102,7 +92,6 @@ export const blockUser = async (req, res) => {
         isBlocked: true,
       }
     );
-
     res.status(200).json({ message: "user is blocked successfully", users });
   } catch (err) {
     res.status(400).json({ error: err });
@@ -117,7 +106,6 @@ export const unBlockUser = async (req, res) => {
         isBlocked: false,
       }
     );
-
     res.status(200).json({ message: "user is unblocked successfully", user });
   } catch (err) {
     res.status(400).json({ error: err });
@@ -132,7 +120,6 @@ export const verifyDoctor = async (req, res) => {
         isVerified: true,
       }
     );
-
     res
       .status(200)
       .json({ message: "doctor is verified successfully", doctor });
@@ -160,10 +147,8 @@ export const getDoctor = async (req, res) => {
 };
 
 export const appointments = async (req, res) => {
-  console.log("hai");
   try {
     const appointments = await Session.find();
-    console.log(appointments);
     res.status(200).json({ message: "data sent success", appointments });
   } catch (err) {
     res.status(400).json({ error: err });

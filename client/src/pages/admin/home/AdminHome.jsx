@@ -1,14 +1,12 @@
-import React from 'react'
-import Navbar from '../../../components/admin/navbar/Navbar'
-import Sidebar from '../../../components/admin/sidebar/Sidebar'
+import React from "react";
+import Layout from "../../../components/admin/layout/Layout";
 
 const AdminHome = () => {
   return (
     <>
-   <Navbar/>
-   <Sidebar/>
+      <Layout></Layout>
     </>
-  )
-}
+  );
+};
 
-export default AdminHome
+export default AdminHome;

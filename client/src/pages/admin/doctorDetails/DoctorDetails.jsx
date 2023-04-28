@@ -1,16 +1,15 @@
-import React from 'react'
-import Navbar from '../../../components/admin/navbar/Navbar'
-import Sidebar from '../../../components/admin/sidebar/Sidebar'
-import DoctorCard from '../../../components/admin/doctorCard/DoctorCard'
+import React from "react";
+import DoctorCard from "../../../components/admin/doctorCard/DoctorCard";
+import Layout from "../../../components/admin/layout/Layout";
 
 const DoctorDetails = () => {
   return (
-        <>
-        <Navbar/>
-        <Sidebar/>
-        <DoctorCard/>
-        </>
-  )
-}
+    <>
+      <Layout>
+        <DoctorCard />
+      </Layout>
+    </>
+  );
+};
 
-export default DoctorDetails
+export default DoctorDetails;

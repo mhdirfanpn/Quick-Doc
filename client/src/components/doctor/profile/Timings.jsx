@@ -2,7 +2,6 @@ import { React } from "react";
 import { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Grid,
   GridItem,
   FormControl,
@@ -21,7 +20,11 @@ const Timings = () => {
   const getDoctorsDetails = async () => {
     try {
       const decode = jwtDecode(localStorage.getItem("doctorToken"));
-      await axios.get(`${DOC_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}`},}).then((response) => {
+      await axios
+        .get(`${DOC_DETAILS}/${decode.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
           setDoctorDetails(response.data.doctorDetails);
         })
         .catch((err) => {
@@ -36,13 +39,12 @@ const Timings = () => {
     getDoctorsDetails();
   }, []);
 
- 
   let timeSlots = doctorDetails.timeSlot;
-  
+
   return (
     <Box
-      marginLeft="330"
-      marginTop={10}
+      marginLeft={24}
+      marginTop={24}
       bg="white"
       rounded="lg"
       border="1px"
@@ -57,7 +59,7 @@ const Timings = () => {
           <GridItem>
             <FormControl mt={6}>
               <FormLabel fontWeight="bold" fontSize="lg">
-                Appointment Timings
+                Appointment Timing
               </FormLabel>
 
               {timeSlots?.map((timeSlot) => (

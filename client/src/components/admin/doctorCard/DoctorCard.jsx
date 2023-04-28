@@ -32,7 +32,6 @@ const DoctorCard = () => {
             headers: { Authorization: `Bearer ${adminToken}` },
           })
           .then(() => {
-            console.log("updated");
             navigate("/manage-doctors");
           });
         Swal.fire("Approved!", "The doctor has been approved.", "success");
@@ -50,18 +49,15 @@ const DoctorCard = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(id);
         axios
           .put(`/admin/rejectDoctor/${id}`, {
             headers: { Authorization: `Bearer ${adminToken}` },
           })
           .then(() => {
-            console.log("updated");
             Swal.fire("Rejected!", "The doctor has been rejected.", "success");
             navigate("/manage-doctors");
           })
           .catch((error) => {
-            console.log(error);
             Swal.fire("Error!", "Something went wrong.", "error");
           });
       }
@@ -76,7 +72,6 @@ const DoctorCard = () => {
           headers: { Authorization: `Bearer ${adminToken}` },
         })
         .then((response) => {
-          console.log(response.data.doctor);
           setDoctor(response.data.doctor);
         })
         .catch((err) => {
@@ -89,17 +84,21 @@ const DoctorCard = () => {
   
 
   return (
-    <Box
-      marginLeft="330"
-      marginTop={10}
-      bg="white"
-      rounded="lg"
-      border="1px"
-      borderColor="gray.200"
-      maxWidth="1400"
-      p={4}
-      shadow="md"
-      dark={{ bg: "gray.800", borderColor: "gray.700" }}
+    <Box 
+    p="6"
+    bg="white"
+    marginLeft={24}
+    marginTop={24}
+    maxWidth="1400"
+    border="1px"
+    borderColor="gray.200"
+    rounded="lg"
+    shadow="md"
+    dark={{
+      bg: "gray.800",
+      border: "1px",
+      borderColor: "gray.700",
+    }}
     >
       <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
         <GridItem>

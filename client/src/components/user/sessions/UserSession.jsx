@@ -9,21 +9,17 @@ import {
   Td,
   TableContainer,
   Box,
-  TableCaption,
   Button,
   ButtonGroup,
   Flex,
-  Center,
 } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
 
 const LIMIT = 3;
 
-
 const UserSession = () => {
   const token = localStorage.getItem("userToken");
   const userData = jwtDecode(token);
-  console.log(userData.id);
   const [session, setSession] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalSession, setTotalSessions] = useState(0);
@@ -41,7 +37,6 @@ const UserSession = () => {
           size: LIMIT,
         },
       });
-      console.log(response.data);
       setSession(response.data.session);
       setTotalSessions(response.data.total);
     } catch (err) {
@@ -50,7 +45,7 @@ const UserSession = () => {
   };
 
   return (
-    <Box w="70%" margin="0 auto" minH="100vh" mt={12}>
+    <Box w="70%" margin="0 auto" minH="100vh" mt={24}>
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -80,19 +75,21 @@ const UserSession = () => {
         marginRight="150"
       >
         <ButtonGroup mt={10}>
-        <Button
-  onClick={() => setActivePage(activePage - 1)}
-  variant="outline"
-  isDisabled={activePage === 1}
->
-  Previous Page
-</Button>
+          <Button
+            onClick={() => setActivePage(activePage - 1)}
+            variant="outline"
+            isDisabled={activePage === 1}
+          >
+            Previous Page
+          </Button>
 
-
-<Button onClick={() => setActivePage(activePage + 1)} ml="-px" isDisabled={activePage === Math.ceil(totalSession / LIMIT)}>
-  Next
-</Button>
-
+          <Button
+            onClick={() => setActivePage(activePage + 1)}
+            ml="-px"
+            isDisabled={activePage === Math.ceil(totalSession / LIMIT)}
+          >
+            Next
+          </Button>
         </ButtonGroup>
       </Flex>
     </Box>

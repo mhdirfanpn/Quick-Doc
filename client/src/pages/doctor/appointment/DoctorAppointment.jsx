@@ -1,14 +1,14 @@
 import React from 'react'
 import AppointmentList from '../../../components/doctor/appointment/AppointmentList'
-import Navbar from '../../../components/doctor/navbar/Navbar'
-import Sidebar from '../../../components/doctor/sidebar/Sidebar'
+import Layout from '../../../components/doctor/layout/Layout'
 
 const DoctorAppointment = () => {
   return (
    <>
-   <Navbar/>
-   <Sidebar/>
+   <Layout>
    <AppointmentList/>
+   </Layout>
+   
    </>
   )
 }

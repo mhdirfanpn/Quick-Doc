@@ -9,7 +9,6 @@ const AvailableTime = () => {
   return (
     <>
     <Navbar/>
-    <UserNav/>
     <SelectTime/>
     <Features2/>
     <Footer/>

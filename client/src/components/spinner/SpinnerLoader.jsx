@@ -1,10 +1,10 @@
- import React from 'react'
- import { HashLoader } from 'react-spinners'
- 
- const SpinnerLoader = () => {
-   return (
+import React from "react";
+import { HashLoader } from "react-spinners";
+
+const SpinnerLoader = () => {
+  return (
     <div
-    style={{
+      style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -13,7 +13,7 @@
     >
       <HashLoader color="#4851b0" />
     </div>
-   )
- }
- 
- export default SpinnerLoader
+  );
+};
+
+export default SpinnerLoader;

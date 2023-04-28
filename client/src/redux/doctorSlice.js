@@ -1,27 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    doctor:null,
-    token:null
-}
+  doctor: null,
+  token: null,
+};
 
 const doctorSlice = createSlice({
-    name:"doctor",
-    initialState,
-    reducers:{          
-             
-        setDoctorLogin: (state,action)=>{
-            state.doctor = action.payload.doctor;
-            state.token = action.payload.token;
-        },
+  name: "doctor",
+  initialState,
+  reducers: {
+    setDoctorLogin: (state, action) => {
+      state.doctor = action.payload.doctor;
+      state.token = action.payload.token;
+    },
 
-        setDoctorLogout: (state)=>{
-            state.doctor = null;
-            state.token = null;
-        }
-    }
-})
+    setDoctorLogout: (state) => {
+      state.doctor = null;
+      state.token = null;
+    },
+  },
+});
 
-export const {setDoctorLogin,setDoctorLogout} = doctorSlice.actions;
+export const { setDoctorLogin, setDoctorLogout } = doctorSlice.actions;
 
 export default doctorSlice.reducer;

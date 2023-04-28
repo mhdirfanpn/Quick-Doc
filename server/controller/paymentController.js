@@ -1,11 +1,8 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
 
-
-
 export const order = async (req, res) => {
   try {
-    
     const instance = new Razorpay({
       key_id: process.env.RAZOR_KEY_ID,
       key_secret: process.env.RAZOR_SECRET_KEY,
@@ -23,17 +20,15 @@ export const order = async (req, res) => {
       }
       res.status(200).json({ data: order });
     });
-
   } catch (error) {
     res.status(500).json({ message: `Error -> ${error}` });
   }
 };
 
-
-
 export const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -47,7 +42,6 @@ export const verifyPayment = async (req, res) => {
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });
     }
-
   } catch (err) {
     res.status(500).json({ message: "Internal server error!" });
   }

@@ -39,7 +39,6 @@ const DoctorsList = () => {
       const response = await axios.get(ALL_DOCTORS, {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
-      console.log(response.data);
       let filteredDoctors = response.data;
       if (searchTerm) {
         filteredDoctors = response.data.filter((doctor) =>
@@ -57,7 +56,6 @@ const DoctorsList = () => {
   };
 
   const viewMore = (id) => {
-    console.log(id);
     navigate(`/doctor-card/${id}`);
   };
 
@@ -79,7 +77,22 @@ const DoctorsList = () => {
   }, 700);
 
   return (
-    <Box marginLeft={80} marginTop={10}>
+    <Box 
+    p="6"
+    bg="white"
+    marginLeft={24}
+    marginTop={24}
+    maxWidth="1400"
+    border="1px"
+    borderColor="gray.200"
+    rounded="lg"
+    shadow="md"
+    dark={{
+      bg: "gray.800",
+      border: "1px",
+      borderColor: "gray.700",
+    }}
+    >
       <Text fontWeight="bold" fontSize="3xl">
         DOCTORS LIST
       </Text>

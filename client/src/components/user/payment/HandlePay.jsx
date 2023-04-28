@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
@@ -32,10 +32,8 @@ const HandlePay = () => {
       image: "",
 
       handler: async (response) => {
-        console.log(response);
         try {
           const result = await axios.post("/payment/verify", response);
-          console.log(result);
           bookSession();
           appointment();
         } catch (err) {
@@ -51,7 +49,6 @@ const HandlePay = () => {
   };
 
   const bookSession = async () => {
-    console.log(doctorDetails._id);
     await axios
       .post("/book_session", {
         doctorDetails,
@@ -61,26 +58,23 @@ const HandlePay = () => {
         userData,
       })
       .then((res) => {
-        console.log(res);
         navigate("/order_success");
       });
   };
 
   const appointment = async () => {
-    console.log("apppointment booking");
     await axios
     .post("/appointment", {
       doctorDetails,
       time,
       date
     })
-    .then((res) => {
-      console.log(res);
+    .then(() => {
     });
   }
 
   return (
-    <div class="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
+    <div class="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto mt-24">
       <div class="flex justify-start item-start space-y-2 flex-col">
         <h1 class="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800">
           Order Summary

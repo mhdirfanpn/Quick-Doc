@@ -1,16 +1,15 @@
-import React from 'react'
-import DoctorsList from '../../../components/admin/doctorsList/DoctorsList'
-import Navbar from '../../../components/admin/navbar/Navbar'
-import Sidebar from '../../../components/admin/sidebar/Sidebar'
+import React from "react";
+import DoctorsList from "../../../components/admin/doctorsList/DoctorsList";
+import Layout from "../../../components/admin/layout/Layout";
 
 const ViewDoctors = () => {
   return (
     <>
-    <Navbar/>
-    <Sidebar/>
-    <DoctorsList/>
+      <Layout>
+        <DoctorsList />
+      </Layout>
     </>
-  )
-}
+  );
+};
 
-export default ViewDoctors
+export default ViewDoctors;

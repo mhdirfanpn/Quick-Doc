@@ -8,7 +8,6 @@ const Sessions = () => {
   return (
     <>
       <NavBar />
-      <UserNav />
       <UserSession />
       <Footer />
     </>

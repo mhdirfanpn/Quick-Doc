@@ -12,7 +12,6 @@ function Home() {
   return (
     <>
       <Navbar/>
-      <UserNav/>
       <Body1/>
       <Features/>
       <DoctorCards/>  

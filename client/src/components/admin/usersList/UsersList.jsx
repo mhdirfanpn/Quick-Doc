@@ -34,7 +34,6 @@ const UsersList = () => {
   let time = d.getTime();
 
   const unBlock = async (id) => {
-    console.log(id);
     await axios
       .put(`/admin/unBlockUser/${id}`, {
         headers: { Authorization: `Bearer ${adminToken}` },
@@ -46,7 +45,6 @@ const UsersList = () => {
   };
 
   const block = async (id) => {
-    console.log(id);
     await axios
       .put(`/admin/blockUser/${id}`, {
         headers: { Authorization: `Bearer ${adminToken}` },
@@ -66,7 +64,6 @@ const UsersList = () => {
       const response = await axios.get(ALL_USERS, {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
-      console.log(response.data);
       let filteredUsers = response.data;
       if (searchTerm) {
         filteredUsers = response.data.filter((user) =>
@@ -101,7 +98,22 @@ const UsersList = () => {
   }, 700);
 
   return (
-    <Box marginLeft={80} marginTop={10}>
+    <Box 
+    p="6"
+    bg="white"
+    marginLeft={24}
+    marginTop={24}
+    maxWidth="1400"
+    border="1px"
+    borderColor="gray.200"
+    rounded="lg"
+    shadow="md"
+    dark={{
+      bg: "gray.800",
+      border: "1px",
+      borderColor: "gray.700",
+    }}
+    >
       <Text fontWeight="bold" fontSize="3xl">
         USERS LIST
       </Text>

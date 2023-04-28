@@ -34,10 +34,11 @@ import OrderSuccess from './pages/user/orderSuccess/OrderSuccess'
 import Sessions from './pages/user/sessions/Sessions'
 import Appointment from './pages/admin/appointments/Appointment'
 import DoctorAppointment from './pages/doctor/appointment/DoctorAppointment'
+import DocMessage from './pages/doctor/doctorMessage/DocMessage'
+import UserMessage from './pages/user/userMessage/UserMessage'
 
 
 
-console.log(process.env.REACT_APP_API_KEY);
 
 const App = () => {
 
@@ -122,6 +123,12 @@ const App = () => {
             </AuthorizeUser>
           }/>
 
+          <Route path='/user-messenger' element={
+            <AuthorizeUser>
+              <UserMessage/>
+            </AuthorizeUser>
+          }/>
+
 
   {/* ========================================DOCTOR ROUTES============================================================= */}
 
@@ -160,6 +167,12 @@ const App = () => {
           <Route path='/doctor-appointment' element={
             <AuthorizeDoctor>
               <DoctorAppointment /> 
+            </AuthorizeDoctor>
+          } />
+
+          <Route path='/doctor-messenger' element={
+            <AuthorizeDoctor>
+              <DocMessage /> 
             </AuthorizeDoctor>
           } />
 

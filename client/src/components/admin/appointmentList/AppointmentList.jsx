@@ -28,16 +28,30 @@ const AppointmentList = () => {
       const response = await axios.get(APPOINTMENT, {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
-      console.log(response.data.appointments);
       setAppointment(response.data.appointments);
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(appointment);
+
   return (
-    <Box marginLeft={80} marginTop={10}>
+    <Box 
+    p="6"
+    bg="white"
+    marginLeft={24}
+    marginTop={24}
+    maxWidth="1400"
+    border="1px"
+    borderColor="gray.200"
+    rounded="lg"
+    shadow="md"
+    dark={{
+      bg: "gray.800",
+      border: "1px",
+      borderColor: "gray.700",
+    }}
+    >
       <Text fontWeight="bold" fontSize="3xl">
         APPOINTMENTS
       </Text>

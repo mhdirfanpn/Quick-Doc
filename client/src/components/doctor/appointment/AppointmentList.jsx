@@ -19,7 +19,6 @@ import jwtDecode from "jwt-decode";
 const AppointmentList = () => {
   const token = localStorage.getItem("doctorToken");
   const DoctorData = jwtDecode(token);
-  console.log(DoctorData.id);
   const [session, setSession] = useState([]);
 
   useEffect(() => {
@@ -38,7 +37,24 @@ const AppointmentList = () => {
   };
 
   return (
-    <Box marginLeft={80} marginTop={10}>
+    <Box 
+    p="6"
+    bg="white"
+    marginLeft={24}
+    marginTop={24}
+    maxWidth="1400"
+    border="1px"
+    borderColor="gray.200"
+    rounded="lg"
+    shadow="md"
+    _hover={{ bg: "gray.100" }}
+    dark={{
+      bg: "gray.800",
+      border: "1px",
+      borderColor: "gray.700",
+      _hover: { bg: "gray.700" },
+    }}
+    >
       <Text fontWeight="bold" fontSize="3xl">
         APPOINTMENTS
       </Text>

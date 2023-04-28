@@ -1,31 +1,61 @@
 import { React, useState, useEffect } from "react";
-import { Box, Button, Grid, GridItem, FormControl, Text, FormLabel, Input, Avatar, useDisclosure, Heading, Stack,Center,Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  FormControl,
+  Text,
+  FormLabel,
+  Input,
+  Avatar,
+  useDisclosure,
+  Heading,
+  Stack,
+  Center,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+} from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-import { doctorDetailsUpdateSchema, changePasswordSchema } from "../../../schemas";
+import {
+  doctorDetailsUpdateSchema,
+  changePasswordSchema,
+} from "../../../schemas";
 import toast, { Toaster } from "react-hot-toast";
-import { DOC_DETAILS, UPDATE_DOC_DETAILS,UPDATE_DOC_PASS } from "../../../utils/ConstUrls";
+import {
+  DOC_DETAILS,
+  UPDATE_DOC_DETAILS,
+  UPDATE_DOC_PASS,
+} from "../../../utils/ConstUrls";
 import axios from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
 import { useFormik } from "formik";
 import { UPDATE_DOC_IMG } from "../../../utils/ConstUrls";
-import { useDispatch, } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 
 const DoctorProfileEdit = () => {
-
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure(); // state variables for showing/hiding the 
+  const { isOpen, onOpen, onClose } = useDisclosure(); // state variables for showing/hiding the
   const [doctorDetails, setDoctorDetails] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [state, setState] = useState("");
   const token = localStorage.getItem("doctorToken");
   const decode = jwtDecode(token);
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
 
   const getDoctorDetails = async () => {
     try {
-      await axios.get(`${DOC_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` }, }).then((response) => {
+      await axios
+        .get(`${DOC_DETAILS}/${decode.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
           console.log(response.data.doctorDetails);
           setDoctorDetails(response.data.doctorDetails);
         })
@@ -49,13 +79,17 @@ const DoctorProfileEdit = () => {
       validationSchema: doctorDetailsUpdateSchema,
       onSubmit: async (values, actions) => {
         try {
-          await axios.put(`${UPDATE_DOC_DETAILS}/${decode.id}`,values, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
+          await axios
+            .put(`${UPDATE_DOC_DETAILS}/${decode.id}`, values, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
               console.log(response.data);
               if (response.data) {
                 setState(response.data);
-                toast.success("updated successfully")
+                toast.success("updated successfully");
               } else {
-                 toast.error("Oops Something went wrong");
+                toast.error("Oops Something went wrong");
               }
             })
             .catch((err) => {
@@ -69,75 +103,89 @@ const DoctorProfileEdit = () => {
       },
     });
 
-    const {values: form2Values,errors: form2Errors,touched: form2Touched,handleChange: form2HandleChange,handleBlur: form2HandleBlur,handleSubmit: form2HandleSubmit,
-    } = useFormik({
-      initialValues: {
-        newPassword: "",
-        confirmPassword: "",
-      },
-       validationSchema: changePasswordSchema,
-      onSubmit: async (values, actions) => {
-        console.log(values);
-        try {
-          await axios.put(`${UPDATE_DOC_PASS}/${decode.id}`, values, { headers: { Authorization: `Bearer ${token}` },}).then((response) => {
-              console.log(response.data);
-              if (response.data) {
-                setState(response.data)
-                toast.success("Password updated successfully")
-              } else {
-                toast.error("Oops Something went wrong");
-              }
-            })
-            .catch((err) => {
+  const {
+    values: form2Values,
+    errors: form2Errors,
+    touched: form2Touched,
+    handleChange: form2HandleChange,
+    handleBlur: form2HandleBlur,
+    handleSubmit: form2HandleSubmit,
+  } = useFormik({
+    initialValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: changePasswordSchema,
+    onSubmit: async (values, actions) => {
+      console.log(values);
+      try {
+        await axios
+          .put(`${UPDATE_DOC_PASS}/${decode.id}`, values, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            console.log(response.data);
+            if (response.data) {
+              setState(response.data);
+              toast.success("Password updated successfully");
+            } else {
               toast.error("Oops Something went wrong");
-            });
-        } catch (err) {
-           toast.error("Oops Something went wrong");
-        }
-        actions.resetForm();
-      },
-    });
-
-    const handleChangeImg = (e) => {
-      setProfilePicture(e.target.files[0]);
-    }
-  
-    const handleImageSumbit = async (e) => {
-      e.preventDefault();
-      if (profilePicture === undefined) {
-        return toast.error("Please select an image")
+            }
+          })
+          .catch((err) => {
+            toast.error("Oops Something went wrong");
+          });
+      } catch (err) {
+        toast.error("Oops Something went wrong");
       }
-      console.log(profilePicture);
-      const formData = new FormData();
-      formData.append('image', profilePicture);
-      console.log(profilePicture);
-      console.log(formData);
-         dispatch(showLoading())
-      await axios.put(`${UPDATE_DOC_IMG}/${decode.id}`,formData,{ headers: { Authorization: `Bearer ${token}` },}).then((res)=>{
-        if(res){
+      actions.resetForm();
+    },
+  });
+
+  const handleChangeImg = (e) => {
+    setProfilePicture(e.target.files[0]);
+  };
+
+  const handleImageSumbit = async (e) => {
+    e.preventDefault();
+    if (profilePicture === undefined) {
+      return toast.error("Please select an image");
+    }
+    console.log(profilePicture);
+    const formData = new FormData();
+    formData.append("image", profilePicture);
+    console.log(profilePicture);
+    console.log(formData);
+    dispatch(showLoading());
+    await axios
+      .put(`${UPDATE_DOC_IMG}/${decode.id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res) {
           setState(res);
           onClose();
-            dispatch(hideLoading())
-          toast.success("image updated successfully")
+          dispatch(hideLoading());
+          toast.success("image updated successfully");
         }
-      }).catch((err)=>{
-        onClose();
-          dispatch(hideLoading())
-        toast.error("Oops Something went wrong");
-        
       })
-    };
+      .catch((err) => {
+        onClose();
+        dispatch(hideLoading());
+        toast.error("Oops Something went wrong");
+      });
+  };
 
   useEffect(() => {
     getDoctorDetails();
   }, [state]);
 
-  let imageUrl = doctorDetails.profilePic
+  let imageUrl = doctorDetails.profilePic;
 
   return (
     <Box
-      marginLeft="330"
-      marginTop={10}
+      marginLeft={24}
+      marginTop={24}
       bg="white"
       rounded="lg"
       border="1px"
@@ -147,63 +195,61 @@ const DoctorProfileEdit = () => {
       shadow="md"
       dark={{ bg: "gray.800", borderColor: "gray.700" }}
     >
-      
-        <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-        </Heading>
-    
-          <FormControl id="userName">
-            
-            <Stack direction={["column", "row"]} spacing={6}>
-              <Center>
-      <Avatar
-        src={imageUrl}
-        alt="Doctor's Profile Photo"
-        size="2xl"
-        marginBottom={5}
-      />
-         </Center>
-         <EditIcon
+      <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}></Heading>
+
+      <FormControl id="userName">
+        <Stack direction={["column", "row"]} spacing={6}>
+          <Center>
+            <Avatar
+              src={imageUrl}
+              alt="Doctor's Profile Photo"
+              size="2xl"
+              marginBottom={5}
+            />
+          </Center>
+          <EditIcon
             onClick={onOpen}
             position="absolute"
             top="110"
             left="100px"
           />
 
-                <Modal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  motionPreset="scale"
-                  isCentered={false}
-                  top="auto"
-                >
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Upload Profile Image</ModalHeader>
-                    <ModalCloseButton />
-                    <form onSubmit={handleImageSumbit}>
-                    <ModalBody>
-                      <FormControl id="profileImage">
-                        <FormLabel>Choose an image to upload</FormLabel>
-                        <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />                      </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button onClick={onClose} mr={3}>
-                        Cancel
-                      </Button>
-                      <Button
-                        colorScheme="blue"
-                        type="submit"
-                      >
-                        Upload
-                      </Button>
-                     
-                    </ModalFooter>
-                    </form>
-                  </ModalContent>
-                </Modal>
-          
-            </Stack>
-          </FormControl>
+          <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            motionPreset="scale"
+            isCentered={false}
+            top="auto"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Upload Profile Image</ModalHeader>
+              <ModalCloseButton />
+              <form onSubmit={handleImageSumbit}>
+                <ModalBody>
+                  <FormControl id="profileImage">
+                    <FormLabel>Choose an image to upload</FormLabel>
+                    <input
+                      accept="image/*"
+                      type="file"
+                      name="file"
+                      onChange={handleChangeImg}
+                    />{" "}
+                  </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                  <Button onClick={onClose} mr={3}>
+                    Cancel
+                  </Button>
+                  <Button colorScheme="blue" type="submit">
+                    Upload
+                  </Button>
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
+        </Stack>
+      </FormControl>
 
       <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
         <form>
@@ -222,9 +268,9 @@ const DoctorProfileEdit = () => {
                   type="text"
                   style={{ color: "grey" }}
                 />
-                 {errors.fullName && touched.fullName && (
-            <p className="error">{errors.fullName}</p>
-          )}
+                {errors.fullName && touched.fullName && (
+                  <p className="error">{errors.fullName}</p>
+                )}
               </FormControl>
               <FormControl id="email" isRequired mt={6}>
                 <FormLabel>Email</FormLabel>
@@ -239,10 +285,9 @@ const DoctorProfileEdit = () => {
                   style={{ color: "grey" }}
                 />
                 {errors.email && touched.email && (
-            <p className="error">{errors.email}</p>
-          )}
+                  <p className="error">{errors.email}</p>
+                )}
               </FormControl>
-
             </GridItem>
             <GridItem>
               <FormControl id="experience" isRequired mt={6}>
@@ -258,9 +303,9 @@ const DoctorProfileEdit = () => {
                   type="text"
                   style={{ color: "grey" }}
                 />
-                 {errors.experience && touched.experience && (
-            <p className="error">{errors.experience}</p>
-          )}
+                {errors.experience && touched.experience && (
+                  <p className="error">{errors.experience}</p>
+                )}
               </FormControl>
               <FormControl id="number" isRequired mt={6}>
                 <FormLabel>Mobile</FormLabel>
@@ -274,9 +319,9 @@ const DoctorProfileEdit = () => {
                   placeholder="Enter your number"
                   style={{ color: "grey" }}
                 />
-                 {errors.number && touched.number && (
-            <p className="error">{errors.number}</p>
-          )}
+                {errors.number && touched.number && (
+                  <p className="error">{errors.number}</p>
+                )}
               </FormControl>
             </GridItem>
           </Grid>
@@ -297,7 +342,7 @@ const DoctorProfileEdit = () => {
           </Text>
         </form>
         {showPasswordForm && (
-          <form  onSubmit={form2HandleSubmit}>
+          <form onSubmit={form2HandleSubmit}>
             <GridItem ml={10}>
               <FormControl id="fullName" isRequired mt={6}>
                 <FormLabel>New Password</FormLabel>
@@ -307,17 +352,17 @@ const DoctorProfileEdit = () => {
                   type="password"
                   placeholder="Enter your new password"
                   value={form2Values.newPassword}
-                onChange={form2HandleChange}
-                onBlur={form2HandleBlur}
+                  onChange={form2HandleChange}
+                  onBlur={form2HandleBlur}
                   _placeholder={{ color: "gray.500" }}
                   style={{ color: "grey" }}
                 />
                 {form2Errors.newPassword && form2Touched.newPassword && (
-                <p className="error">{form2Errors.newPassword}</p>
-              )}
+                  <p className="error">{form2Errors.newPassword}</p>
+                )}
               </FormControl>
               <FormControl id="email" isRequired mt={6}>
-                <FormLabel>Confirm Password</FormLabel >
+                <FormLabel>Confirm Password</FormLabel>
                 <Input
                   value={form2Values.confirmPassword}
                   onChange={form2HandleChange}
@@ -329,9 +374,10 @@ const DoctorProfileEdit = () => {
                   _placeholder={{ color: "gray.500" }}
                   style={{ color: "grey" }}
                 />
-                {form2Errors.confirmPassword && form2Touched.confirmPassword && (
-                <p className="error">{form2Errors.confirmPassword}</p>
-              )}
+                {form2Errors.confirmPassword &&
+                  form2Touched.confirmPassword && (
+                    <p className="error">{form2Errors.confirmPassword}</p>
+                  )}
               </FormControl>
             </GridItem>
 

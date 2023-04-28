@@ -1,12 +1,10 @@
 import * as yup from "yup";
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-// min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
 
 const nameRules = /^[A-Za-z ]+$/;
 
-const experienceRules =/^\d+-\d+$/;
-
+const experienceRules = /^\d+-\d+$/;
 
 export const loginSchema = yup.object().shape({
   email: yup
@@ -82,21 +80,19 @@ export const userDetailsUpdateSchema = yup.object().shape({
     .matches(/^[0-9]{10}$/, { message: "Number must be 10 characters" })
     .required("Contact is required"),
   userName: yup.string().required("Name is required"),
-  // .matches(nameRules, "Name can only contain alphabets"),
 });
 
 export const changePasswordSchema = yup.object().shape({
-    newPassword: yup
+  newPassword: yup
     .string()
     .min(5)
     .matches(passwordRules, { message: "Please create a stronger password" })
     .required("Required"),
-    confirmPassword: yup
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref("newPassword"), null], "Passwords must match")
     .required("Required"),
 });
-
 
 export const doctorDetailsUpdateSchema = yup.object().shape({
   email: yup
@@ -107,9 +103,9 @@ export const doctorDetailsUpdateSchema = yup.object().shape({
     .string()
     .matches(/^[0-9]{10}$/, { message: "Number must be 10 characters" })
     .required("Contact is required"),
-  experience: yup.string().required("Experience is required")
+  experience: yup
+    .string()
+    .required("Experience is required")
     .matches(experienceRules, "Enter a valid experience"),
   fullName: yup.string().required("Name is required"),
-  // .matches(nameRules, "Name can only contain alphabets"),
 });
-

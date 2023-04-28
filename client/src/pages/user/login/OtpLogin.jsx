@@ -26,7 +26,6 @@ const Mobile = () => {
       {
         size: "invisible",
         callback: (response) => {
-          console.log(response);
         },
         defaultCountry: "IN",
       },
@@ -38,13 +37,8 @@ const Mobile = () => {
     const phoneNumber = "+91" + mobile;
     await axios.get(`${OTP_LOGIN}/${mobile}`, { headers: { "Content-Type": "application/json" } })
     .then((res)=>{
-        console.log(`backend OTP response = ${res}`);
-        console.log(`backend OTP response = ${JSON.stringify(res)}`);
         if(res.status===202){
            const decode = jwtDecode(res.data.token);
-           console.log(decode);
-           console.log(decode.name);
-           console.log(res.data.token);
            setUsername(decode.name);
            setTokenVal(res.data.token);
         }else{
@@ -64,13 +58,10 @@ const Mobile = () => {
   };
 
   const verifyOTP = (otp) => {
-    console.log(otp);
     let confirmationResult = window.confirmationResult;
     confirmationResult
       .confirm(otp)
       .then((result) => {
-        console.log(result);
-        console.log(JSON.stringify(result));
         dispatch(setLogin({
             user:username,
             token:tokenVal

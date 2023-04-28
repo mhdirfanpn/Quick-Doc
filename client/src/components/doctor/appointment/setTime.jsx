@@ -35,7 +35,6 @@ function TimeSlot() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("Selected timings:", selectedTimings);
     e.preventDefault();
     try {
       const decode = jwtDecode(localStorage.getItem("doctorToken"));
@@ -43,8 +42,9 @@ function TimeSlot() {
         .post("doc/timeSlot", [selectedTimings, { id: decode.id }], {
           headers: { Authorization: `Bearer ${doctorToken}` },
         })
-        .then((response) => {})
-        toast.success("time slot updated successfully")
+        .then(() => {
+          toast.success("time slot updated successfully");
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -57,8 +57,8 @@ function TimeSlot() {
     <Box
       p="6"
       bg="white"
-      marginLeft="330"
-      marginTop={10}
+      marginLeft={24}
+      marginTop={24}
       maxWidth="1400"
       border="1px"
       borderColor="gray.200"
@@ -119,7 +119,7 @@ function TimeSlot() {
           )}
         </Flex>
       </VStack>
-      <Toaster/>
+      <Toaster />
     </Box>
   );
 }

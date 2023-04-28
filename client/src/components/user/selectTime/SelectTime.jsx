@@ -78,7 +78,6 @@ const SelectTime = () => {
             setSelectedTime(null);
             toast.error("time slot unavailable");
           }
-          console.log(response);
         })
         .catch((err) => {
           console.log(err, "catch error in doctorFetching");
@@ -93,11 +92,10 @@ const SelectTime = () => {
     navigate("/handlePay", { state: { doctor, selectedDate, selectedTime } });
   };
 
-  console.log(selectedDate);
 
   return (
     <Center>
-      <Container maxW={"5xl"} py={12}>
+      <Container maxW={"5xl"} py={12} mt={24}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
           <Stack spacing={4}>
             <Heading color={"#051766"}>Dr. {doctor.fullName}</Heading>
