@@ -61,11 +61,7 @@ const Mobile = () => {
     let confirmationResult = window.confirmationResult;
     confirmationResult
       .confirm(otp)
-      .then((result) => {
-        dispatch(setLogin({
-            user:username,
-            token:tokenVal
-        }))
+      .then(() => {
         navigate('/home')
         localStorage.setItem('userToken',tokenVal);
       })

@@ -41,6 +41,7 @@ import UserMessage from './pages/user/userMessage/UserMessage'
 
 
 const App = () => {
+  const userData = useSelector((state) => state.user)
 
   const {loading} = useSelector(state => state.spinner)
   

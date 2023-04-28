@@ -34,3 +34,7 @@ export const APPOINTMENT='admin/appointment'
 export const GET_DOC='/getDoctor'
 
 
+//CHAT
+
+export const USER_CHAT='conversation/chatUser'
+export const DOC_CHAT='conversation/chatDoctor'

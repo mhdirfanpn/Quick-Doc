@@ -1,9 +1,17 @@
 import { Navigate } from "react-router-dom";
+import store from "../../redux/store";
+import { setAdminLogin } from "../../redux/adminSlice";
 
 export default function AuthorizeAdmin({ children }) {
-  const adminToken = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("adminToken");
 
-  if (!adminToken) return <Navigate to={"/admin"} />;
+  if (!token) return <Navigate to={"/admin"} />;
+
+  store.dispatch(
+    setAdminLogin({
+      adminToken: token,
+    })
+  );
 
   return children;
 }

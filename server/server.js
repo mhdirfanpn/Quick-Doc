@@ -8,6 +8,8 @@ import userRoutes from './routes/userRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
 import paymentRoutes from './routes/paymentRoutes.js'
+import conversationRoutes from './routes/conversationRoutes.js'
+import messageRoutes from './routes/messageRoutes.js'
 
 
 const app=express();
@@ -26,6 +28,8 @@ app.use('/api',userRoutes)
 app.use('/api/doc',doctorRoutes)
 app.use('/api/admin',adminRoutes)
 app.use('/api/payment',paymentRoutes)
+app.use('/api/conversation',conversationRoutes)
+app.use('/api/message',messageRoutes)
 
 app.get('*',(req,res)=>{
     res.status(404).send("PAGE NOT FOUND")

@@ -24,23 +24,16 @@ const DoctorLogin = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
-  const body = JSON.stringify(values);
+    const body = JSON.stringify(values);
     try {
       await axios
         .post(DOC_LOGIN, body, {
           headers: { "Content-Type": "application/json" },
         })
         .then(({ data }) => {
+          console.log("data", data);
           if (data.success) {
-            document.cookie = `token:${data.token}`;
-
-            dispatch(
-              setDoctorLogin({
-                doctor: data.doctorDetails,
-                token: data.token,
-              })
-            );
-
+            document.cookie = `token:${data.token}`
             navigate("/doctor-home");
             localStorage.setItem("doctorToken", data.token);
           } else {

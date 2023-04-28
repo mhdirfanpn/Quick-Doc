@@ -34,13 +34,6 @@ const AdminLogin = () => {
         .then(({ data }) => {
           console.log(data.adminToken);
           if (data.success) {
-            dispatch(
-              setAdminLogin({
-                admin: data.adminDetails,
-                token: data.adminToken,
-              })
-            );
-
             navigate("/users-list");
             localStorage.setItem("adminToken", data.adminToken);
           } else {

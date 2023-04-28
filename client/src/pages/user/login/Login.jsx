@@ -31,13 +31,10 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
         })
         .then(({ data }) => {
+          console.log(data);
           if (data.success) {
-            dispatch(
-              setLogin({
-                user: data.userDetails,
-                token: data.token,
-              })
-            );
+            document.cookie = `token:${data.token}`;
+       
             navigate("/home");
             localStorage.setItem("userToken", data.token);
           } else {
