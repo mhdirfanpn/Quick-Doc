@@ -1,22 +1,19 @@
 import {
-  Avatar,
   Box,
   Button,
   Flex,
-  Heading,
   Input,
   InputGroup,
   InputLeftElement,
-  Stack,
   Textarea,
   Text,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
+import { useState, useEffect, useRef } from "react";
 import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 import Chat from "../../chat/Chat";
 import axios from "../../../utils/axios";
+import { io } from "socket.io-client";
 import Conversations from "../../conversations/Conversations";
 
 function Messenger({ isUser }) {
@@ -34,6 +31,32 @@ function Messenger({ isUser }) {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const socket = useRef();
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", commonUser.id);
+    socket.current.on("getUsers", (users) => {});
+  }, [commonUser]);
 
   useEffect(() => {
     const getConversation = async () => {
@@ -46,33 +69,67 @@ function Messenger({ isUser }) {
     getConversation();
   }, [commonUser.id]);
 
-
   useEffect(() => {
     const getMessages = async () => {
-        try {
-            const res = await axios.get(`/message/${currentChat._id}`);
-            console.log(res);
-            setMessages(res.data);
-        } catch (err) {
-            console.log(err);
-        }
-    } 
+      try {
+        const res = await axios.get(`/message/${currentChat._id}`);
+        setMessages(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     getMessages();
-},[currentChat]);
+  }, [currentChat]);
 
-  console.log(messages);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const message = {
+      sender: commonUser.id,
+      text: newMessage,
+      conversationId: currentChat._id,
+    };
+
+    const recieverId = currentChat.members.find(
+      (member) => member !== commonUser.id
+    );
+
+    socket.current.emit("sendMessage", {
+      senderId: commonUser.id,
+      recieverId: recieverId,
+      text: newMessage,
+    });
+
+    try {
+      const res = await axios.post("/message", message);
+      setMessages([...messages, res.data]);
+      setNewMessage("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
-    <Flex direction="row" mt={isUser ? 0 : 20}>
-      <Box w="25%" h="100vh" borderRight="1px solid gray.200" p="4">
+    <Flex direction="row" mt={isUser ? 0 : 0}>
+      <Box
+        w="25%"
+        h={isUser ? "100vh" : "100vh"}
+        borderRight="1px solid gray.200"
+        p="4"
+        mt={4}
+      >
         <InputGroup mb="4">
-          <InputLeftElement pointerEvents="none" children={<FaSearch />} />
-          <Input placeholder="Search user..." />
+          <InputLeftElement pointerEvents="none" border={"none"} />
+          <Input placeholder="" borderColor={"transparent"} />
         </InputGroup>
-        <Box overflowY="auto" h="calc(100vh - 120px)">
+
+        <Box overflowY="auto" h="calc(100vh - 120px)" mt={9}>
           {conversations.map((c) => {
             return (
-              <Box onClick={ () => setCurrentChat(c)}>
+              <Box onClick={() => setCurrentChat(c)}>
                 {doctorToken ? (
                   <Conversations
                     key={c._id}
@@ -93,29 +150,35 @@ function Messenger({ isUser }) {
           })}
         </Box>
       </Box>
-      <Box w="75%" h="100vh" p="4">
-        {/* <Flex alignItems="center">
-          <Avatar size="md" name="John Doe" src="https://bit.ly/dan-abramov" />
-          <Box ml="4">
-            <Heading as="h2" fontSize="lg">
-              John Doe
-            </Heading>
-            <Box fontSize="sm" color="gray.500">
-              Online
-            </Box>
-          </Box>
-        </Flex> */}
+      <Box w="75%" h="100vh">
+        {/* <ChatAvatar/> */}
         {currentChat ? (
           <>
-            <Box overflowY="auto" h="calc(90vh - 200px)" mt="4">
+            <Box
+              overflowY="auto"
+              h="calc(90vh - 200px)"
+              mt="24"
+              css={{ "::-webkit-scrollbar": { display: "none" } }}
+            >
               <Box>
-                <Chat />
+                {messages.map((m) => (
+                  <Box ref={scrollRef} key={m._id}>
+                    <Chat message={m} own={m.sender === commonUser.id} />
+                  </Box>
+                ))}
               </Box>
             </Box>
 
             <Box mt="4" mb={12}>
-              <Textarea placeholder="Type your message..." mb="4" />
-              <Button colorScheme="blue">Send</Button>
+              <Textarea
+                placeholder="Type your message..."
+                mb="4"
+                onChange={(e) => setNewMessage(e.target.value)}
+                value={newMessage}
+              />
+              <Button colorScheme="blue" onClick={handleSubmit}>
+                Send
+              </Button>
             </Box>
           </>
         ) : (
