@@ -11,10 +11,10 @@ import {
 import { useState, useEffect, useRef } from "react";
 import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
-import Chat from "../../chat/Chat";
-import axios from "../../../utils/axios";
+import Chat from "../chat/Chat";
+import axios from "../../utils/axios";
 import { io } from "socket.io-client";
-import Conversations from "../../conversations/Conversations";
+import Conversations from "../conversations/Conversations";
 
 function Messenger({ isUser }) {
   let commonUser;

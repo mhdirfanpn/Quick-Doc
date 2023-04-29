@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../../../components/doctor/layout/Layout'
-import Messenger from '../../../components/user/messenger/Messenger'
-
+import Messenger from '../../../components/messenger/Messenger'
 const DocMessage = () => {
   return (
     <>
