@@ -15,8 +15,12 @@ import Chat from "../chat/Chat";
 import axios from "../../utils/axios";
 import { io } from "socket.io-client";
 import Conversations from "../conversations/Conversations";
+import ActiveSession from "../activeSession/ActiveSession";
+import ChatAvatar from "../chatAvatar/ChatAvatar"
 
 function Messenger({ isUser }) {
+
+
   let commonUser;
   const doctorToken = useSelector((state) => state.doctor.doctorToken);
   if (doctorToken) {
@@ -28,13 +32,18 @@ function Messenger({ isUser }) {
     commonUser = jwtDecode(userToken);
   }
 
+
+
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [active, setActive] = useState(null);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [activeConversation, setActiveConversation] = useState(null);
   const socket = useRef();
   const scrollRef = useRef();
+
 
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
@@ -47,16 +56,20 @@ function Messenger({ isUser }) {
     });
   }, []);
 
+
+
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentChat]);
+  }, [arrivalMessage, currentChat, active]);
 
   useEffect(() => {
     socket.current.emit("addUser", commonUser.id);
     socket.current.on("getUsers", (users) => {});
-  }, [commonUser]);
+  }, [commonUser, active]);
+
+
 
   useEffect(() => {
     const getConversation = async () => {
@@ -67,23 +80,29 @@ function Messenger({ isUser }) {
       } catch (error) {}
     };
     getConversation();
-  }, [commonUser.id]);
+  }, [commonUser.id, active]);
+
+
 
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`/message/${currentChat._id}`);
+        const res = await axios.get(`/message/${currentChat?._id}`);
         setMessages(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getMessages();
-  }, [currentChat]);
+  }, [currentChat, active]);
+
+
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, active]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,6 +131,30 @@ function Messenger({ isUser }) {
     }
   };
 
+
+
+  const handleActiveSessionId = async (id) => {
+    const body = {
+      senderId: commonUser.id,
+      receiverId: id,
+    };
+    try {
+      const conversation = await axios.post("/conversation", body);
+      setActiveConversation(conversation.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
+  const handleActive = (e) => {
+    e.preventDefault();
+    setActive(e);
+  };
+
+  
+
   return (
     <Flex direction="row" mt={isUser ? 0 : 0}>
       <Box
@@ -123,7 +166,13 @@ function Messenger({ isUser }) {
       >
         <InputGroup mb="4">
           <InputLeftElement pointerEvents="none" border={"none"} />
-          <Input placeholder="" borderColor={"transparent"} />
+          <Input
+            w={1}
+            placeholder=""
+            borderColor={"transparent"}
+            _hover={{ borderColor: "transparent" }}
+            _focus={{ borderColor: "transparent" }}
+          />
         </InputGroup>
 
         <Box overflowY="auto" h="calc(100vh - 120px)" mt={9}>
@@ -151,7 +200,9 @@ function Messenger({ isUser }) {
         </Box>
       </Box>
       <Box w="75%" h="100vh">
-        {/* <ChatAvatar/> */}
+      {currentChat && (
+      <ChatAvatar isDoctor={doctorToken}  currentUserId={commonUser.id} />
+      )}
         {currentChat ? (
           <>
             <Box
@@ -169,17 +220,19 @@ function Messenger({ isUser }) {
               </Box>
             </Box>
 
-            <Box mt="4" mb={12}>
-              <Textarea
-                placeholder="Type your message..."
-                mb="4"
-                onChange={(e) => setNewMessage(e.target.value)}
-                value={newMessage}
-              />
-              <Button colorScheme="blue" onClick={handleSubmit}>
-                Send
-              </Button>
-            </Box>
+            {/* {messages[0]?.conversationId === activeConversation?._id && ( */}
+              <Box mt="4" mb={12}>
+                <Textarea
+                  placeholder="Type your message..."
+                  mb="4"
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={newMessage}
+                />
+                <Button colorScheme="blue" onClick={handleSubmit}>
+                  Send
+                </Button>
+              </Box>
+            {/* )} */}
           </>
         ) : (
           <Text
@@ -193,6 +246,42 @@ function Messenger({ isUser }) {
             Open a conversation to start chat
           </Text>
         )}
+      </Box>
+      <Box
+        w="25%"
+        h={isUser ? "100vh" : "100vh"}
+        borderRight="1px solid gray.200"
+        p="4"
+        mt={4}
+      >
+        <InputGroup mb="4" ml={24}>
+          <InputLeftElement pointerEvents="none" border={"none"} />
+          <Input
+            w={1}
+            placeholder=""
+            borderColor={"transparent"}
+            _hover={{ borderColor: "transparent" }}
+            _focus={{ borderColor: "transparent" }}
+          />
+        </InputGroup>
+
+        <Box overflowY="auto" h="calc(100vh - 120px)" mt={9}>
+          <Box onClick={handleActive}>
+            {doctorToken ? (
+              <ActiveSession
+                currentUser={commonUser.id}
+                isDoctor={true}
+                handleActiveSessionId={handleActiveSessionId}
+              />
+            ) : (
+              <ActiveSession
+                currentUser={commonUser.id}
+                isDoctor={false}
+                handleActiveSessionId={handleActiveSessionId}
+              />
+            )}
+          </Box>
+        </Box>
       </Box>
     </Flex>
   );

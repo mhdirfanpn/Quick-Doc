@@ -10,6 +10,7 @@ const HandlePay = () => {
   let time = location.state.selectedTime;
   let date = location.state.selectedDate;
   let userData = jwtDecode(localStorage.getItem("userToken"));
+  console.log(doctorDetails);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -58,6 +59,7 @@ const HandlePay = () => {
         userData,
       })
       .then((res) => {
+        console.log(res);
         navigate("/order_success");
       });
   };

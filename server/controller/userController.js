@@ -204,37 +204,20 @@ export const getDoctor = async (req, res) => {
 
 export const bookSession = async (req, res) => {
   try {
+    let timeSlot = req.body.time;
+    let sessionDate = req.body.date;
+    const isoDate = moment(
+      `${sessionDate} ${timeSlot}`,
+      "YYYY-MM-DD h:mm A"
+    ).toISOString();
+    const twoHoursLater = moment(isoDate).add(2, "hours").toISOString();
+    const currentISODate = moment().toISOString();
+    const formattedDate = moment(currentISODate).format(
+      "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
+    );
 
-    let dateString = req.body.date
-    let timeString = req.body.time
-    const date = new Date(dateString);
-    console.log(date);
-const [hours, minutes] = timeString.match(/(\d+):(\d+) (AM|PM)/).slice(1).map((v, i) => i < 2 ? Number(v) : v);
-date.setHours(hours % 12 + (timeString.endsWith("PM") ? 12 : 0));
-date.setMinutes(minutes);
-date.setSeconds(50);
-date.setMilliseconds(500);
-
-
-
-// Format the date object into the desired string format
-const formattedString = date.toISOString().replace("Z", "0").replace("T", " ").slice(0, -5) + "z";
-
-console.log(formattedString); // Output: "2023-04-26 00:30:50.5000z"
-
-const d = new Date(formattedString);
-
-// Add two hours to the date object
-date.setHours(date.getHours() + 2);
-
-// Convert the date object back to an ISO string
-const isoString = date.toISOString();
-
-console.log(isoString); // Output: "2023-05-11T06:30:50.000Z"
     const today = moment().format("YYYY-MM-DD");
-
     const userDetails = req.body.userData;
-
     const doctorDetails = req.body.doctorDetails;
     const user = await User.findById(userDetails.id);
 
@@ -247,6 +230,8 @@ console.log(isoString); // Output: "2023-05-11T06:30:50.000Z"
       plan: req.body.plan,
       sessionDate: req.body.date,
       bookedDate: today,
+      startTime: isoDate,
+      endTime: twoHoursLater,
     });
 
     res
@@ -336,27 +321,20 @@ export const session = async (req, res) => {
 };
 
 
-export const chat = async (req, res) => {
 
-  const dateString = "2023-04-26";
-const timeString = "12:30 AM";
+export const activeSession = async (req, res) => {
+  const currentISODate = new Date();
+//  currentISODate.setHours(currentISODate.getHours());
 
-// Create a new Date object and set its time using the time string
-const date = new Date(dateString);
-const [hours, minutes] = timeString.match(/(\d+):(\d+) (AM|PM)/).slice(1).map((v, i) => i < 2 ? Number(v) : v);
-date.setHours(hours % 12 + (timeString.endsWith("PM") ? 12 : 0));
-date.setMinutes(minutes);
-date.setSeconds(50);
-date.setMilliseconds(500);
-
-// Format the date object into the desired string format
-const formattedString = date.toISOString().replace("Z", "0").replace("T", " ").slice(0, -5) + "z";
-
-console.log(formattedString); // Output: "2023-04-26 00:30:50.5000z"
-
-  
-
-  
-  
-} 
-  
+  try {
+    const session = await Session.findOne({
+      userId: req.params.id,
+      startTime: { $lte: currentISODate },
+      endTime: { $gte: currentISODate },
+    });
+    res.json(session);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

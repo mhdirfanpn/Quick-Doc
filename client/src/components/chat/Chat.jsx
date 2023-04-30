@@ -3,6 +3,7 @@ import React from "react";
 import { format } from "timeago.js";
 
 const Chat = ({ message, own }) => {
+  console.log(own,"asdasdasdasdasdasd");
   return (
     <Box
       display="flex"

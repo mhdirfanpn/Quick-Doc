@@ -197,3 +197,26 @@ export const session = async (req, res) => {
     res.status(400).json(err);
   }
 };
+
+export const activeSession = async (req, res) => {
+  const currentISODate = new Date();
+ // currentISODate.setHours(currentISODate.getHours());
+
+  try {
+    const session = await Session.findOne({
+      doctorId: req.params.id,
+      startTime: { $lte: currentISODate },
+      endTime: { $gte: currentISODate },
+    });
+
+    if(session){
+      res.json(session);
+    }else{
+      res.json("no session")
+    }
+   
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
