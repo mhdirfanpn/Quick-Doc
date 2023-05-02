@@ -1,47 +1,51 @@
 import './App.css'
-import React from 'react'
-import Register from './pages/user/register/Register'
-import Login from './pages/user/login/Login'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
+import AuthUser from './protected/user/AuthUser'
+import AuthorizeUser from './protected/user/AuthorizeUser'
+import AuthDoctor from './protected/doctor/AuthDoctor'
+import AuthorizeDoctor from './protected/doctor/AuthorizeDoctor'
+import AuthAdmin from './protected/admin/AuthAdmin'
+import AuthorizeAdmin from './protected/admin/AuthorizeAdmin'
+import SpinnerLoader from './components/spinner/SpinnerLoader'
+import ScrollToTop from './scrollTop/ScrollTop'
+
 import Home from './pages/user/home/Home'
-import AdminLogin from './pages/admin/login/AdminLogin'
+import DoctorHome from './pages/doctor/home/DoctorHome'
 import AdminHome from './pages/admin/home/AdminHome'
 import UserManage from './pages/admin/usersList/UserManage'
-import ViewDoctors from './pages/admin/doctorsList/ViewDoctors'
-import ManageDoctors from './pages/admin/doctorsRequest/ManageDoctors'
-import DoctorRegister from './pages/doctor/register/DoctorRegister'
+
+import AdminLogin from './pages/admin/login/AdminLogin'
 import DoctorLogin from './pages/doctor/login/DoctorLogin'
-import DoctorHome from './pages/doctor/home/DoctorHome'
-import DoctorCard from './pages/admin/doctorDetails/DoctorDetails'
-import AuthorizeAdmin from './protected/admin/AuthorizeAdmin'
-import AuthAdmin from './protected/admin/AuthAdmin'
-import AuthorizeUser from './protected/user/AuthorizeUser'
-import AuthUser from './protected/user/AuthUser'
-import AuthorizeDoctor from './protected/doctor/AuthorizeDoctor'
-import AuthDoctor from './protected/doctor/AuthDoctor'
-import UserProfile from './pages/user/profile/UserProfile'
-import UserProfileEdit from './pages/user/profile/UserProfileEdit'
-import DoctorProfile from './pages/doctor/profile/DoctorProfile'
-import { useSelector } from 'react-redux'
-import OtpLogin from './pages/user/login/OtpLogin'
-import SpinnerLoader from './components/spinner/SpinnerLoader'
-import ScheduleAppointment from './pages/doctor/ScheduleTime/ScheduleAppointment'
-import DoctorDetails from './pages/user/doctorDetails/DoctorDetails'
-import ScrollToTop from './scrollTop/ScrollTop'
-import AvailableTime from './pages/user/availableTime/AvailableTime'
-import Payment from './pages/user/payment/Payment'
-import OrderSuccess from './pages/user/orderSuccess/OrderSuccess'
-import Sessions from './pages/user/sessions/Sessions'
-import Appointment from './pages/admin/appointments/Appointment'
-import DoctorAppointment from './pages/doctor/appointment/DoctorAppointment'
-import DocMessage from './pages/doctor/doctorMessage/DocMessage'
-import UserMessage from './pages/user/userMessage/UserMessage'
+import Login from './pages/user/login/Login'
+
+const DoctorRegister = lazy(()=>('./pages/doctor/register/DoctorRegister'))
+const Register = lazy(()=>import('./pages/user/register/Register'))
+const OtpLogin = lazy(()=>import('./pages/user/login/OtpLogin'))
+const ViewDoctors = lazy(()=>import('./pages/admin/doctorsList/ViewDoctors'))
+const ManageDoctors = lazy(()=>import('./pages/admin/doctorsRequest/ManageDoctors'))
+const UserMessage = lazy(()=>import('./pages/user/userMessage/UserMessage'))
+const AvailableTime  = lazy(()=>import('./pages/user/availableTime/AvailableTime' ))
+const DoctorDetails = lazy(()=>import('./pages/user/doctorDetails/DoctorDetails'))
+const DoctorCard = lazy(()=>import('./pages/admin/doctorDetails/DoctorDetails'))
+const UserProfileEdit = lazy(()=>import('./pages/user/profile/UserProfileEdit'))
+const UserProfile = lazy(()=>import('./pages/user/profile/UserProfile'))
+const DocMessage = lazy(()=>import('./pages/doctor/doctorMessage/DocMessage'))
+const DoctorProfile = lazy(()=>import('./pages/doctor/profile/DoctorProfile'))
+const ScheduleAppointment = lazy(()=>import('./pages/doctor/ScheduleTime/ScheduleAppointment'))
+const Sessions = lazy(()=>import('./pages/user/sessions/Sessions'))
+const Appointment = lazy(()=>import('./pages/admin/appointments/Appointment'))
+const DoctorAppointment = lazy(()=>import('./pages/doctor/appointment/DoctorAppointment')) 
+const Payment = lazy(()=>import('./pages/user/payment/Payment'))
+const OrderSuccess = lazy(()=>import('./pages/user/orderSuccess/OrderSuccess'))
 
 
 
 
 const App = () => {
-  const userData = useSelector((state) => state.user)
+
 
   const {loading} = useSelector(state => state.spinner)
   
@@ -66,13 +70,17 @@ const App = () => {
 
           <Route path='/otp' element={
             <AuthUser>
+              <Suspense>
               <OtpLogin/>
+              </Suspense>
             </AuthUser>
           }/>
 
           <Route path='/signUp' element={
             <AuthUser>
+              <Suspense>
               <Register/>
+              </Suspense>
             </AuthUser>
           }/>   
 
@@ -84,31 +92,41 @@ const App = () => {
 
           <Route path='/profile' element={
             <AuthorizeUser>
+              <Suspense>
               <UserProfile/>
+              </Suspense>    
             </AuthorizeUser>
           }/>
 
           <Route path='/profile/edit' element={
             <AuthorizeUser>
+              <Suspense>
               <UserProfileEdit/>
+              </Suspense>
             </AuthorizeUser>
           }/>
 
           <Route path='/doctorDetails/:doctorId' element={
             <AuthorizeUser>
+              <Suspense>
               <DoctorDetails/>
+              </Suspense> 
             </AuthorizeUser>
           }/>
 
           <Route path='/checkAvailability/:doctorId' element={
             <AuthorizeUser>
-              <AvailableTime/>
+                <Suspense>
+                <AvailableTime/>
+                </Suspense>
             </AuthorizeUser>
           }/>
 
           <Route path='/handlePay' element={
             <AuthorizeUser>
+              <Suspense>
               <Payment/>
+              </Suspense>
             </AuthorizeUser>
           }/>
 
@@ -120,13 +138,17 @@ const App = () => {
 
           <Route path='/userSessions' element={
             <AuthorizeUser>
+              <Suspense>
               <Sessions/>
+              </Suspense>         
             </AuthorizeUser>
           }/>
 
           <Route path='/user-messenger' element={
             <AuthorizeUser>
+              <Suspense>
               <UserMessage/>
+              </Suspense>
             </AuthorizeUser>
           }/>
 
@@ -142,7 +164,9 @@ const App = () => {
            
         <Route path='/doctor-register' element={
             <AuthDoctor>
-               <DoctorRegister />
+              <Suspense>
+              <DoctorRegister />
+              </Suspense>
             </AuthDoctor>
           } />
 
@@ -155,25 +179,33 @@ const App = () => {
 
           <Route path='/doctor-profile' element={
             <AuthorizeDoctor>
+              <Suspense>
               <DoctorProfile /> 
+              </Suspense>
             </AuthorizeDoctor>
           } />
 
           <Route path='/setTime' element={
             <AuthorizeDoctor>
-              <ScheduleAppointment /> 
+               <Suspense>
+               <ScheduleAppointment /> 
+               </Suspense>
             </AuthorizeDoctor>
           } />
 
           <Route path='/doctor-appointment' element={
             <AuthorizeDoctor>
+              <Suspense>
               <DoctorAppointment /> 
+              </Suspense>
             </AuthorizeDoctor>
           } />
 
           <Route path='/doctor-messenger' element={
             <AuthorizeDoctor>
+              <Suspense>
               <DocMessage /> 
+              </Suspense>
             </AuthorizeDoctor>
           } />
 
@@ -203,25 +235,33 @@ const App = () => {
 
           <Route path='/doctors-list' element={
             <AuthorizeAdmin>
+              <Suspense>
               <ViewDoctors />
+              </Suspense>
             </AuthorizeAdmin>
           } />
 
           <Route path='/manage-doctors' element={
             <AuthorizeAdmin>
+              <Suspense>
               <ManageDoctors />
+              </Suspense>
             </AuthorizeAdmin>
           } />
 
           <Route path='/doctor-card/:doctorId' element={
             <AuthorizeAdmin>
+              <Suspense>
               <DoctorCard />
+              </Suspense>
             </AuthorizeAdmin>
           } />
 
           <Route path='/appointment' element={
             <AuthorizeAdmin>
+              <Suspense>
               <Appointment />
+              </Suspense>
             </AuthorizeAdmin>
           } />
 

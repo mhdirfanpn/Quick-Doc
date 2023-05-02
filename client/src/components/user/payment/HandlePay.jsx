@@ -10,12 +10,14 @@ const HandlePay = () => {
   let time = location.state.selectedTime;
   let date = location.state.selectedDate;
   let userData = jwtDecode(localStorage.getItem("userToken"));
-  console.log(doctorDetails);
+  
 
   const handlePayment = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("/payment/orders", { amount: "500" });
+      const result = await axios.post("/payment/orders", { amount: "500" },{
+        headers: { Authorization: `Bearer ${userData}` },
+      });
       initPayment(result.data.data);
     } catch (err) {
       console.log(err);
@@ -60,7 +62,7 @@ const HandlePay = () => {
       })
       .then((res) => {
         console.log(res);
-        navigate("/order_success");
+ 
       });
   };
 
@@ -72,6 +74,7 @@ const HandlePay = () => {
       date
     })
     .then(() => {
+      navigate("/order_success");
     });
   }
 

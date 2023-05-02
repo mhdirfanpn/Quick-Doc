@@ -105,7 +105,8 @@ function Messenger({ isUser }) {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
+    console.log("hello");
     const message = {
       sender: commonUser.id,
       text: newMessage,
@@ -141,6 +142,7 @@ function Messenger({ isUser }) {
     try {
       const conversation = await axios.post("/conversation", body);
       setActiveConversation(conversation.data);
+      console.log(conversation);
     } catch (err) {
       console.log(err);
     }
@@ -153,8 +155,13 @@ function Messenger({ isUser }) {
     setActive(e);
   };
 
+  if(messages[0]?.conversationId === activeConversation?._id){
+    console.log("first")
+  }
   
 
+  
+console.log(activeConversation,"weqwewqeqwe");
   return (
     <Flex direction="row" mt={isUser ? 0 : 0}>
       <Box
@@ -220,19 +227,23 @@ function Messenger({ isUser }) {
               </Box>
             </Box>
 
-            {/* {messages[0]?.conversationId === activeConversation?._id && ( */}
+            { (messages[0]?.conversationId === activeConversation?._id || !messages[0]) && (
               <Box mt="4" mb={12}>
                 <Textarea
                   placeholder="Type your message..."
                   mb="4"
                   onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e)=>{
+                    e.key==='Enter' &&
+                    handleSubmit()
+                  }}
                   value={newMessage}
                 />
                 <Button colorScheme="blue" onClick={handleSubmit}>
                   Send
                 </Button>
               </Box>
-            {/* )} */}
+             )}
           </>
         ) : (
           <Text

@@ -4,20 +4,29 @@ import Conversation from "../model/conversation.js";
 import User from "../model/user.js";
 import Doctor from "../model/doctor.js";
 
+
 router.post("/", async (req, res) => {
+  try {
+    console.log(req.body);
   const conversations = await Conversation.find({
     members: { $all: [req.body.senderId, req.body.receiverId] },
   });
-  const id = conversations[0]?._id;
-  if (id) {
+  if (conversations[0]) {
+    console.log("hello");
     return res.json(conversations[0]);
+  }
+  if(req.body.senderId==null || req.body.receiverId==null){
+    console.log("first")
+    return res.json(conversations[0]);
+   
   }
   const newConversation = new Conversation({
     members: [req.body.senderId, req.body.receiverId],
   });
 
-  try {
+
     const savedConversation = await newConversation.save();
+    console.log("sdsdasdasd")
     res.status(200).json(savedConversation);
   } catch (error) {
     res.status(500).json(error);

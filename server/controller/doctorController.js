@@ -200,7 +200,7 @@ export const session = async (req, res) => {
 
 export const activeSession = async (req, res) => {
   const currentISODate = new Date();
- // currentISODate.setHours(currentISODate.getHours());
+  currentISODate.setHours(currentISODate.getHours());
 
   try {
     const session = await Session.findOne({

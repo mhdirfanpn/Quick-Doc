@@ -1,6 +1,8 @@
 import express from "express";
 import { registerUser, userLogin, userDetails, updateDetails, session, updatePassword, updateProfileImage, otpLogin,availability, allDoctors, getDoctor, bookSession, appointment, activeSession} from "../controller/userController.js";
 import upload from "../utils/multer.js";
+import { verifyToken } from "../middleWares/userAuth.js";
+import { isBlocked } from "../middleWares/authorize.js";
 const router = express.Router();
 
 
@@ -20,9 +22,9 @@ router.put("/updatePassword/:id",updatePassword);
 
 router.put("/updateUserImage/:id",upload.single('image'),updateProfileImage);
 
-router.get("/allDoctors",allDoctors)
+router.get("/allDoctors",verifyToken,allDoctors)
 
-router.get("/getDoctor/:id",getDoctor)
+router.get("/getDoctor/:id",verifyToken,getDoctor)
 
 router.post('/book_session',bookSession);
 
