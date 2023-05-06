@@ -20,8 +20,9 @@ import UserManage from './pages/admin/usersList/UserManage'
 import AdminLogin from './pages/admin/login/AdminLogin'
 import DoctorLogin from './pages/doctor/login/DoctorLogin'
 import Login from './pages/user/login/Login'
+import RoomPage from './pages/room'
+import DoctorRegister from './pages/doctor/register/DoctorRegister'
 
-const DoctorRegister = lazy(()=>('./pages/doctor/register/DoctorRegister'))
 const Register = lazy(()=>import('./pages/user/register/Register'))
 const OtpLogin = lazy(()=>import('./pages/user/login/OtpLogin'))
 const ViewDoctors = lazy(()=>import('./pages/admin/doctorsList/ViewDoctors'))
@@ -68,9 +69,16 @@ const App = () => {
             </AuthUser>
           }/>
 
+
+         <Route path='/room/:roomId' element={
+                 <RoomPage/>
+          }/>
+
+
+
           <Route path='/otp' element={
             <AuthUser>
-              <Suspense>
+               <Suspense fallback={<SpinnerLoader/>}>
               <OtpLogin/>
               </Suspense>
             </AuthUser>
@@ -78,7 +86,7 @@ const App = () => {
 
           <Route path='/signUp' element={
             <AuthUser>
-              <Suspense>
+                <Suspense fallback={<SpinnerLoader/>}>
               <Register/>
               </Suspense>
             </AuthUser>
@@ -92,7 +100,7 @@ const App = () => {
 
           <Route path='/profile' element={
             <AuthorizeUser>
-              <Suspense>
+                <Suspense fallback={<SpinnerLoader/>}>
               <UserProfile/>
               </Suspense>    
             </AuthorizeUser>
@@ -100,7 +108,7 @@ const App = () => {
 
           <Route path='/profile/edit' element={
             <AuthorizeUser>
-              <Suspense>
+             <Suspense fallback={<SpinnerLoader/>}>
               <UserProfileEdit/>
               </Suspense>
             </AuthorizeUser>
@@ -108,7 +116,7 @@ const App = () => {
 
           <Route path='/doctorDetails/:doctorId' element={
             <AuthorizeUser>
-              <Suspense>
+              <Suspense fallback={<SpinnerLoader/>}>
               <DoctorDetails/>
               </Suspense> 
             </AuthorizeUser>
@@ -116,7 +124,7 @@ const App = () => {
 
           <Route path='/checkAvailability/:doctorId' element={
             <AuthorizeUser>
-                <Suspense>
+<Suspense fallback={<SpinnerLoader/>}>
                 <AvailableTime/>
                 </Suspense>
             </AuthorizeUser>
@@ -124,7 +132,7 @@ const App = () => {
 
           <Route path='/handlePay' element={
             <AuthorizeUser>
-              <Suspense>
+              <Suspense fallback={<SpinnerLoader/>}>
               <Payment/>
               </Suspense>
             </AuthorizeUser>
@@ -138,7 +146,7 @@ const App = () => {
 
           <Route path='/userSessions' element={
             <AuthorizeUser>
-              <Suspense>
+              <Suspense fallback={<SpinnerLoader/>}>
               <Sessions/>
               </Suspense>         
             </AuthorizeUser>
@@ -146,7 +154,7 @@ const App = () => {
 
           <Route path='/user-messenger' element={
             <AuthorizeUser>
-              <Suspense>
+              <Suspense fallback={<SpinnerLoader/>}>
               <UserMessage/>
               </Suspense>
             </AuthorizeUser>
@@ -164,9 +172,7 @@ const App = () => {
            
         <Route path='/doctor-register' element={
             <AuthDoctor>
-              <Suspense>
               <DoctorRegister />
-              </Suspense>
             </AuthDoctor>
           } />
 
@@ -179,7 +185,7 @@ const App = () => {
 
           <Route path='/doctor-profile' element={
             <AuthorizeDoctor>
-              <Suspense>
+              <Suspense fallback={<SpinnerLoader/>}>
               <DoctorProfile /> 
               </Suspense>
             </AuthorizeDoctor>
@@ -187,7 +193,7 @@ const App = () => {
 
           <Route path='/setTime' element={
             <AuthorizeDoctor>
-               <Suspense>
+                 <Suspense fallback={<SpinnerLoader/>}>
                <ScheduleAppointment /> 
                </Suspense>
             </AuthorizeDoctor>
@@ -195,7 +201,7 @@ const App = () => {
 
           <Route path='/doctor-appointment' element={
             <AuthorizeDoctor>
-              <Suspense>
+                 <Suspense fallback={<SpinnerLoader/>}>
               <DoctorAppointment /> 
               </Suspense>
             </AuthorizeDoctor>
@@ -203,7 +209,7 @@ const App = () => {
 
           <Route path='/doctor-messenger' element={
             <AuthorizeDoctor>
-              <Suspense>
+                <Suspense fallback={<SpinnerLoader/>}>
               <DocMessage /> 
               </Suspense>
             </AuthorizeDoctor>
@@ -235,7 +241,7 @@ const App = () => {
 
           <Route path='/doctors-list' element={
             <AuthorizeAdmin>
-              <Suspense>
+           <Suspense fallback={<SpinnerLoader/>}>
               <ViewDoctors />
               </Suspense>
             </AuthorizeAdmin>
@@ -243,7 +249,7 @@ const App = () => {
 
           <Route path='/manage-doctors' element={
             <AuthorizeAdmin>
-              <Suspense>
+           <Suspense fallback={<SpinnerLoader/>}>
               <ManageDoctors />
               </Suspense>
             </AuthorizeAdmin>
@@ -251,7 +257,7 @@ const App = () => {
 
           <Route path='/doctor-card/:doctorId' element={
             <AuthorizeAdmin>
-              <Suspense>
+             <Suspense fallback={<SpinnerLoader/>}>
               <DoctorCard />
               </Suspense>
             </AuthorizeAdmin>
@@ -259,7 +265,7 @@ const App = () => {
 
           <Route path='/appointment' element={
             <AuthorizeAdmin>
-              <Suspense>
+             <Suspense fallback={<SpinnerLoader/>}>
               <Appointment />
               </Suspense>
             </AuthorizeAdmin>

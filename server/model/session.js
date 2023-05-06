@@ -52,6 +52,9 @@ const SessionSchema=mongoose.Schema({
         type:Date,
         required:true
     },
+    link: {
+        type:String
+    }
 
 })
 

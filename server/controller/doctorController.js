@@ -1,5 +1,6 @@
 import Doctor from "../model/doctor.js";
 import Session from "../model/session.js";
+import Appointment from "../model/appointment.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
@@ -55,7 +56,7 @@ export const registerDoctor = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: error });
   }
 };
 
@@ -169,25 +170,6 @@ export const updateProfileImage = async (req, res) => {
   }
 };
 
-export const timeSlot = async (req, res) => {
-  try {
-    const id = req.body[1].id;
-    const doc = await Doctor.findById({ _id: id });
-    await Doctor.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          timeSlot: req.body[0],
-        },
-      },
-      { upsert: true }
-    );
-    res.status(200).json("successful");
-  } catch (err) {
-    res.status(200).json(err);
-  }
-};
-
 export const session = async (req, res) => {
   try {
     const id = req.params.id;
@@ -209,14 +191,91 @@ export const activeSession = async (req, res) => {
       endTime: { $gte: currentISODate },
     });
 
-    if(session){
+    if (session) {
       res.json(session);
-    }else{
-      res.json("no session")
+    } else {
+      res.json("no session");
     }
-   
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const setLink = async (req, res) => {
+  console.log(req.params.id);
+  const currentISODate = new Date();
+  currentISODate.setHours(currentISODate.getHours());
+
+  try {
+    const session = await Session.findOne({
+      doctorId: req.params.id,
+      startTime: { $lte: currentISODate },
+      endTime: { $gte: currentISODate },
+    });
+
+    if (session) {
+      let data = req.body.data;
+      await session.updateOne({
+        $set: { link: data },
+      });
+    } else {
+      res.json("no session");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const timeSlot = async (req, res) => {
+  try {
+    console.log(req.body);
+    const timings = req.body.selectedTimings;
+    const uniqueTimings = [...new Set(timings.map((timing) => timing.time))];
+    // Sort the unique times in ascending order
+    const sortedTimings = uniqueTimings.sort((a, b) => {
+      const aTime = new Date(`2000-01-01 ${a}`);
+      const bTime = new Date(`2000-01-01 ${b}`);
+      return aTime - bTime;
+    });
+    let arr = [];
+    (arr.date = req.body.selectedDate), (arr.timings = sortedTimings);
+
+    const appointmentData = {
+      date: req.body.selectedDate,
+      timings: sortedTimings,
+    };
+
+    const exist = await Appointment.findOne({
+      doctor: req.body.id,
+      "timeAndDate.date": req.body.selectedDate,
+    });
+
+    if (exist) {
+      try {
+        await Appointment.findOneAndUpdate(
+          { doctor: req.body.id, "timeAndDate.date": req.body.selectedDate },
+          { $set: { "timeAndDate.timings": sortedTimings } }
+        );
+        return res.status(200).json("successful");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    try {
+      const newDoctor = await Appointment.create({
+        doctor: req.body.id,
+        timeAndDate: appointmentData,
+      });
+      return res.status(200).json("successful");
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (err) {
+    res.status(200).json(err);
+  }
+};
+
+

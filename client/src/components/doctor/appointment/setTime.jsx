@@ -11,19 +11,21 @@ import {
 import jwtDecode from "jwt-decode";
 import axios from "../../../utils/axios";
 import toast, { Toaster } from "react-hot-toast";
+import { DatePicker } from "antd";
 
 const availableTimings = [
-  { time: "10:00 AM", available: true },
-  { time: "12:00 PM", available: true },
-  { time: "2:00 PM", available: true },
-  { time: "4:00 PM", available: true },
-  { time: "6:00 PM", available: true },
-  { time: "8:00 PM", available: true },
+  { time: "10:00 AM" },
+  { time: "12:00 PM" },
+  { time: "2:00 PM" },
+  { time: "4:00 PM" },
+  { time: "6:00 PM" },
+  { time: "8:00 PM" },
 ];
 
 function TimeSlot() {
   const doctorToken = localStorage.getItem("doctorToken");
   const [selectedTimings, setSelectedTimings] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const handleTimingSelection = (timing) => {
     const index = selectedTimings.indexOf(timing);
@@ -36,10 +38,19 @@ function TimeSlot() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (selectedDate === null) return toast.error("select a date");
     try {
       const decode = jwtDecode(localStorage.getItem("doctorToken"));
+      let id = decode.id;
+      
+      const body = ({
+        selectedDate,
+        selectedTimings,
+        id,
+      });
+
       await axios
-        .post("doc/timeSlot", [selectedTimings, { id: decode.id }], {
+        .post("doc/timeSlot", body, {
           headers: { Authorization: `Bearer ${doctorToken}` },
         })
         .then(() => {
@@ -51,6 +62,11 @@ function TimeSlot() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleDateChange = (date) => {
+    console.log(date.toISOString().split("T")[0]);
+    setSelectedDate(date.toISOString().split("T")[0]);
   };
 
   return (
@@ -72,25 +88,32 @@ function TimeSlot() {
         _hover: { bg: "gray.700" },
       }}
     >
-      <VStack align="stretch" spacing={4}>
-        <Text fontSize="2xl" fontWeight="bold">
-          Select Appointment Timings:
+      {" "}
+      <Text fontSize="xl" fontWeight="medium">
+        Select Date:
+      </Text>
+      <Box mt={3}>
+        <DatePicker onChange={handleDateChange} />
+      </Box>
+      <VStack align="stretch" spacing={4} mt={9}>
+        <Text fontSize="xl" fontWeight="medium">
+          Select Time:
         </Text>
         <Flex wrap="wrap">
           {availableTimings.map((timing) => (
             <Checkbox
               paddingLeft={28}
               key={timing.time}
-              isDisabled={!timing.available}
+              // isDisabled={!timing.available}
               isChecked={selectedTimings.includes(timing)}
               onChange={() => handleTimingSelection(timing)}
             >
               {timing.time}
-              {!timing.available && (
+              {/* {!timing.available && (
                 <Badge ml={2} colorScheme="red">
                   Booked
                 </Badge>
-              )}
+              )} */}
             </Checkbox>
           ))}
         </Flex>

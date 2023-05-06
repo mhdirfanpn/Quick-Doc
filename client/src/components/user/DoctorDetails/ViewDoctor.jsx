@@ -45,7 +45,7 @@ export default function ViewDoctor() {
   };
 
   const checkAvailability = (id) => {
-    navigate(`/checkAvailability/${id}`);
+    navigate(`/checkAvailability/${id}`, { state: { doctor} });
   };
 
   return (

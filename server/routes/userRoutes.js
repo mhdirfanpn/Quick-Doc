@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, userLogin, userDetails, updateDetails, session, updatePassword, updateProfileImage, otpLogin,availability, allDoctors, getDoctor, bookSession, appointment, activeSession} from "../controller/userController.js";
+import { registerUser, userLogin, userDetails,getTime, updateDetails, session, updatePassword, updateProfileImage, otpLogin,availability, allDoctors, getDoctor, bookSession, appointment, activeSession} from "../controller/userController.js";
 import upload from "../utils/multer.js";
 import { verifyToken } from "../middleWares/userAuth.js";
 import { isBlocked } from "../middleWares/authorize.js";
@@ -35,5 +35,8 @@ router.post('/availability',availability);
 router.get("/getSession/:id",session);
 
 router.get("/getActiveSession/:id",activeSession);
+
+router.get("/getTime", getTime);
+
 
 export default router;

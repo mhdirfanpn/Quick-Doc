@@ -1,6 +1,7 @@
 import User from "../model/user.js";
 import Session from "../model/session.js";
 import Doctor from "../model/doctor.js";
+import Appointment from "../model/appointment.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
@@ -232,6 +233,7 @@ export const bookSession = async (req, res) => {
       bookedDate: today,
       startTime: isoDate,
       endTime: twoHoursLater,
+      link:null
     });
 
     res
@@ -337,5 +339,21 @@ export const activeSession = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+export const getTime = async (req, res) => {
+  try {
+    const doctorId = req.query.value1;
+    const Inputdate = req.query.value2;
+    const findTime = await Appointment.findOne({
+      'doctor': doctorId,
+      'timeAndDate.date': Inputdate
+    })
+    res.status(200).json(findTime.timeAndDate.timings);
+  } catch (error) {
+    console.log(error);
+    res.status(200).json(error);
   }
 };

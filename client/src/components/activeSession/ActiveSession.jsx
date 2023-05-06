@@ -1,38 +1,82 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Heading, Stack, Flex, Avatar, Badge } from "@chakra-ui/react";
 import axios from "../../utils/axios";
 import { USER_CHAT, DOC_CHAT } from "../../utils/ConstUrls";
+import { MdVideoCall } from "react-icons/md";
+import jwtDecode from "jwt-decode";
+import { useSelector } from "react-redux";
 
-const ActiveSession = ({handleActiveSessionId, currentUser, isDoctor }) => {
+const ActiveSession = ({ handleActiveSessionId, currentUser, isDoctor }) => {
   const [activeSession, setActiveSession] = useState("");
+  const navigate = useNavigate();
+  const doctorToken = useSelector((state) => state.doctor.doctorToken);
+  const userToken = useSelector((state) => state.user.userToken);
+  let commonUser;
+  if (doctorToken) {
+    commonUser = jwtDecode(doctorToken);
+  } else {
+    commonUser = jwtDecode(userToken);
+  }
+  const handleJoinRoom = useCallback(() => {
+    let result = "";
+    if (result) return result;
+    var chars =
+        "12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP",
+      maxPos = chars.length,
+      i;
+    for (i = 0; i < 5; i++) {
+      result += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    console.log(result);
+    let link = {};
+    link.data = result;
+    const body = link;
 
-
-  useEffect(()=>{
-    const  getSession = async() => {
-        try {
-            if (isDoctor) {
-            await axios.get(`doc/getActiveSession/${currentUser}`).then((res) => {
-                setActiveSession(res.data);
-                handleActiveSessionId(res.data.userId)
-                console.log(res);
-            });
-        } else {
-            await axios.get(`getActiveSession/${currentUser}`).then((res) => {
-                setActiveSession(res.data);
-                handleActiveSessionId(res.data.doctorId)
-                console.log(res);
-              });
-        }
-        
-        } catch (error) {
-            console.log(error)
-        }
+    try {
+      axios.put(`doc/link/${commonUser.id}`, body).then((res) => {});
+    } catch (error) {
+      console.log(error);
     }
 
-   getSession()
-  },[])
+    window.open(`/room/${result}`);
+  }, []);
 
+  useEffect(() => {
+    const getSession = async () => {
+      try {
+        if (isDoctor) {
+          await axios.get(`doc/getActiveSession/${currentUser}`).then((res) => {
+            setActiveSession(res.data);
+            handleActiveSessionId(res.data.userId);
+          });
+        } else {
+          await axios.get(`getActiveSession/${currentUser}`).then((res) => {
+            setActiveSession(res.data);
+            handleActiveSessionId(res.data.doctorId);
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getSession();
+  }, []);
+
+  const handleJoinUser = async () => {
+    try {
+      await axios.get(`getActiveSession/${currentUser}`).then((res) => {
+        let link = res.data.link
+        if(link!==null){
+          window.open(`/room/${link}`)
+        } 
+      });
+    } catch (error) {
+      console.log(error);
+    }
+   
+  };
 
   // useEffect(()=>{
   //   getuserData = async()=>{
@@ -45,33 +89,36 @@ const ActiveSession = ({handleActiveSessionId, currentUser, isDoctor }) => {
   //   getuserData()
   // },[])
 
-
-
   return (
-    activeSession?._id &&
-    <Box mt={4} backgroundColor="gray.100" h={20}>
-  <Stack spacing="4">
-    <Flex alignItems="center" mt={4} ml={2}>
-      <Avatar
-        size="md"
-        name="John Doe"
-        src={`https://bit.ly/dan-abramov`}
-      />
-      <Box ml="4">
-        <Heading as="h2" fontSize="lg">
-         {isDoctor ? activeSession?.userName : activeSession?.doctorName }
-        </Heading>
-        {/* <Box fontSize="sm" color="gray.500">
-          Last message received 5 minutes ago
-        </Box> */}
-        <Badge variant="subtle" colorScheme="green" ml="2">
-          Online
-        </Badge>
+    activeSession?._id && (
+      <Box mt={4} backgroundColor="gray.100" h={20}>
+        <Stack spacing="4">
+          <Flex alignItems="center" mt={4} ml={2}>
+            <Avatar
+              size="md"
+              y
+              name="John Doe"
+              src={`https://bit.ly/dan-abramov`}
+            />
+            <Box ml="4">
+              <Heading as="h2" fontSize="lg">
+                {isDoctor ? activeSession?.userName : activeSession?.doctorName}
+              </Heading>
+              <Badge variant="subtle" colorScheme="green" ml="2">
+                Online
+              </Badge>
+            </Box>
+            <Box ml={9}>
+              <MdVideoCall
+                size={"50px"}
+                onClick={isDoctor ? handleJoinRoom : handleJoinUser}
+              />
+              
+            </Box>
+          </Flex>
+        </Stack>
       </Box>
-    </Flex>
-  </Stack>
-</Box>
-
+    )
   );
 };
 

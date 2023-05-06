@@ -165,7 +165,7 @@ console.log(activeConversation,"weqwewqeqwe");
   return (
     <Flex direction="row" mt={isUser ? 0 : 0}>
       <Box
-        w="25%"
+        w="20%"
         h={isUser ? "100vh" : "100vh"}
         borderRight="1px solid gray.200"
         p="4"
@@ -206,7 +206,7 @@ console.log(activeConversation,"weqwewqeqwe");
           })}
         </Box>
       </Box>
-      <Box w="75%" h="100vh">
+      <Box w="53%" h="100vh">
       {currentChat && (
       <ChatAvatar isDoctor={doctorToken}  currentUserId={commonUser.id} />
       )}
@@ -259,7 +259,7 @@ console.log(activeConversation,"weqwewqeqwe");
         )}
       </Box>
       <Box
-        w="25%"
+        w="20%"
         h={isUser ? "100vh" : "100vh"}
         borderRight="1px solid gray.200"
         p="4"
@@ -276,7 +276,7 @@ console.log(activeConversation,"weqwewqeqwe");
           />
         </InputGroup>
 
-        <Box overflowY="auto" h="calc(100vh - 120px)" mt={9}>
+        <Box mt={9}>
           <Box onClick={handleActive}>
             {doctorToken ? (
               <ActiveSession

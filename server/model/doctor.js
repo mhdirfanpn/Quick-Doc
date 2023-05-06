@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 
+
+  
+
 const DoctorSchema=mongoose.Schema({
+
+    doctor:{
+        type: mongoose.Schema.Types.ObjectId,
+        required:true
+    },
     
     fullName:{
         type:String,
@@ -46,12 +54,13 @@ const DoctorSchema=mongoose.Schema({
         type:Array,
         default:''
     },
+       
 
     appointments: [
         {
-          date: { type: Date, required: true },
-          times: [{ type: String, required: true }],
-        },
+            date: { type: Date, required: true },
+            times: [{ type: String, required: true }],
+          },
       ],
 
 })

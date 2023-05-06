@@ -14,7 +14,7 @@ const ChatAvatar = ({isDoctor,isUser,currentUserId}) => {
 
 
   return (
-    <Box position="fixed" bg={"whiteAlpha.900"} w={isDoctor ? "40%" : '60%'} mt={isDoctor ? "62px" : "72px"}>
+    <Box position="fixed" bg={"whiteAlpha.900"} w={isDoctor ? "40%" : '40%'} mt={isDoctor ? "62px" : "72px"}>
         <Flex alignItems="center" mt={1}> 
           <Avatar size="md" name="John Doe" src="https://bit.ly/dan-abramov" />
           <Box ml="4">

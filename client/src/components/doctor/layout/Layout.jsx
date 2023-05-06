@@ -26,12 +26,14 @@ import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { FaUser, FaUserCog, FaBuilding, FaUserTie } from "react-icons/fa";
 import { GiArchiveRegister } from "react-icons/gi";
 
+
 const LinkItems = [
   { name: "Profile", icon: FaUser, path: "/doctor-home" },
   { name: "Time Slot", icon: FaUserCog, path: "/setTime" },
   { name: "Appointment", icon: FaBuilding, path: "/doctor-appointment" },
   { name: "chat", icon: GiArchiveRegister, path: "/doctor-messenger" },
 ];
+
 
 export default function Layout({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();

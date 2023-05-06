@@ -12,50 +12,42 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-import moment from "moment";
+import moment from 'moment';
 import { DatePicker } from "antd";
 import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { GET_DOCTOR } from "../../../utils/ConstUrls";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios";
 
 const SelectTime = () => {
-  const [doctor, setDoctor] = useState("");
-  const [timeSlot, SetTimeSlot] = useState([""]);
-
+  const [timeSlot, SetTimeSlot] = useState([]);
+  const location = useLocation();
   const params = useParams();
-
   const navigate = useNavigate();
-
+  let doctor = location.state.doctor;
   const token = localStorage.getItem("userToken");
-
-  useEffect(() => {
-    getDoctorsDetails();
-  }, []);
-
-  const getDoctorsDetails = async () => {
-    try {
-      axios
-        .get(`${GET_DOCTOR}/${params.doctorId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setDoctor(response.data.doctor);
-          SetTimeSlot(response.data.doctor.timeSlot);
-        })
-        .catch((err) => {
-          console.log(err, "catch error in doctorFetching");
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  const handleDateChange = (date) => {
+  const handleDateChange = async(date) => {
+    const isoDateString = date.toISOString().split("T")[0];
+    const value1 = params.doctorId;
+    const value2 = isoDateString;
+    try {
+     const response = await axios
+        .get(`/getTime`, {
+          params: {
+            value1,
+            value2,
+          },
+        })
+        if(response){
+          SetTimeSlot(response.data);
+        }
+    } catch (err) {
+      console.log(err);
+    }
+
     setSelectedDate(date.toISOString().split("T")[0]);
     setSelectedTime(null);
   };
@@ -63,25 +55,20 @@ const SelectTime = () => {
   const handleTimeChange = async (time) => {
     try {
       if (selectedDate === null) return toast.error("select a date");
-      await axios
-        .post("/availability", {
-          doctorId: params.doctorId,
-          time: time,
-          date: selectedDate,
-        })
-        .then((response) => {
-          if (response.status === 202) {
-            setSelectedTime(time);
-            toast.success("time slot available");
-          }
-          if (response.status === 204) {
-            setSelectedTime(null);
-            toast.error("time slot unavailable");
-          }
-        })
-        .catch((err) => {
-          console.log(err, "catch error in doctorFetching");
-        });
+      const response = await axios.post("/availability", {
+        doctorId: params.doctorId,
+        time: time,
+        date: selectedDate,
+      });
+
+      if (response.status === 202) {
+        setSelectedTime(time);
+        toast.success("time slot available");
+      }
+      if (response.status === 204) {
+        setSelectedTime(null);
+        toast.error("time slot unavailable");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -92,6 +79,7 @@ const SelectTime = () => {
     navigate("/handlePay", { state: { doctor, selectedDate, selectedTime } });
   };
 
+  useEffect(() => {}, [timeSlot]);
 
   return (
     <Center>
@@ -131,26 +119,31 @@ const SelectTime = () => {
                   />
 
                   <FormLabel mt={4}>Time</FormLabel>
-                  <SimpleGrid columns={3} spacing={4}>
-                    {timeSlot.map((timeSlot) => (
-                      <Button
-                        key={timeSlot.time}
-                        variant={timeSlot.available ? "outline" : "ghost"}
-                        onClick={() => handleTimeChange(timeSlot.time)}
-                        disabled={!timeSlot.available}
-                      >
-                        {timeSlot.time}
-                      </Button>
-                    ))}
 
-                    <Button
-                      key={timeSlot.time}
-                      variant={timeSlot.available ? "outline" : "ghost"}
-                      onClick={() => handleTimeChange(timeSlot.time)}
-                      disabled={!timeSlot.available}
-                    >
-                      {timeSlot.time}
-                    </Button>
+                  <SimpleGrid columns={3} spacing={4}>
+                    {timeSlot.length ? (
+                      <>
+                        {timeSlot.map((timing, index) => (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            onClick={() => handleTimeChange(timing)}
+                          >
+                            {timing}
+                          </Button>
+                        ))}
+                      </>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        fontSize="sm"
+                        color={"red.400"}
+                        fontWeight={"light"}
+                        _hover={{ color: "transparent" }}
+                      >
+                        Not available in this date
+                      </Button>
+                    )}
                   </SimpleGrid>
                   {selectedTime && selectedDate && (
                     <Button
