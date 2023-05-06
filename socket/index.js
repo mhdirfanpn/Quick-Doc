@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  //send and get message
+  //send and get messages
   socket.on("sendMessage", ({ senderId, recieverId, text }) => {
     try {
       console.log(senderId, recieverId, text);
