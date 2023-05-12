@@ -8,7 +8,7 @@ import UserNav from "../../../components/user/navbar/UserNav";
 const Payment = () => {
   return (
     <>
-      <Navbar />
+      <UserNav />
       <HandlePay />
       <Features />
       <Footer />

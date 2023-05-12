@@ -7,7 +7,7 @@ import Footer from '../../../components/user/footer/Footer'
 const OrderSuccess = () => {
   return (
     <>
-    <NavBar/>
+    <UserNav/>
     <Success/>
     <Footer/>
     </>

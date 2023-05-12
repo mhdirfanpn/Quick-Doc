@@ -23,14 +23,17 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
-import { FaUser, FaUserCog, FaBuilding, FaUserTie } from "react-icons/fa";
+import { FaUser, FaUserNurse, FaBuilding, FaUserTie } from "react-icons/fa";
 import { GiArchiveRegister } from "react-icons/gi";
-
+import { GoDashboard } from "react-icons/go";
+import { GiVerticalBanner } from "react-icons/gi";
 const LinkItems = [
+  { name: "Dashboard", icon: GoDashboard, path: "/dashboard" },
   { name: "Users", icon: FaUser, path: "/users-list" },
-  { name: " Doctors", icon: FaUserCog, path: "/doctors-list" },
+  { name: " Doctors", icon: FaUserNurse, path: "/doctors-list" },
   { name: "Doctor request", icon: FaBuilding, path: "/manage-doctors" },
   { name: " Appointment", icon: GiArchiveRegister, path: "/appointment" },
+  { name: " Banner", icon: GiVerticalBanner, path: "/banner" },
 ];
 
 export default function Layout({ children }) {

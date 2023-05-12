@@ -7,7 +7,7 @@ import UserNav from "../../../components/user/navbar/UserNav";
 const UserProfileEdit = () => {
   return (
     <>
-      <NavBar />
+      <UserNav />
       <UpdateProperty/>
       <Footer />
     </>

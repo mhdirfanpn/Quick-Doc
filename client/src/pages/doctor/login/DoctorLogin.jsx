@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { loginSchema } from "../../../schemas";
 import { useFormik } from "formik";
 import {
@@ -15,21 +13,17 @@ import {
   Image,
 } from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "../../../utils/axios";
+import { doctorInstance } from "../../../utils/axios";
 import { DOC_LOGIN } from "../../../utils/ConstUrls";
-import { setDoctorLogin } from "../../../redux/doctorSlice";
+
 
 const DoctorLogin = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
-    const body = JSON.stringify(values);
-    try {
-      await axios
-        .post(DOC_LOGIN, body, {
-          headers: { "Content-Type": "application/json" },
-        })
+
+      await doctorInstance
+        .post(DOC_LOGIN, values)
         .then(({ data }) => {
           console.log("data", data);
           if (data.success) {
@@ -41,11 +35,8 @@ const DoctorLogin = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          toast.error("Oops Something went wrong");
         });
-    } catch (err) {
-      toast.error("Oops Something went wrong");
-    }
     actions.resetForm();
   };
 

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
 
-const LIMIT = 3;
+const LIMIT = 8;
 
 const UserSession = () => {
   const token = localStorage.getItem("userToken");
@@ -23,10 +23,11 @@ const UserSession = () => {
   const [session, setSession] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalSession, setTotalSessions] = useState(0);
+  const [state, setState] = useState("");
 
   useEffect(() => {
     getSessionDetails();
-  }, [activePage]);
+  }, [activePage, state]);
 
   const getSessionDetails = async () => {
     try {
@@ -44,6 +45,47 @@ const UserSession = () => {
     }
   };
 
+  const cancelSession = async (sessionID, doctorID, appDate, appTime) => {
+    axios
+      .put(
+        "/cancelSession",
+        {
+          sessionID,
+          doctorID,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        cancelAppointment(doctorID, appDate, appTime);
+      })
+      .catch((err) => {
+        console.log(err, "catch error in doctorFetching");
+      });
+  };
+
+  const cancelAppointment = async (doctorID, appDate, appTime) => {
+    axios
+      .put(
+        "/cancelAppointment",
+        {
+          doctorID,
+          appDate,
+          appTime,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        setState(response);
+      })
+      .catch((err) => {
+        console.log(err, "catch error in doctorFetching");
+      });
+  };
+
   return (
     <Box w="70%" margin="0 auto" minH="100vh" mt={24}>
       <TableContainer>
@@ -54,17 +96,47 @@ const UserSession = () => {
               <Th>Booked Date</Th>
               <Th>Session Date</Th>
               <Th>Session Time</Th>
+              <Th>Cancel Appointment</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {session.map((session, index) => (
-              <Tr key={index}>
-                <Td>Dr. {session.doctorName}</Td>
-                <Td>{session.bookedDate}</Td>
-                <Td>{session.sessionDate}</Td>
-                <Td>{session.timeSlot}</Td>
-              </Tr>
-            ))}
+            {session.map((session, index) => {
+              const dateStr = session.sessionDate;
+              const date = new Date(dateStr);
+              date.setDate(date.getDate() - 1);
+              const newDateStr = date.toISOString();
+              const isBeforeDate = new Date() < new Date(newDateStr);
+
+              return (
+                <Tr key={index}>
+                  <Td>Dr. {session.doctorName}</Td>
+                  <Td>{session.bookedDate}</Td>
+                  <Td>{session.sessionDate}</Td>
+                  <Td>{session.timeSlot}</Td>
+                  <Td>
+                    {isBeforeDate ? (
+                      <Button
+                        color="red.300"
+                        onClick={() =>
+                          cancelSession(
+                            session._id,
+                            session.doctorId,
+                            session.sessionDate,
+                            session.timeSlot
+                          )
+                        }
+                      >
+                        cancel
+                      </Button>
+                    ) : (
+                      <Button color="red.300" isDisabled>
+                        cancel
+                      </Button>
+                    )}
+                  </Td>
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>

@@ -5,8 +5,8 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 const RoomPage = () => {
   const { roomId } = useParams();
   const myMeeting = (element) => {
-    const appID =   REACT_APP_ZEGO_APP_ID;
-    const serverSecret =   REACT_APP_ZEGO_SECRET_ID;
+    const appID = 286130343;
+    const serverSecret = "2b83476ae0a2f17a2158e4b4f08c11c4";
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -20,12 +20,12 @@ const RoomPage = () => {
     const zp = ZegoUIKitPrebuilt.create(kitToken);
     zp.joinRoom({
       container: element,
-      sharedLinks: [
-        {
-            name:"Copy Link",
-            url:`localhost:3000/room/${roomId}`
-        }
-      ],
+      // sharedLinks: [
+      //   {
+      //       name:"Copy Link",
+      //       url:`localhost:3000/room/${roomId}`
+      //   }
+      // ],
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
        },

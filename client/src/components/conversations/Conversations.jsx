@@ -8,25 +8,19 @@ const Conversations = ({ conversation, currentUser, isDoctor }) => {
   const [user, setUser] = useState("");
 
   useEffect(() => {
+
     const chatterId = conversation.members.find((m) => m !== currentUser);
-
-    console.log("friendId");
-    console.log(chatterId);
-
     const getUser = async () => {
       try {
         if (isDoctor) {
           console.log(chatterId);
-          await axios.get(`${USER_CHAT}/${chatterId}`).then((res) => {
-            setUser(res.data);
-          });
+          const res = await axios.get(`${USER_CHAT}/${chatterId}`);
+          setUser(res.data);
         } else {
-          await axios.get(`${DOC_CHAT}/${chatterId}`).then((res) => {
-            setUser(res.data);
-          });
+          const res = await axios.get(`${DOC_CHAT}/${chatterId}`);
+          setUser(res.data);
         }
       } catch (err) {
-        console.log("err");
         console.log(err);
       }
     };
@@ -48,9 +42,6 @@ const Conversations = ({ conversation, currentUser, isDoctor }) => {
             <Heading as="h2" fontSize="lg">
               {isDoctor ? user.userName : `Dr. ${user.fullName}`}
             </Heading>
-            {/* <Box fontSize="sm" color="gray.500">
-              Last message received 5 minutes ago
-            </Box> */}
           </Box>
         </Flex>
       </Stack>

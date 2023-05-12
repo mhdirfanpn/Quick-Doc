@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
-import axios from "../../../utils/axios";
+import { doctorInstance } from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
 import { DOC_DETAILS } from "../../../utils/ConstUrls";
 import { useNavigate } from "react-router-dom";
@@ -20,23 +20,13 @@ function DoctorProfile() {
   }, []);
 
   const [doctorDetails, setDoctorDetails] = useState("");
-  const doctorToken = localStorage.getItem("doctorToken");
   const navigate = useNavigate();
 
   const getDoctorsDetails = async () => {
     try {
       const decode = jwtDecode(localStorage.getItem("doctorToken"));
-      await axios
-        .get(`${DOC_DETAILS}/${decode.id}`, {
-          headers: { Authorization: `Bearer ${doctorToken}` },
-        })
-        .then((response) => {
-          console.log(response.data.doctorDetails);
-          setDoctorDetails(response.data.doctorDetails);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const response = await doctorInstance.get(`${DOC_DETAILS}/${decode.id}`);
+      setDoctorDetails(response.data.doctorDetails);
     } catch (err) {
       console.log(err);
     }

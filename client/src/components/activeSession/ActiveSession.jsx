@@ -46,15 +46,17 @@ const ActiveSession = ({ handleActiveSessionId, currentUser, isDoctor }) => {
     const getSession = async () => {
       try {
         if (isDoctor) {
-          await axios.get(`doc/getActiveSession/${currentUser}`).then((res) => {
-            setActiveSession(res.data);
-            handleActiveSessionId(res.data.userId);
+          const res = await axios.get(`doc/getActiveSession/${currentUser}`, {
+            headers: { Authorization: `Bearer ${doctorToken}` },
           });
+          setActiveSession(res.data);
+          handleActiveSessionId(res.data.userId);
         } else {
-          await axios.get(`getActiveSession/${currentUser}`).then((res) => {
-            setActiveSession(res.data);
-            handleActiveSessionId(res.data.doctorId);
+          const res = await axios.get(`getActiveSession/${currentUser}`, {
+            headers: { Authorization: `Bearer ${userToken}` },
           });
+          setActiveSession(res.data);
+          handleActiveSessionId(res.data.doctorId);
         }
       } catch (error) {
         console.log(error);
@@ -66,16 +68,18 @@ const ActiveSession = ({ handleActiveSessionId, currentUser, isDoctor }) => {
 
   const handleJoinUser = async () => {
     try {
-      await axios.get(`getActiveSession/${currentUser}`).then((res) => {
-        let link = res.data.link
-        if(link!==null){
-          window.open(`/room/${link}`)
-        } 
+      console.log("here");
+      await axios.get(`getActiveSession/${currentUser}`,{
+        headers: { Authorization: `Bearer ${userToken}` },
+      }).then((res) => {
+        let link = res.data.link;
+        if (link !== null) {
+          window.open(`/room/${link}`);
+        }
       });
     } catch (error) {
       console.log(error);
     }
-   
   };
 
   // useEffect(()=>{
@@ -113,7 +117,6 @@ const ActiveSession = ({ handleActiveSessionId, currentUser, isDoctor }) => {
                 size={"50px"}
                 onClick={isDoctor ? handleJoinRoom : handleJoinUser}
               />
-              
             </Box>
           </Flex>
         </Stack>

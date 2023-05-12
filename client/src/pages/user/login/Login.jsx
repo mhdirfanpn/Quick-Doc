@@ -25,7 +25,6 @@ export default function Login() {
 
   const onSubmit = async (values, actions) => {
     const body = JSON.stringify(values);
-    try {
       await axios
         .post(USER_LOGIN, body, {
           headers: { "Content-Type": "application/json" },
@@ -42,11 +41,8 @@ export default function Login() {
           }
         })
         .catch((err) => {
-          console.log(err);
+          toast.error("Oops Something went wrong");
         });
-    } catch (err) {
-      toast.error("Oops Something went wrong");
-    }
     actions.resetForm();
   };
 

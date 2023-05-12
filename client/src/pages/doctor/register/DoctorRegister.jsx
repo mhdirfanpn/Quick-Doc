@@ -15,7 +15,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "../../../utils/axios";
+import { doctorInstance } from "../../../utils/axios";
 import { DOC_SIGN_UP } from "../../../utils/ConstUrls";
 
 const DoctorRegister = () => {
@@ -43,11 +43,9 @@ const DoctorRegister = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
-  const body = JSON.stringify(values);
 
-    try {
-      await axios
-        .post(DOC_SIGN_UP, body, {
+      await doctorInstance
+        .post(DOC_SIGN_UP, values, {
           headers: { "Content-Type": "application/json" },
         })
         .then(({ data }) => {
@@ -57,9 +55,6 @@ const DoctorRegister = () => {
             toast.error(data.message);
           }
         });
-    } catch (err) {
-      toast.error("Oops Something went wrong");
-    }
     actions.resetForm();
   };
 

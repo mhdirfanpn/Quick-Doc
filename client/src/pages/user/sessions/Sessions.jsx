@@ -7,7 +7,7 @@ import UserNav from "../../../components/user/navbar/UserNav";
 const Sessions = () => {
   return (
     <>
-      <NavBar />
+      <UserNav />
       <UserSession />
       <Footer />
     </>

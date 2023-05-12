@@ -5,17 +5,14 @@ import {
   SimpleGrid,
   Text,
   Link,
-  FormControl,
-  Input,
   useColorModeValue,
-  HStack,
-  Button,
 } from "@chakra-ui/react";
 
-const ListHeader = () => {
+
+const ListHeader = ({ children }) => {
   return (
     <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
-      {/* {children} */}
+      {children}
     </Text>
   );
 };
@@ -23,13 +20,13 @@ const ListHeader = () => {
 const Footer = () => {
   return (
     <Box
-    position=""
-    bottom={0}
-    left={0}
-    right={0}
-    marginTop={5}
-    bg={useColorModeValue("#4851b0")}
-    color={useColorModeValue("white")}
+      position=""
+      bottom={0}
+      left={0}
+      right={0}
+      marginTop={5}
+      bg={useColorModeValue("#4851b0")}
+      color={useColorModeValue("white")}
     >
       <Container as={Stack} maxW={"6xl"} py={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
@@ -57,18 +54,8 @@ const Footer = () => {
           </Stack>
 
           <Stack align={"flex-start"}>
-            <ListHeader>Legal</ListHeader>
-
-            <FormControl id="password">
-              <HStack>
-                <Input bg="white" type="text" />
-                <Button color={"#4851b0"}>Subscribe</Button>
-              </HStack>
-            </FormControl>
-          </Stack>
-
-          <Stack align={"flex-start"}>
-            <ListHeader>Install App</ListHeader>
+          <ListHeader>Community</ListHeader>
+            <img src="https://res.cloudinary.com/dxzfgrp4k/image/upload/v1683788256/ldikifyoxx9v5bm0zdlg.png" alt="Quick-Doc logo" width={150} height={150} />
           </Stack>
         </SimpleGrid>
       </Container>
@@ -95,3 +82,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

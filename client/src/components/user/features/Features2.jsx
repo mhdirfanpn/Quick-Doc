@@ -28,9 +28,11 @@ export default function Features2() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Monetize your content by charging your most loyal readers and reward
-            them loyalty points. Give back to your loyal readers by granting
-            them access to your pre-releases and sneak-peaks.
+          we ensures to provide the highest quality of
+            care and a transformative experience for all your healthcare needs.
+            Our multi-specialty care equipped with specialised doctors, and
+            bring global standards of medical care to
+            our patients.
           </Text>
         </Stack>
       </Container>

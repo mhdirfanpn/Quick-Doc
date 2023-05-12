@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import axios from "../../../utils/axios";
 import { GET_DOCTOR } from "../../../utils/ConstUrls";
 
-
 export default function ViewDoctor() {
   const [doctor, setDoctor] = useState("");
   const params = useParams();
@@ -28,24 +27,20 @@ export default function ViewDoctor() {
   }, []);
 
   const getDoctorsDetails = async () => {
-    try {
-      axios
-        .get(`${GET_DOCTOR}/${params.doctorId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setDoctor(response.data.doctor);
-        })
-        .catch((err) => {
-          console.log(err, "catch error in doctorFetching");
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    axios
+      .get(`${GET_DOCTOR}/${params.doctorId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setDoctor(response.data.doctor);
+      })
+      .catch((err) => {
+        console.log(err, "catch error in doctorFetching");
+      });
   };
 
   const checkAvailability = (id) => {
-    navigate(`/checkAvailability/${id}`, { state: { doctor} });
+    navigate(`/checkAvailability/${id}`, { state: { doctor } });
   };
 
   return (
@@ -77,15 +72,7 @@ export default function ViewDoctor() {
               rounded={"full"}
               bg={"blue.400"}
               color={"white"}
-              boxShadow={
-                "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-              }
-              _hover={{
-                bg: "blue.500",
-              }}
-              _focus={{
-                bg: "blue.500",
-              }}
+             
               onClick={() => checkAvailability(doctor._id)}
             >
               Check availability

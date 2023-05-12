@@ -28,26 +28,23 @@ function UserProfileCard(props) {
   }, []);
 
   const getUserDetails = async () => {
-    try {
-      await axios
-        .get(`${USER_DETAILS}/${decode.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setUserDetails(response.data.userDetails);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    await axios
+      .get(`${USER_DETAILS}/${decode.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUserDetails(response.data.userDetails);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <Box
       mx={{ base: "2", md: "auto" }}
-      mt={{ base: "12", md: "16" }}
+      marginTop={24}
+      minH={"88vh"}
       bg="white"
       rounded="lg"
       border="1px"
@@ -55,7 +52,6 @@ function UserProfileCard(props) {
       maxW={{ base: "90vw", md: "1400px" }}
       p={{ base: "4", md: "8" }}
       shadow="md"
-      minH={"500"}
       dark={{ bg: "gray.800", borderColor: "gray.700" }}
       position="relative"
     >

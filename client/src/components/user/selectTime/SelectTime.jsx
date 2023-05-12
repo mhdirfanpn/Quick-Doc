@@ -18,14 +18,19 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios";
+import jwtDecode from "jwt-decode";
+
 
 const SelectTime = () => {
+
+
   const [timeSlot, SetTimeSlot] = useState([]);
   const location = useLocation();
   const params = useParams();
   const navigate = useNavigate();
   let doctor = location.state.doctor;
   const token = localStorage.getItem("userToken");
+  let userData = jwtDecode(token);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -33,15 +38,19 @@ const SelectTime = () => {
     const isoDateString = date.toISOString().split("T")[0];
     const value1 = params.doctorId;
     const value2 = isoDateString;
+
     try {
      const response = await axios
         .get(`/getTime`, {
           params: {
             value1,
             value2,
+           
           },
+          headers: { Authorization: `Bearer ${token}` }
         })
         if(response){
+          console.log(response);
           SetTimeSlot(response.data);
         }
     } catch (err) {
@@ -54,18 +63,23 @@ const SelectTime = () => {
 
   const handleTimeChange = async (time) => {
     try {
-      if (selectedDate === null) return toast.error("select a date");
       const response = await axios.post("/availability", {
         doctorId: params.doctorId,
         time: time,
         date: selectedDate,
-      });
+        userId:  userData.id
+        
+      },{headers: { Authorization: `Bearer ${token}` }});
 
-      if (response.status === 202) {
+      if (response.status === 200) {
         setSelectedTime(time);
         toast.success("time slot available");
       }
       if (response.status === 204) {
+        setSelectedTime(null);
+        toast.error("already an appoinmtment in this time");
+      }
+      if (response.status === 202) {
         setSelectedTime(null);
         toast.error("time slot unavailable");
       }

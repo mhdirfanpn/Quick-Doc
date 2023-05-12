@@ -9,15 +9,18 @@ const HandlePay = () => {
   let doctorDetails = location.state.doctor;
   let time = location.state.selectedTime;
   let date = location.state.selectedDate;
-  let userData = jwtDecode(localStorage.getItem("userToken"));
+  const token = localStorage.getItem("userToken");
+  let userData = jwtDecode(token);
   
 
   const handlePayment = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("/payment/orders", { amount: "500" },{
-        headers: { Authorization: `Bearer ${userData}` },
-      });
+      const result = await axios.post(
+        "/payment/orders",
+        { amount: "500" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       initPayment(result.data.data);
     } catch (err) {
       console.log(err);
@@ -26,7 +29,7 @@ const HandlePay = () => {
 
   const initPayment = (data) => {
     const options = {
-      key: process.env.RAZOR_KEY_ID,
+      key: "rzp_test_JfiruKTJHf8QRk",
       amount: data.amount,
       currency: data.currency,
       name: "QuickDoc.com",
@@ -53,30 +56,41 @@ const HandlePay = () => {
 
   const bookSession = async () => {
     await axios
-      .post("/book_session", {
-        doctorDetails,
-        time,
-        date,
-        plan: "500",
-        userData,
-      })
+      .post(
+        "/book_session",
+        {
+          doctorDetails,
+          time,
+          date,
+          plan: "500",
+          userData,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         console.log(res);
- 
       });
   };
 
   const appointment = async () => {
     await axios
-    .post("/appointment", {
-      doctorDetails,
-      time,
-      date
-    })
-    .then(() => {
-      navigate("/order_success");
-    });
-  }
+      .post(
+        "/appointment",
+        {
+          doctorDetails,
+          time,
+          date,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        navigate("/order_success");
+      });
+  };
 
   return (
     <div class="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto mt-24">

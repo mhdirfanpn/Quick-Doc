@@ -8,7 +8,7 @@ import Features2 from '../../../components/user/features/Features2';
 const AvailableTime = () => {
   return (
     <>
-    <Navbar/>
+    <UserNav/>
     <SelectTime/>
     <Features2/>
     <Footer/>

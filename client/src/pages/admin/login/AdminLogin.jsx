@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { loginSchema } from "../../../schemas";
 import { useFormik } from "formik";
 import {
@@ -16,36 +15,25 @@ import {
 } from "@chakra-ui/react";
 import toast, { Toaster } from "react-hot-toast";
 import { ADMIN_LOGIN } from "../../../utils/ConstUrls";
-import { setAdminLogin } from "../../../redux/adminSlice";
-import axios from "../../../utils/axios";
+import { adminInstance } from "../../../utils/axios";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
-    const body = JSON.stringify(values);
-    console.log(body);
-    try {
-      await axios
-        .post(ADMIN_LOGIN, body, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then(({ data }) => {
-          console.log(data.adminToken);
-          if (data.success) {
-            navigate("/users-list");
-            localStorage.setItem("adminToken", data.adminToken);
-          } else {
-            toast.error(data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {
-      toast.error("Oops Something went wrong");
-    }
+    await adminInstance
+      .post(ADMIN_LOGIN, values)
+      .then(({ data }) => {
+        if (data.success) {
+          navigate("/users-list");
+          localStorage.setItem("adminToken", data.adminToken);
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch(() => {
+        toast.error("Oops Something went wrong");
+      });
     actions.resetForm();
   };
 

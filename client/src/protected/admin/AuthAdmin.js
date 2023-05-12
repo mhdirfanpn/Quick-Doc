@@ -10,7 +10,7 @@ export default function AuthAdmin({ children }) {
         adminToken: token,
       })
     );
-    return <Navigate to={"/users-list"} />;
+    return <Navigate to={"/dashboard"} />;
   } 
 
   return children;

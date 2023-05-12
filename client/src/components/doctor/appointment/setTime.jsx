@@ -9,7 +9,8 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
-import axios from "../../../utils/axios";
+import { doctorInstance } from "../../../utils/axios";
+import { DOC_TIMINGS } from "../../../utils/ConstUrls";
 import toast, { Toaster } from "react-hot-toast";
 import { DatePicker } from "antd";
 
@@ -23,7 +24,6 @@ const availableTimings = [
 ];
 
 function TimeSlot() {
-  const doctorToken = localStorage.getItem("doctorToken");
   const [selectedTimings, setSelectedTimings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -42,23 +42,14 @@ function TimeSlot() {
     try {
       const decode = jwtDecode(localStorage.getItem("doctorToken"));
       let id = decode.id;
-      
-      const body = ({
+
+      const body = {
         selectedDate,
         selectedTimings,
         id,
-      });
-
-      await axios
-        .post("doc/timeSlot", body, {
-          headers: { Authorization: `Bearer ${doctorToken}` },
-        })
-        .then(() => {
-          toast.success("time slot updated successfully");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      };
+      await doctorInstance.post(DOC_TIMINGS, body);
+      toast.success("time slot updated successfully");
     } catch (err) {
       console.log(err);
     }
@@ -70,80 +61,80 @@ function TimeSlot() {
   };
 
   return (
-    <Box
-      p="6"
-      bg="white"
-      marginLeft={24}
-      marginTop={24}
-      maxWidth="1400"
-      border="1px"
-      borderColor="gray.200"
-      rounded="lg"
-      shadow="md"
-      _hover={{ bg: "gray.100" }}
-      dark={{
-        bg: "gray.800",
-        border: "1px",
-        borderColor: "gray.700",
-        _hover: { bg: "gray.700" },
-      }}
-    >
-      {" "}
-      <Text fontSize="xl" fontWeight="medium">
-        Select Date:
-      </Text>
-      <Box mt={3}>
-        <DatePicker onChange={handleDateChange} />
-      </Box>
-      <VStack align="stretch" spacing={4} mt={9}>
-        <Text fontSize="xl" fontWeight="medium">
-          Select Time:
-        </Text>
-        <Flex wrap="wrap">
-          {availableTimings.map((timing) => (
-            <Checkbox
-              paddingLeft={28}
-              key={timing.time}
-              // isDisabled={!timing.available}
-              isChecked={selectedTimings.includes(timing)}
-              onChange={() => handleTimingSelection(timing)}
-            >
-              {timing.time}
-              {/* {!timing.available && (
-                <Badge ml={2} colorScheme="red">
-                  Booked
-                </Badge>
-              )} */}
-            </Checkbox>
-          ))}
-        </Flex>
-        <Flex justify="center">
-          <Button
-            mt={6}
-            colorScheme="blue"
-            size="sm"
-            disabled={selectedTimings.length === 0}
-            onClick={handleSubmit}
-          >
-            Submit Timings
-          </Button>
-        </Flex>
-        <Flex mt={4}>
-          {selectedTimings.length > 0 ? (
-            selectedTimings.map((timing) => (
-              <Box key={timing.time} mr={12}>
-                <Badge colorScheme="green">{timing.time}</Badge>
-              </Box>
-            ))
-          ) : (
-            <Text fontStyle="italic">
-              Please select one or more available appointment timings.
-            </Text>
-          )}
-        </Flex>
-      </VStack>
-      <Toaster />
+    <Box 
+  p={{ base: "4", md: "6" }}
+  bg="white"
+  ml={{ base: "0", md: "24" }}
+  mt={{ base: "0", md: "24" }}
+  maxW="1400px"
+  borderWidth="1px"
+  borderColor="gray.200"
+  rounded="lg"
+  shadow="md"
+  _hover={{ bg: "gray.100" }}
+  dark={{
+    bg: "gray.800",
+    borderWidth: "1px",
+    borderColor: "gray.700",
+    _hover: { bg: "gray.700" },
+  }}
+  >
+    <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="medium">
+      Select Date:
+    </Text>
+    <Box mt={3}>
+      <DatePicker onChange={handleDateChange} />
     </Box>
+    <VStack align="stretch" spacing={4} mt={9}>
+      <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="medium">
+        Select Time:
+      </Text>
+      <Flex wrap="wrap">
+        {availableTimings.map((timing) => (
+          <Checkbox
+            paddingLeft={{ base: 2, md: 28 }}
+            key={timing.time}
+            // isDisabled={!timing.available}
+            isChecked={selectedTimings.includes(timing)}
+            onChange={() => handleTimingSelection(timing)}
+          >
+            {timing.time}
+            {/* {!timing.available && (
+              <Badge ml={2} colorScheme="red">
+                Booked
+              </Badge>
+            )} */}
+          </Checkbox>
+        ))}
+      </Flex>
+      <Flex justify="center">
+        <Button
+          mt={6}
+          colorScheme="blue"
+          size={{ base: "sm", md: "md" }}
+          disabled={selectedTimings.length === 0}
+          onClick={handleSubmit}
+        >
+          Submit Timings
+        </Button>
+      </Flex>
+      <Flex mt={4}>
+        {selectedTimings.length > 0 ? (
+          selectedTimings.map((timing) => (
+            <Box key={timing.time} mr={{ base: 2, md: 12 }}>
+              <Badge colorScheme="green">{timing.time}</Badge>
+            </Box>
+          ))
+        ) : (
+          <Text fontStyle="italic">
+            Please select one or more available appointment timings.
+          </Text>
+        )}
+      </Flex>
+    </VStack>
+    <Toaster />
+  </Box>
+  
   );
 }
 

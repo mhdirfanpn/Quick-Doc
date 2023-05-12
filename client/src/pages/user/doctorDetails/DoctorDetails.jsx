@@ -8,7 +8,7 @@ import Features2 from '../../../components/user/features/Features2';
 const DoctorDetails = () => {
   return (
     <>
-    <Navbar/>
+    <UserNav/>
     <ViewDoctor/>
     <Features2/>
     <Footer/>

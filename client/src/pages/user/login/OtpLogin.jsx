@@ -38,11 +38,13 @@ const Mobile = () => {
     await axios.get(`${OTP_LOGIN}/${mobile}`, { headers: { "Content-Type": "application/json" } })
     .then((res)=>{
         if(res.status===202){
+          setFlag(true);
            const decode = jwtDecode(res.data.token);
            setUsername(decode.name);
            setTokenVal(res.data.token);
         }else{
             alert('mobile not registered');
+            navigate('/')
         }
     })
 
@@ -71,7 +73,6 @@ const Mobile = () => {
   };
 
   const getOTP = () => {
-    setFlag(true);
     requestOTP(mobile);
   };
 

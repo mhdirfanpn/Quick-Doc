@@ -1,5 +1,6 @@
 export const baseUserUrl = "http://localhost:7000/api/"
-
+export const baseAdminUrl = "http://localhost:7000/api/admin"
+export const baseDoctorUrl = "http://localhost:7000/api/doc"
 //USER
 
 export const USER_SIGN_UP='/signup'
@@ -11,27 +12,38 @@ export const UPDATE_PASS='/updatePassword'
 export const OTP_LOGIN='/otpLogin'
 export const GET_DOCTORS='/allDoctors'
 export const GET_DOCTOR ='/getDoctor'
+export const GET_BANNER='/getBanner'
 
 
 //DOCTOR
 
 export const DOC_SIGN_UP='doc/signup'
-export const DOC_LOGIN='doc/login'
-export const DOC_DETAILS='doc/details'
-export const UPDATE_DOC_DETAILS='/doc/updateDetails'
-export const UPDATE_DOC_PASS='/doc/updatePassword'
-export const UPDATE_DOC_IMG='/doc/updateDoctorImage'
-export const DOC_APPOINTMENT='/doc/appointment'
+export const DOC_LOGIN='/login'
+export const DOC_DETAILS='/details'
+export const UPDATE_DOC_DETAILS='/updateDetails'
+export const UPDATE_DOC_PASS='/updatePassword'
+export const UPDATE_DOC_IMG='/updateDoctorImage'
+export const DOC_APPOINTMENT='/appointment'
+export const DOC_TIMINGS='/timeSlot'
 
 
 //ADMIN
 
-export const ADMIN_LOGIN='admin/login'
-export const ALL_USERS='admin/allUsers'
-export const ALL_DOCTORS='admin/allDoctors'
-export const ALL_DOC_REQ='admin/doctorsRequest'
-export const APPOINTMENT='admin/appointment'
+export const ADMIN_LOGIN='/login'
+export const ALL_USERS='/allUsers'
+export const BLOCK_USER='/blockUser'
+export const UNBLOCK_USER='/unBlockUser'
+export const ALL_DOCTORS='/allDoctors'
+export const ALL_DOC_REQ='/doctorsRequest'
+export const APPOINTMENT='/appointment'
+export const DASHBOARD='/dashboard'
+export const UPDATE_BANNER='/changeBanner'
+export const GET_USER_BANNER='/getBanner'
+export const UPDATE_BANNER_DISC='/updateBannerDisc'
+export const VERIFY_DOC='/verifyDoctor'
+export const REJECT_DOC='/rejectDoctor'
 export const GET_DOC='/getDoctor'
+
 
 
 //CHAT

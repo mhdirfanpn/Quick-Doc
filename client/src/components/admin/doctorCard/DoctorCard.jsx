@@ -1,106 +1,105 @@
-import { Box, Grid, GridItem, Text, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Text,
+  Button,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "../../../utils/axios";
-import Swal from "sweetalert2";
+import { useEffect, useState, useRef } from "react";
+import { adminInstance } from "../../../utils/axios";
+import { VERIFY_DOC, REJECT_DOC, GET_DOC } from "../../../utils/ConstUrls";
 
 const DoctorCard = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [doctorList, setDoctor] = useState([]);
-  const adminToken = localStorage.getItem("adminToken");
-
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
+  const cancelRef = useRef();
 
   useEffect(() => {
     getDoctorsDetails();
   }, []);
 
+  const handleApproveClick = () => {
+    setIsConfirming(true);
+    setIsApproving(true);
+  };
+
+  const handleRejectClick = () => {
+    setIsConfirming(true);
+    setIsRejecting(true);
+  };
+
+  const handleCancel = () => {
+    setIsConfirming(false);
+    setIsApproving(false);
+    setIsRejecting(false);
+  };
+
+  const handleConfirm = () => {
+    if (isApproving) {
+      approve(doctorList._id);
+    } else if (isRejecting) {
+      reject(doctorList._id);
+    }
+
+    setIsConfirming(false);
+    setIsApproving(false);
+    setIsRejecting(false);
+  };
 
   const approve = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to approve this doctor!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, approve it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .put(`/admin/verifyDoctor/${id}`, {
-            headers: { Authorization: `Bearer ${adminToken}` },
-          })
-          .then(() => {
-            navigate("/manage-doctors");
-          });
-        Swal.fire("Approved!", "The doctor has been approved.", "success");
-      }
+    adminInstance.put(`${VERIFY_DOC}/${id}`).then(() => {
+      navigate("/manage-doctors");
     });
   };
-
 
   const reject = (id) => {
-    Swal.fire({
-      title: "Are you sure you want to reject this doctor?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, reject it!",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .put(`/admin/rejectDoctor/${id}`, {
-            headers: { Authorization: `Bearer ${adminToken}` },
-          })
-          .then(() => {
-            Swal.fire("Rejected!", "The doctor has been rejected.", "success");
-            navigate("/manage-doctors");
-          })
-          .catch((error) => {
-            Swal.fire("Error!", "Something went wrong.", "error");
-          });
-      }
+    adminInstance.put(`${REJECT_DOC}/${id}`).then(() => {
+      navigate("/manage-doctors");
     });
   };
 
-
   const getDoctorsDetails = async () => {
-    try {
-      axios
-        .get(`/admin/getDoctor/${params.doctorId}`, {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        })
-        .then((response) => {
-          setDoctor(response.data.doctor);
-        })
-        .catch((err) => {
-          console.log(err, "catch error in doctorFetching");
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    adminInstance.get(`${GET_DOC}/${params.doctorId}`)
+      .then((response) => {
+        setDoctor(response.data.doctor);
+      })
+      .catch((err) => {
+        console.log(err, "catch error in doctorFetching");
+      });
   };
-  
 
   return (
-    <Box 
-    p="6"
-    bg="white"
-    marginLeft={24}
-    marginTop={24}
-    maxWidth="1400"
-    border="1px"
-    borderColor="gray.200"
-    rounded="lg"
-    shadow="md"
-    dark={{
-      bg: "gray.800",
-      border: "1px",
-      borderColor: "gray.700",
-    }}
+    <Box
+      p={["2", "4", "6"]}
+      bg="white"
+      marginLeft={["2", "4", "24"]}
+      marginTop={["2", "4", "24"]}
+      maxWidth={["100%", "100%", "1400px"]}
+      border="1px"
+      borderColor="gray.200"
+      rounded="lg"
+      shadow="md"
+      dark={{
+        bg: "gray.800",
+        border: "1px",
+        borderColor: "gray.700",
+      }}
     >
-      <Grid gap={8} templateColumns={{ lg: "repeat(2, 1fr)" }}>
+      <Grid
+        gap={8}
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+      >
         <GridItem>
           <Text
             mb={5}
@@ -108,7 +107,7 @@ const DoctorCard = () => {
             color="gray.500"
             dark={{ color: "gray.400" }}
           >
-            Name -DR. {doctorList.fullName}
+            Name - DR. {doctorList.fullName}
           </Text>
           <Text
             mb={5}
@@ -126,32 +125,62 @@ const DoctorCard = () => {
           >
             Mobile - {doctorList.number}
           </Text>
-          <Box d="flex" justifyContent={{ md: "center" }} mt={{ md: 5 }}>
+          <Box
+            d="flex"
+            justifyContent={{ base: "center", md: "start" }}
+            mt={{ md: 5 }}
+          >
             {doctorList.isVerified ? (
               <Text textShadow={4} style={{ color: "green" }} p={4}>
                 Approved
               </Text>
             ) : (
-              <Box mt={5}>
+              <Box mt={{ base: 5, md: 0 }}>
                 <Button
                   colorScheme="blue"
                   size="sm"
                   mr={5}
-                  onClick={() => {
-                    approve(doctorList._id);
-                  }}
+                  onClick={handleApproveClick}
                 >
                   Approve
                 </Button>
                 <Button
                   colorScheme="gray"
                   size="sm"
-                  onClick={() => {
-                    reject(doctorList._id);
-                  }}
+                  onClick={handleRejectClick}
                 >
                   Reject
                 </Button>
+                <AlertDialog
+                  isOpen={isConfirming}
+                  leastDestructiveRef={cancelRef}
+                  onClose={handleCancel}
+                >
+                  <AlertDialogOverlay>
+                    <AlertDialogContent>
+                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                        Confirm Action
+                      </AlertDialogHeader>
+                      <AlertDialogBody>
+                        {isApproving
+                          ? `Are you sure you want to approve ${doctorList.fullName}'s request?`
+                          : `Are you sure you want to reject ${doctorList.fullName}'s request?`}
+                      </AlertDialogBody>
+                      <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={handleCancel}>
+                          Cancel
+                        </Button>
+                        <Button
+                          colorScheme={isApproving ? "blue" : "red"}
+                          onClick={handleConfirm}
+                          ml={3}
+                        >
+                          {isApproving ? "Approve" : "Reject"}
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialogOverlay>
+                </AlertDialog>
               </Box>
             )}
           </Box>

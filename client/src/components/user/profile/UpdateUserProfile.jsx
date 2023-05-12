@@ -1,76 +1,114 @@
-import { Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useColorModeValue,  Avatar, AvatarBadge, IconButton, Center,  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure,} from "@chakra-ui/react";
-import { userDetailsUpdateSchema, changePasswordSchema } from "../../../schemas";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  useColorModeValue,
+  Avatar,
+  AvatarBadge,
+  IconButton,
+  Center,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@chakra-ui/react";
+import {
+  userDetailsUpdateSchema,
+  changePasswordSchema,
+} from "../../../schemas";
 import { useFormik } from "formik";
-import { useDispatch, } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 import { React, useState, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import axios from "../../../utils/axios";
 import toast, { Toaster } from "react-hot-toast";
-import {  USER_DETAILS, UPDATE_PROFILE, UPDATE_PASS,UPDATE_IMG } from "../../../utils/ConstUrls";
+import {
+  USER_DETAILS,
+  UPDATE_PROFILE,
+  UPDATE_PASS,
+  UPDATE_IMG,
+} from "../../../utils/ConstUrls";
 
 const UpdateProperty = () => {
   const [UserDetails, setUserDetails] = useState("");
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [profilePicture, setProfilePicture] = useState("");
-  const [state,setState]= useState('')
+  const [state, setState] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure(); // state variables for showing/hiding the modal
   const token = localStorage.getItem("userToken");
   const decode = jwtDecode(token);
   const dispatch = useDispatch();
 
   const getUserDetails = async () => {
-    
     try {
-      await axios.get(`${USER_DETAILS}/${decode.id}`, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
+      await axios
+        .get(`${USER_DETAILS}/${decode.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
           setUserDetails(response.data.userDetails);
-          dispatch(hideLoading())
+          dispatch(hideLoading());
         })
         .catch((err) => {
           console.log(err);
-          dispatch(hideLoading())
+          dispatch(hideLoading());
         });
     } catch (err) {
       console.log(err);
-      dispatch(hideLoading())
+      dispatch(hideLoading());
     }
   };
 
   const onSubmit = async (values, actions) => {
-    try {
-      dispatch(showLoading())
-      await axios.put(`${UPDATE_PROFILE}/${decode.id}`, values, {headers: { Authorization: `Bearer ${token}` },}).then((response) => {
-          dispatch(hideLoading())
-          if (response.data) {
-            setState(response.data)
-            toast.success("updated successfully")
-          } else {
-            toast.error("Oops Something went wrong");
-          }
-        })
-        .catch((err) => {
-          dispatch(hideLoading())
+    dispatch(showLoading());
+    await axios
+      .put(`${UPDATE_PROFILE}/${decode.id}`, values, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        dispatch(hideLoading());
+        if (response.data) {
+          setState(response.data);
+          toast.success("updated successfully");
+        } else {
           toast.error("Oops Something went wrong");
-        });
-    } catch (err) {
-      dispatch(hideLoading())
-      toast.error("Oops Something went wrong");
-    }
+        }
+      })
+      .catch((err) => {
+        dispatch(hideLoading());
+        toast.error("Oops Something went wrong");
+      });
     actions.resetForm();
   };
 
-  const {values,errors,touched,handleChange,handleBlur,handleSubmit,} = useFormik({
-    initialValues: {
-      userName: UserDetails.userName,
-      email: UserDetails.email,
-      number: UserDetails.number,
-    },
-    enableReinitialize: true,
-    validationSchema: userDetailsUpdateSchema,
-    onSubmit,
-  });
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: {
+        userName: UserDetails.userName,
+        email: UserDetails.email,
+        number: UserDetails.number,
+      },
+      enableReinitialize: true,
+      validationSchema: userDetailsUpdateSchema,
+      onSubmit,
+    });
 
-  const {values: form2Values,errors: form2Errors,touched: form2Touched,handleChange: form2HandleChange,handleBlur: form2HandleBlur,handleSubmit: form2HandleSubmit,
+  const {
+    values: form2Values,
+    errors: form2Errors,
+    touched: form2Touched,
+    handleChange: form2HandleChange,
+    handleBlur: form2HandleBlur,
+    handleSubmit: form2HandleSubmit,
   } = useFormik({
     initialValues: {
       newPassword: "",
@@ -78,69 +116,68 @@ const UpdateProperty = () => {
     },
     validationSchema: changePasswordSchema,
     onSubmit: async (values, actions) => {
-      try {
-        dispatch(showLoading())
-        await axios.put(`${UPDATE_PASS}/${decode.id}`, values, { headers: { Authorization: `Bearer ${token}` },}).then((response) => {
-            dispatch(hideLoading())
-            if (response.data) {
-              setState(response.data)
-              toast.success("Password updated successfully")
-            } else {
-              toast.error("Oops Something went wrong");
-            }
-          })
-          .catch((err) => {
-            dispatch(hideLoading())
+      dispatch(showLoading());
+      await axios
+        .put(`${UPDATE_PASS}/${decode.id}`, values, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          dispatch(hideLoading());
+          if (response.data) {
+            setState(response.data);
+            toast.success("Password updated successfully");
+          } else {
             toast.error("Oops Something went wrong");
-          });
-      } catch (err) {
-        dispatch(hideLoading())
-        toast.error("Oops Something went wrong");
-      }
+          }
+        })
+        .catch((err) => {
+          dispatch(hideLoading());
+          toast.error("Oops Something went wrong");
+        });
       actions.resetForm();
     },
   });
 
-
-
   const handleChangeImg = (e) => {
     setProfilePicture(e.target.files[0]);
-  }
+  };
 
   const handleImageSumbit = async (e) => {
     e.preventDefault();
     if (profilePicture === "") {
-      return toast.error("Please select an image")
+      return toast.error("Please select an image");
     }
     const formData = new FormData();
-    formData.append('image', profilePicture);
-    dispatch(showLoading())
-    await axios.put(`${UPDATE_IMG}/${decode.id}`,formData,{ headers: { Authorization: `Bearer ${token}` },}).then((res)=>{
-      if(res){
-        setState(res);
+    formData.append("image", profilePicture);
+    dispatch(showLoading());
+    await axios
+      .put(`${UPDATE_IMG}/${decode.id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res) {
+          setState(res);
+          onClose();
+          dispatch(hideLoading());
+          toast.success("image updated successfully");
+        }
+      })
+      .catch((err) => {
         onClose();
-        dispatch(hideLoading())
-        toast.success("image updated successfully")
-      }
-    }).catch((err)=>{
-      onClose();
-      dispatch(hideLoading())
-      toast.error("Oops Something went wrong");
-      
-    })
+        dispatch(hideLoading());
+        toast.error("Oops Something went wrong");
+      });
   };
-  
 
-  useEffect(()=>{
+  useEffect(() => {
     getUserDetails();
-  },[state])
+  }, [state]);
 
-  let imageUrl = UserDetails.profilePic
- 
+  let imageUrl = UserDetails.profilePic;
+
   return (
     <Flex
       minH={"100vh"}
-      mt={24}
       align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
@@ -153,66 +190,65 @@ const UpdateProperty = () => {
         rounded={"xl"}
         boxShadow={"lg"}
         p={6}
-        mt={10}
         my={12}
       >
         <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
           User Profile Edit
         </Heading>
-    
-          <FormControl id="userName">
-            
-            <Stack direction={["column", "row"]} spacing={6}>
-              <Center>
-                <Avatar size="xl" src={imageUrl}>
-                  <AvatarBadge
-                    as={IconButton}
-                    size="sm"
-                    rounded="full"
-                    top="-10px"
-                    colorScheme="green"
-                  />
-                </Avatar>
-              </Center>
-              <Center w="full">
-                <Button onClick={onOpen}>Upload Profile Image</Button>
-                <Modal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  motionPreset="scale"
-                  isCentered={false}
-                  top="auto"
-                >
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Upload Profile Image</ModalHeader>
-                    <ModalCloseButton />
-                    <form onSubmit={handleImageSumbit}>
+
+        <FormControl id="userName">
+          <Stack direction={["column", "row"]} spacing={6}>
+            <Center>
+              <Avatar size="xl" src={imageUrl}>
+                <AvatarBadge
+                  as={IconButton}
+                  size="sm"
+                  rounded="full"
+                  top="-10px"
+                  colorScheme="green"
+                />
+              </Avatar>
+            </Center>
+            <Center w="full">
+              <Button onClick={onOpen}>Upload Profile Image</Button>
+              <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                motionPreset="scale"
+                isCentered={false}
+                top="auto"
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Upload Profile Image</ModalHeader>
+                  <ModalCloseButton />
+                  <form onSubmit={handleImageSumbit}>
                     <ModalBody>
                       <FormControl id="profileImage">
                         <FormLabel>Choose an image to upload</FormLabel>
-                        <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />
+                        <input
+                          accept="image/*"
+                          type="file"
+                          name="file"
+                          onChange={handleChangeImg}
+                        />
                       </FormControl>
                     </ModalBody>
                     <ModalFooter>
                       <Button onClick={onClose} mr={3}>
                         Cancel
                       </Button>
-                      <Button
-                        colorScheme="blue"
-                        type="submit"
-                      >
+                      <Button colorScheme="blue" type="submit">
                         Upload
                       </Button>
-                     
                     </ModalFooter>
-                    </form>
-                  </ModalContent>
-                </Modal>
-              </Center>
-            </Stack>
-          </FormControl>
-          <form onSubmit={handleSubmit}>
+                  </form>
+                </ModalContent>
+              </Modal>
+            </Center>
+          </Stack>
+        </FormControl>
+        <form onSubmit={handleSubmit}>
           <FormControl id="userName" isRequired>
             <FormLabel>User name</FormLabel>
             <Input
@@ -226,9 +262,9 @@ const UpdateProperty = () => {
               type="text"
               style={{ color: "grey" }}
             />
-               {errors.userName && touched.userName && (
-            <p className="error">{errors.userName}</p>
-          )}
+            {errors.userName && touched.userName && (
+              <p className="error">{errors.userName}</p>
+            )}
           </FormControl>
           <FormControl id="email" isRequired>
             <FormLabel>Email address</FormLabel>
@@ -242,9 +278,9 @@ const UpdateProperty = () => {
               placeholder="Enter your email"
               style={{ color: "grey" }}
             />
-              {errors.email && touched.email && (
-            <p className="error">{errors.email}</p>
-          )}
+            {errors.email && touched.email && (
+              <p className="error">{errors.email}</p>
+            )}
           </FormControl>
           <FormControl id="password" isRequired>
             <FormLabel>Contact</FormLabel>
@@ -258,9 +294,9 @@ const UpdateProperty = () => {
               placeholder="Enter your number"
               style={{ color: "grey" }}
             />
-             {errors.number && touched.number && (
-            <p className="error">{errors.number}</p>
-          )}
+            {errors.number && touched.number && (
+              <p className="error">{errors.number}</p>
+            )}
           </FormControl>
           <Stack spacing={6} direction={["column", "row"]}>
             <Button

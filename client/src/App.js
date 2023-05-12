@@ -23,6 +23,9 @@ import Login from './pages/user/login/Login'
 import RoomPage from './pages/room'
 import DoctorRegister from './pages/doctor/register/DoctorRegister'
 
+import Dashboard from './pages/admin/dashboard/Dashboard'
+
+const Banner = lazy(()=>import('./pages/admin/banner/Banner'))
 const Register = lazy(()=>import('./pages/user/register/Register'))
 const OtpLogin = lazy(()=>import('./pages/user/login/OtpLogin'))
 const ViewDoctors = lazy(()=>import('./pages/admin/doctorsList/ViewDoctors'))
@@ -224,13 +227,25 @@ const App = () => {
             </AuthAdmin>
           } />
 
+          <Route path='/dashboard' element={
+          <AuthorizeAdmin>
+            <Dashboard />
+          </AuthorizeAdmin>
+          } />
+
+          <Route path='/banner' element={
+          <AuthorizeAdmin>
+             <Suspense fallback={<SpinnerLoader/>}>
+            <Banner />
+            </Suspense>
+          </AuthorizeAdmin>
+          } />
+
           <Route path='/admin-home' element={
             <AuthorizeAdmin>
               <AdminHome />
             </AuthorizeAdmin>
           } />
-
-
 
           <Route path='/users-list' element={
             <AuthorizeAdmin>

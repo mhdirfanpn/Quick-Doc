@@ -46,7 +46,7 @@ function Messenger({ isUser }) {
 
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
+    socket.current = io("ws://localhost:7000");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -105,8 +105,7 @@ function Messenger({ isUser }) {
 
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
-    console.log("hello");
+    
     const message = {
       sender: commonUser.id,
       text: newMessage,
@@ -161,7 +160,6 @@ function Messenger({ isUser }) {
   
 
   
-console.log(activeConversation,"weqwewqeqwe");
   return (
     <Flex direction="row" mt={isUser ? 0 : 0}>
       <Box

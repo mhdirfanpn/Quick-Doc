@@ -51,10 +51,13 @@ export default function Features() {
           >
             Our Story
           </Text>
-          <Heading>A digital Product design agency</Heading>
+          <Heading>A digital health care agency</Heading>
           <Text color={"gray.500"} fontSize={"lg"}>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore
+            we ensures to provide the highest quality of
+            care and a transformative experience for all your healthcare needs.
+            {/* Our multi-specialty hospital equipped with specialised doctors, and
+            world-class technology, bring global standards of medical care to
+            our patients. */}
           </Text>
           <Stack
             spacing={4}
@@ -69,19 +72,19 @@ export default function Features() {
                 <Icon as={IoAnalyticsSharp} color={"yellow.500"} w={5} h={5} />
               }
               iconBg={useColorModeValue("yellow.100", "yellow.900")}
-              text={"Business Planning"}
+              text={"Better Care"}
             />
             <Feature
-              icon={<Icon as={IoLogoBitcoin} color={"green.500"} w={5} h={5} />}
+              icon={<Icon as={IoSearchSharp} color={"green.500"} w={5} h={5} />}
               iconBg={useColorModeValue("green.100", "green.900")}
-              text={"Financial Planning"}
+              text={"Specialised Doctors"}
             />
             <Feature
               icon={
-                <Icon as={IoSearchSharp} color={"purple.500"} w={5} h={5} />
+                <Icon as={IoLogoBitcoin} color={"purple.500"} w={5} h={5} />
               }
               iconBg={useColorModeValue("purple.100", "purple.900")}
-              text={"Market Analysis"}
+              text={"Affordable Plans"}
             />
           </Stack>
         </Stack>

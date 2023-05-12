@@ -11,7 +11,7 @@ import UserNav from "../../../components/user/navbar/UserNav";
 function Home() {
   return (
     <>
-      <Navbar/>
+      <UserNav/>
       <Body1/>
       <Features/>
       <DoctorCards/>  

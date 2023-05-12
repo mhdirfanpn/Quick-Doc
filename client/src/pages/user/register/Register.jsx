@@ -20,27 +20,22 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
-    const body = JSON.stringify(values);
- 
+  const body = JSON.stringify(values);
 
-    try {
-      await axios
-        .post(USER_SIGN_UP, body, {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then(({ data }) => {
-          if (data.success) {
-            navigate("/");
-          } else {
-            toast.error(data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {
-      toast.error("Oops Something went wrong");
-    }
+    await axios
+      .post(USER_SIGN_UP, body, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(({ data }) => {
+        if (data.success) {
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((err) => {
+        toast.error("Oops Something went wrong");
+      });
     actions.resetForm();
   };
 

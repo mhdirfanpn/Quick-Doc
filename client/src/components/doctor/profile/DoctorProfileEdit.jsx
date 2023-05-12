@@ -31,11 +31,11 @@ import {
   DOC_DETAILS,
   UPDATE_DOC_DETAILS,
   UPDATE_DOC_PASS,
+  UPDATE_DOC_IMG 
 } from "../../../utils/ConstUrls";
-import axios from "../../../utils/axios";
+import { doctorInstance } from "../../../utils/axios";
 import jwtDecode from "jwt-decode";
 import { useFormik } from "formik";
-import { UPDATE_DOC_IMG } from "../../../utils/ConstUrls";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../../../redux/spinnerSlice";
 
@@ -51,22 +51,13 @@ const DoctorProfileEdit = () => {
 
   const getDoctorDetails = async () => {
     try {
-      await axios
-        .get(`${DOC_DETAILS}/${decode.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          console.log(response.data.doctorDetails);
-          setDoctorDetails(response.data.doctorDetails);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const response = await doctorInstance.get(`${DOC_DETAILS}/${decode.id}`);
+      setDoctorDetails(response.data.doctorDetails);
     } catch (err) {
       console.log(err);
     }
   };
-  console.log(doctorDetails.timings);
+
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
     useFormik({
       initialValues: {
@@ -77,24 +68,19 @@ const DoctorProfileEdit = () => {
       },
       enableReinitialize: true,
       validationSchema: doctorDetailsUpdateSchema,
+
       onSubmit: async (values, actions) => {
         try {
-          await axios
-            .put(`${UPDATE_DOC_DETAILS}/${decode.id}`, values, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
-              console.log(response.data);
-              if (response.data) {
-                setState(response.data);
-                toast.success("updated successfully");
-              } else {
-                toast.error("Oops Something went wrong");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          const response = await doctorInstance.put(
+            `${UPDATE_DOC_DETAILS}/${decode.id}`,
+            values
+          );
+          if (response.data) {
+            setState(response.data);
+            toast.success("updated successfully");
+          } else {
+            toast.error("Oops Something went wrong");
+          }
         } catch (err) {
           console.log(err);
           toast.error("Oops Something went wrong");
@@ -119,22 +105,16 @@ const DoctorProfileEdit = () => {
     onSubmit: async (values, actions) => {
       console.log(values);
       try {
-        await axios
-          .put(`${UPDATE_DOC_PASS}/${decode.id}`, values, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => {
-            console.log(response.data);
-            if (response.data) {
-              setState(response.data);
-              toast.success("Password updated successfully");
-            } else {
-              toast.error("Oops Something went wrong");
-            }
-          })
-          .catch((err) => {
-            toast.error("Oops Something went wrong");
-          });
+        const response = await doctorInstance.put(
+          `${UPDATE_DOC_PASS}/${decode.id}`,
+          values
+        );
+        if (response.data) {
+          setState(response.data);
+          toast.success("Password updated successfully");
+        } else {
+          toast.error("Oops Something went wrong");
+        }
       } catch (err) {
         toast.error("Oops Something went wrong");
       }
@@ -154,13 +134,11 @@ const DoctorProfileEdit = () => {
     console.log(profilePicture);
     const formData = new FormData();
     formData.append("image", profilePicture);
-    console.log(profilePicture);
     console.log(formData);
     dispatch(showLoading());
-    await axios
-      .put(`${UPDATE_DOC_IMG}/${decode.id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+
+    doctorInstance
+      .put(`${UPDATE_DOC_IMG}/${decode.id}`, formData)
       .then((res) => {
         if (res) {
           setState(res);

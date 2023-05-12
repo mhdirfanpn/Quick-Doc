@@ -11,6 +11,7 @@ import {
   Box,
   Text,
   Image,
+  Avatar,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { GET_DOCTORS } from "../../../utils/ConstUrls";
@@ -57,24 +58,20 @@ const DoctorCards = () => {
   const token = localStorage.getItem("userToken");
 
   const getAllDoctors = async () => {
-    try {
-      await axios
-        .get(`${GET_DOCTORS}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          if (response.data.doctors) {
-            setDoctorDetails(response.data.doctors);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    await axios
+      .get(`${GET_DOCTORS}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        if (response.data.doctors) {
+          console.log(response);
+          setDoctorDetails(response.data.doctors);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
 
   return (
     <Container maxW={"8xl"} py={12} mt={6}>
@@ -84,16 +81,26 @@ const DoctorCards = () => {
         </Heading>
         <Flex ref={containerRef} overflowX="hidden" w="100%" h="auto">
           {doctorDetails?.map((doctor) => (
-            <Box minW={`${cardWidth}px`} >
+            <Box minW={`${cardWidth}px`}>
               <Card maxW="sm" className="card-footer">
                 <CardBody>
-                  <Image
-                    ml={6}
-                    src={doctor.profilePic}
-                    alt="Green double couch with wooden legs"
-                    borderRadius="lg"
-                    onClick={() => viewMore(doctor._id)}
-                  />
+                  {doctor.profilePic ? (
+                    <Image
+                      ml={6}
+                      src={doctor.profilePic}
+                      alt="Green double couch with wooden legs"
+                      borderRadius="lg"
+                      onClick={() => viewMore(doctor._id)}
+                    />
+                  ) : (
+                    <Avatar
+                      size="lg"
+                      name={doctor.fullName}
+                      src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                      ml={6}
+                      onClick={() => viewMore(doctor._id)}
+                    />
+                  )}
                   <Stack mt="6" spacing="3" ml="6">
                     <Heading size="md">{doctor.fullName}</Heading>
                     <Text>{doctor.specialization}</Text>
